@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>后台管理系统</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="后台管理系统">
+    <meta name="description" content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <!--<link rel="stylesheet" href="/plugins/layui_v2/css/layui.css">-->
+    <!--<link rel="stylesheet" href="/css/global.css">-->
+
+    <link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_9h680jcse4620529.css">
+    <!--<link rel="stylesheet" href="/css/main.css">-->
+    <link rel="stylesheet" href="/static/css/backstage.css">
+
+</head>
+<body class="main_body larryTheme-A">
+
+    <div class="layui-layout layui-layout-admin ">
+
+        <!-- 顶部-->
+        {% block head %}
+            {% include "layout/head.html" %}
+        {% endblock %}
+
+        <!-- 左侧导航-->
+        {% block left %}
+            {% include "layout/left.html" %}
+        {% endblock %}
+
+        <!--中间内容 -->
+        <div class="layui-body layui-form" id="larry-body">
+            <div class="layui-tab marg0" id="larry-tab" lay-filter="bodyTab">
+                <! -- 选项卡-->
+                <ul class="layui-tab-title top_tab" id="top_tabs">
+                    <li class="layui-this" lay-id=""><i class="larry-icon larry-houtaishouye"></i> <cite>后台首页</cite></li>
+                </ul>
+                <div class="larry-title-box" style="height: 41px;" >
+                    <div class="go-left key-press pressKey" id="titleLeft" title="滚动至最右侧"><i class="larry-icon larry-weibiaoti6-copy"></i> </div>
+                    <div class="title-right" id="titleRbox">
+                        <div class="go-right key-press pressKey" id="titleRight" title="滚动至最左侧"><i class="larry-icon larry-right"></i></div>
+                        <div class="refresh key-press" id="refresh_iframe"><i class="larry-icon larry-shuaxin2"></i><cite>刷新</cite></div>
+
+                        <div class="often key-press">
+                            <ul class="layui-nav posr">
+                                <li class="layui-nav-item posb">
+                                    <a class="top"><i class="larry-icon larry-caozuo"></i><cite>常用操作</cite><span class="layui-nav-more"></span></a>
+                                    <dl class="layui-nav-child">
+                                        <dd>
+                                            <a href="javascript:;" class="closeCurrent"><i class="larry-icon larry-guanbidangqianye"></i>关闭当前选项卡</a>
+                                        </dd>
+                                        <dd>
+                                            <a href="javascript:;" class="closeOther"><i class="larry-icon larry-guanbiqita"></i>关闭其他选项卡</a>
+                                        </dd>
+                                        <dd>
+                                            <a href="javascript:;" class="closeAll"><i class="larry-icon larry-guanbiquanbufenzu"></i>关闭全部选项卡</a>
+                                        </dd>
+                                    </dl>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-tab-content clildFrame" style="height:793px;">
+                    <div class="layui-tab-item layui-show layui-anim layui-anim-upbit">
+                        {% block content %}
+                            {% include "layout/home.html" %}
+                        {% endblock %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部-->
+        <div class="layui-footer footer layui-larry-foot">
+            <div>
+                <p style="color: #0C0C0C">Copyright 2017 © 5help.me,417449614@qq.com(推荐使用IE9+,Firefox、Chrome 浏览器访问)</p>
+            </div>
+        </div>
+    </div>
+
+<script type="text/javascript" src="/static/js/index.js"></script>
+{% block script %}
+<script>
+    layui.config({
+        base : "/static/js/"
+    }).use(['form', 'layer','common'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            layer = layui.layer,
+            common = layui.common;
+
+        //锁屏
+        function lockPage(){
+            const avatar = '';
+            const nickname = '';
+            parent.layer.open({
+                title : false,
+                type : 1,
+                anim: 4,
+                content : '	<div class="admin-header-lock" id="lock-box">'+
+                '<div class="admin-header-lock-img"><img src="'+avatar+'" /></div>'+
+                '<div class="admin-header-lock-name" id="lockUserName">'+nickname+'</div>'+
+                '<div class="input_btn">'+
+                '<input type="password" class="admin-header-lock-input layui-input" autocomplete="off" placeholder="请输入登录密码解锁.." name="lockPwd" id="lockPwd" />'+
+                '<button class="layui-btn" id="unlock">解锁</button>'+
+                '</div>'+
+                '</div>',
+                closeBtn : 0,
+                shade : 1
+            });
+            $(".layui-layer-shade").addClass("lockBg")
+            $(".admin-header-lock-input").focus();
+        }
+
+        $(".lockcms").on("click",function(){
+            window.sessionStorage.setItem("lockcms", true);
+            lockPage();
+        })
+
+        // 判断是否显示锁屏
+        if(window.sessionStorage.getItem("lockcms") == "true"){
+            lockPage();
+        }
+
+        // 解锁
+        $("body").on("click","#unlock",function(){
+            if($(this).siblings(".admin-header-lock-input").val() == ''){
+                layer.msg("请输入登录密码解锁！");
+                $(this).siblings(".admin-header-lock-input").focus();
+            }else{
+                const password = $(this).siblings(".admin-header-lock-input").val();
+                const userId = '';
+                const ss = '';
+                $.ajax({
+                    url : '/sys/user/unLock',
+                    type : 'post',
+                    async: false,
+                    data : {password:password,userId:userId},
+                    success : function(data) {
+                        if(data.code == 0000){
+                            window.sessionStorage.setItem("lockcms", false);
+                            $(this).siblings(".admin-header-lock-input").val('');
+                            layer.closeAll("page");
+                        }else{
+                            layer.msg("密码错误，请重新输入！");
+                            $(this).siblings(".admin-header-lock-input").val('').focus();
+                        }
+                    },error:function(data){
+                        layer.msg("密码错误，请重新输入！");
+                        $(this).siblings(".admin-header-lock-input").val('').focus();
+                    }
+                });
+            }
+        });
+
+       $('#lock').mouseover(function () {
+           layer.tips('请按Alt+L快速锁屏！', '#lock', {tips: [1, '#009688'], time: 2000})
+       });
+
+       $(top.window).keydown(function (e) {
+           if (e.altKey && e.which == 76) {
+               lockPage();
+           }
+       });
+
+       $(top.window).keyup(function(event){
+           if(event.keyCode ==13){
+               $("#unlock").click();
+           }
+       });
+    });
+</script>
+{% endblock %}
+
+</body>
+</html>
+

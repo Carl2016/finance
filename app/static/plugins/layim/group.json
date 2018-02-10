@@ -1,0 +1,64 @@
+{
+    "status": 1,
+    "msg": "ok",
+    "data": [
+        {
+            "name": "群组分类一",
+            "nums": 36,
+            "id": 1,
+            "item": [
+                {
+                    "id": "101",
+                    "name": "我的群1",
+                    "face": "images/1.png"
+                },
+                {
+                    "id": "102",
+                    "name": "我的群2",
+                    "face": "images/2.jpg"
+                }
+            ]
+        },
+        
+        {
+            "name": "群组分类二",
+            "nums": 16,
+            "id": 2,
+            "item": [
+                {
+                    "id": "103",
+                    "name": "我的群3",
+                    "face": "images/1.png"
+                },
+                {
+                    "id": "104",
+                    "name": "我的群4",
+                    "face": "images/2.jpg"
+                }
+            ]
+        },
+        
+        {
+            "name": "群组分类三",
+            "nums": 106,
+            "id": 3,
+            "item": [
+                {
+                    "id": "105",
+                    "name": "我的群5",
+                    "face": "images/1.png"
+                },
+                {
+                    "id": "106",
+                    "name": "我的群6",
+                    "face": "images/2.jpg"
+                },
+                {
+                    "id": "107",
+                    "name": "我的群7",
+                    "face": "images/1.png"
+                }
+            ]
+        }
+    ]
+}

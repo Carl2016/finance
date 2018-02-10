@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>layout 后台大布局 - Layui</title>
+    <link rel="stylesheet" href="/static/plugins/layui/css/layui.css">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        <!-- 头区域 -->
+        {% block head %}
+            {% include "layout/head.html" %}
+        {% endblock %}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <!-- 菜单区域 -->
+        {% block left %}
+            {% include "layout/left.html" %}
+        {% endblock %}
+    </div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        {% block content %}
+            <div>内容主体区域</div>
+        {% endblock %}
+    </div>
+
+    <div class="layui-footer" style="text-align: center">
+        <!-- 底部固定区域 -->
+        {% block footer %}
+        © layui.com - 底部固定区域
+        {% endblock %}
+    </div>
+</div>
+<script src="/static/plugins/layui/layui.js"></script>
+<script src="/static/js/common/tabActive.js"></script>
+{% block script %}
+ <script>
+    //JavaScript代码区域
+    layui.use('element', function () {
+        var element = layui.element;
+    });
+</script>
+{% endblock %}
+
+</body>
+</html>
