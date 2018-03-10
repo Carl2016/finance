@@ -12,25 +12,25 @@ class Stock(db.Model):
     name = db.Column(db.String(30), nullable=False, comment=u"股票名称")
     industry = db.Column(db.String(30), comment=u"所属行业")
     area = db.Column(db.String(30), comment=u"地区")
-    pe = db.Column(db.DECIMAL, comment=u"市盈率")
-    outStanding = db.Column(db.DECIMAL, comment=u"流通股本(亿)")
-    totals = db.Column(db.DECIMAL, comment=u"总股本(亿)")
-    totalAssets = db.Column(db.DECIMAL, comment=u"总资产(万)")
-    liquidAssets = db.Column(db.DECIMAL, comment=u"流动资产")
-    fixedAssets = db.Column(db.DECIMAL, comment=u"固定资产")
-    reserved = db.Column(db.DECIMAL, comment=u"公积金")
-    reservedPerShare = db.Column(db.DECIMAL, comment=u"每股公积金")
-    esp = db.Column(db.DECIMAL, comment=u"每股收益")
-    bvps = db.Column(db.DECIMAL, comment=u"每股净资")
-    pb = db.Column(db.DECIMAL, comment=u"市净率")
+    pe = db.Column(db.DECIMAL(20,  4), comment=u"市盈率")
+    outStanding = db.Column(db.DECIMAL(20,  4), comment=u"流通股本(亿)")
+    totals = db.Column(db.DECIMAL(20,  4), comment=u"总股本(亿)")
+    totalAssets = db.Column(db.DECIMAL(20,  4), comment=u"总资产(万)")
+    liquidAssets = db.Column(db.DECIMAL(20,  4), comment=u"流动资产")
+    fixedAssets = db.Column(db.DECIMAL(20,  4), comment=u"固定资产")
+    reserved = db.Column(db.DECIMAL(20,  4), comment=u"公积金")
+    reservedPerShare = db.Column(db.DECIMAL(20,  4), comment=u"每股公积金")
+    esp = db.Column(db.DECIMAL(20,  4), comment=u"每股收益")
+    bvps = db.Column(db.DECIMAL(20,  4), comment=u"每股净资")
+    pb = db.Column(db.DECIMAL(20,  4), comment=u"市净率")
     timeToMarketDateTime = db.Column(db.DateTime, index=True, comment=u"上市日期时间")
     timeToMarket = db.Column(db.String(20), comment=u"上市日期")
-    undp = db.Column(db.DECIMAL, comment=u"未分利润")
-    perundp = db.Column(db.DECIMAL, comment=u"每股未分配")
-    rev = db.Column(db.DECIMAL, comment=u"收入同比(%)")
-    profit = db.Column(db.DECIMAL, comment=u"利润同比(%)")
-    gpr = db.Column(db.DECIMAL, comment=u"毛利率(%)")
-    npr = db.Column(db.DECIMAL, comment=u"净利润率(%)")
+    undp = db.Column(db.DECIMAL(20,  4), comment=u"未分利润")
+    perundp = db.Column(db.DECIMAL(20,  4), comment=u"每股未分配")
+    rev = db.Column(db.DECIMAL(20,  4), comment=u"收入同比(%)")
+    profit = db.Column(db.DECIMAL(20,  4), comment=u"利润同比(%)")
+    gpr = db.Column(db.DECIMAL(20,  4), comment=u"毛利率(%)")
+    npr = db.Column(db.DECIMAL(20,  4), comment=u"净利润率(%)")
     holders = db.Column(db.INTEGER, comment=u"股东人数")
     createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
     updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
@@ -38,9 +38,14 @@ class Stock(db.Model):
     def __repr__(self):
         return '<Stock %r>' % self.code
 
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
     def save(self):
         db.session.add(self)
         db.session.commit()
+
+
 
 
 # 股票行业分类
@@ -97,7 +102,7 @@ class AreaCategory(db.Model):
         db.session.commit()
 
 
-# 股票中小板分类
+# 股票 中小板分类
 class SmallBoardCategory(db.Model):
     __tablename__ = 'stock_small_board_category'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -114,7 +119,7 @@ class SmallBoardCategory(db.Model):
         db.session.commit()
 
 
-# 股票中小板分类
+# 股票 创业板分类
 class GemCategory(db.Model):
     __tablename__ = 'stock_gem_category'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -154,8 +159,10 @@ class Hs300Weights(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     code = db.Column(db.String(30), unique=True, nullable=False, comment=u"股票代码")
     name = db.Column(db.String(50), nullable=False, comment=u"股票名称")
+
+    dateTime = db.Column(db.DateTime, index=True, comment=u"权重时间")
     date = db.Column(db.String(20), nullable=False, comment=u"日期")
-    weight = db.Column(db.DECIMAL, nullable=False, comment=u"权重")
+    weight = db.Column(db.DECIMAL(20,  4), nullable=False, comment=u"权重")
     createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
     updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
 
@@ -216,7 +223,7 @@ class TerminateListing(db.Model):
         db.session.commit()
 
 
-# 终止上市股票列表
+# 暂停上市股票列表
 class PauseListing(db.Model):
     __tablename__ = 'stock_pause_listing'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -239,15 +246,15 @@ class PauseListing(db.Model):
 class Results(db.Model):
     __tablename__ = 'stock_results'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    code = db.Column(db.String(30), index=True, nullable=False, comment=u"股票代码")
+    code = db.Column(db.String(30), nullable=False, comment=u"股票代码")
     name = db.Column(db.String(50), nullable=False, comment=u"股票名称")
-    eps = db.Column(db.DECIMAL, comment=u"每股收益")
-    bvps = db.Column(db.DECIMAL, comment=u"每股净资")
-    epsYoy = db.Column(db.DECIMAL, comment=u"每股收益同比(%)")
-    roe = db.Column(db.DECIMAL, comment=u"净资产收益率(%)")
-    epcf = db.Column(db.DECIMAL, comment=u"每股现金流量(元)")
-    netProfits = db.Column(db.DECIMAL, comment=u"净利润(万元)")
-    profitsYoy = db.Column(db.DECIMAL, comment=u"净利润同比(%)")
+    eps = db.Column(db.DECIMAL(20, 4), comment=u"每股收益")
+    bvps = db.Column(db.DECIMAL(20, 4), comment=u"每股净资")
+    epsYoy = db.Column(db.DECIMAL(20, 4), comment=u"每股收益同比(%)")
+    roe = db.Column(db.DECIMAL(20, 4), comment=u"净资产收益率(%)")
+    epcf = db.Column(db.DECIMAL(20, 4), comment=u"每股现金流量(元)")
+    netProfits = db.Column(db.DECIMAL(20, 4), comment=u"净利润(万元)")
+    profitsYoy = db.Column(db.DECIMAL(20, 4), comment=u"净利润同比(%)")
     distrib = db.Column(db.String(30), comment=u"分配方案")
     reportDate = db.Column(db.String(20), comment=u"发布日期")
     createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
@@ -265,15 +272,15 @@ class Results(db.Model):
 class Profit(db.Model):
     __tablename__ = 'stock_profit'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    code = db.Column(db.String(30), unique=True, nullable=False, comment=u"股票代码")
+    code = db.Column(db.String(30), nullable=False, comment=u"股票代码")
     name = db.Column(db.String(50), nullable=False, comment=u"股票名称")
-    roe = db.Column(db.DECIMAL, comment=u"净资产收益率(%)")
-    netProfitRatio = db.Column(db.DECIMAL, comment=u"净利率(%)")
-    esp = db.Column(db.DECIMAL, comment=u"每股收益")
-    grossProfitRate = db.Column(db.DECIMAL, comment=u"毛利率(%)")
-    netProfits = db.Column(db.DECIMAL, comment=u"净利润(万元)")
-    businessIncome = db.Column(db.DECIMAL, comment=u"营业收入(百万元)")
-    bips = db.Column(db.DECIMAL, comment=u"每股主营业务收入(元)")
+    roe = db.Column(db.DECIMAL(20, 4), comment=u"净资产收益率(%)")
+    netProfitRatio = db.Column(db.DECIMAL(20, 4), comment=u"净利率(%)")
+    esp = db.Column(db.DECIMAL(20, 4), comment=u"每股收益")
+    grossProfitRate = db.Column(db.DECIMAL(20, 4), comment=u"毛利率(%)")
+    netProfits = db.Column(db.DECIMAL(20, 4), comment=u"净利润(万元)")
+    businessIncome = db.Column(db.DECIMAL(20, 4), comment=u"营业收入(百万元)")
+    bips = db.Column(db.DECIMAL(20, 4), comment=u"每股主营业务收入(元)")
     createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
     updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
 
@@ -289,14 +296,14 @@ class Profit(db.Model):
 class Operating(db.Model):
     __tablename__ = 'stock_operating'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    code = db.Column(db.String(30), unique=True, nullable=False, comment=u"股票代码")
+    code = db.Column(db.String(30), nullable=False, comment=u"股票代码")
     name = db.Column(db.String(50), nullable=False, comment=u"股票名称")
-    arturnOver = db.Column(db.DECIMAL, comment=u"应收账款周转率(次)")
-    arturnDays = db.Column(db.DECIMAL, comment=u"应收账款周转天数(天)")
-    inventoryTurnover = db.Column(db.DECIMAL, comment=u"存货周转率(次)")
-    inventoryDays = db.Column(db.DECIMAL, comment=u"存货周转天数(天)")
-    currentAssetTurnover = db.Column(db.DECIMAL, comment=u"流动资产周转率(次)")
-    currentAssetDays = db.Column(db.DECIMAL, comment=u"流动资产周转天数(天)")
+    arturnOver = db.Column(db.DECIMAL(20, 4), comment=u"应收账款周转率(次)")
+    arturnDays = db.Column(db.DECIMAL(20, 4), comment=u"应收账款周转天数(天)")
+    inventoryTurnover = db.Column(db.DECIMAL(20, 4), comment=u"存货周转率(次)")
+    inventoryDays = db.Column(db.DECIMAL(20, 4), comment=u"存货周转天数(天)")
+    currentAssetTurnover = db.Column(db.DECIMAL(20, 4), comment=u"流动资产周转率(次)")
+    currentAssetDays = db.Column(db.DECIMAL(20, 4), comment=u"流动资产周转天数(天)")
     createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
     updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
 
@@ -312,14 +319,14 @@ class Operating(db.Model):
 class Growth(db.Model):
     __tablename__ = 'stock_growth'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    code = db.Column(db.String(30), unique=True, nullable=False, comment=u"股票代码")
+    code = db.Column(db.String(30), nullable=False, comment=u"股票代码")
     name = db.Column(db.String(50), nullable=False, comment=u"股票名称")
-    mbrg = db.Column(db.DECIMAL, comment=u"主营业务收入增长率(%)")
-    nprg = db.Column(db.DECIMAL, comment=u"净利润增长率(%)")
-    nav = db.Column(db.DECIMAL, comment=u"净资产增长率")
-    targ = db.Column(db.DECIMAL, comment=u"总资产增长率")
-    epsg = db.Column(db.DECIMAL, comment=u"每股收益增长率")
-    seg = db.Column(db.DECIMAL, comment=u"股东权益增长率")
+    mbrg = db.Column(db.DECIMAL(20, 4), comment=u"主营业务收入增长率(%)")
+    nprg = db.Column(db.DECIMAL(20, 4), comment=u"净利润增长率(%)")
+    nav = db.Column(db.DECIMAL(20, 4), comment=u"净资产增长率")
+    targ = db.Column(db.DECIMAL(20, 4), comment=u"总资产增长率")
+    epsg = db.Column(db.DECIMAL(20, 4), comment=u"每股收益增长率")
+    seg = db.Column(db.DECIMAL(20, 4), comment=u"股东权益增长率")
     createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
     updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
 
@@ -331,18 +338,18 @@ class Growth(db.Model):
         db.session.commit()
 
 
-# 股票成长能力
+# 股票偿债能力
 class Solvency(db.Model):
     __tablename__ = 'stock_solvency'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    code = db.Column(db.String(30), unique=True, nullable=False, comment=u"股票代码")
+    code = db.Column(db.String(30), nullable=False, comment=u"股票代码")
     name = db.Column(db.String(50), nullable=False, comment=u"股票名称")
-    currentRatio = db.Column(db.DECIMAL, comment=u"流动比率")
-    quickRatio = db.Column(db.DECIMAL, comment=u"速动比率")
-    cashRatio = db.Column(db.DECIMAL, comment=u"现金比率")
-    icRatio = db.Column(db.DECIMAL, comment=u"利息支付倍数")
-    sheqRatio = db.Column(db.DECIMAL, comment=u"股东权益比率")
-    adRatio = db.Column(db.DECIMAL, comment=u"股东权益增长率")
+    currentRatio = db.Column(db.DECIMAL(20, 4), comment=u"流动比率")
+    quickRatio = db.Column(db.DECIMAL(20, 4), comment=u"速动比率")
+    cashRatio = db.Column(db.DECIMAL(20, 4), comment=u"现金比率")
+    icRatio = db.Column(db.DECIMAL(20, 4), comment=u"利息支付倍数")
+    sheqRatio = db.Column(db.DECIMAL(20, 4), comment=u"股东权益比率")
+    adRatio = db.Column(db.DECIMAL(20, 4), comment=u"股东权益增长率")
     createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
     updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
 
@@ -358,13 +365,13 @@ class Solvency(db.Model):
 class CashFlow(db.Model):
     __tablename__ = 'stock_cash_flow'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    code = db.Column(db.String(30), unique=True, nullable=False, comment=u"股票代码")
+    code = db.Column(db.String(30), nullable=False, comment=u"股票代码")
     name = db.Column(db.String(50), nullable=False, comment=u"股票名称")
-    cfSales = db.Column(db.DECIMAL, comment=u"经营现金净流量对销售收入比率")
-    rateOfReturn = db.Column(db.DECIMAL, comment=u"资产的经营现金流量回报率")
-    cfNm = db.Column(db.DECIMAL, comment=u"经营现金净流量与净利润的比率")
-    cfLiabilities = db.Column(db.DECIMAL, comment=u"经营现金净流量对负债比率")
-    cashFlowRatio = db.Column(db.DECIMAL, comment=u"现金流量比率")
+    cfSales = db.Column(db.DECIMAL(20,  4), comment=u"经营现金净流量对销售收入比率")
+    rateOfReturn = db.Column(db.DECIMAL(20, 4), comment=u"资产的经营现金流量回报率")
+    cfNm = db.Column(db.DECIMAL(20, 4), comment=u"经营现金净流量与净利润的比率")
+    cfLiabilities = db.Column(db.DECIMAL(20, 4), comment=u"经营现金净流量对负债比率")
+    cashFlowRatio = db.Column(db.DECIMAL(20, 4), comment=u"现金流量比率")
     createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
     updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
 
@@ -381,24 +388,24 @@ class CashFlow(db.Model):
 class HistoricalQuotes(db.Model):
     __tablename__ = 'stock_historical_quotes'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    code = db.Column(db.String(30), unique=True, nullable=False, comment=u"股票代码")
+    code = db.Column(db.String(30), nullable=False, comment=u"股票代码")
     name = db.Column(db.String(50), nullable=False, comment=u"股票名称")
 
     date = db.Column(db.String(20), comment=u"日期")
-    open = db.Column(db.DECIMAL, comment=u"开盘价")
-    high = db.Column(db.DECIMAL, comment=u"最高价")
-    close = db.Column(db.DECIMAL, comment=u"收盘价")
-    low = db.Column(db.DECIMAL, comment=u"最低价")
-    volume = db.Column(db.DECIMAL, comment=u"成交量")
-    priceChange = db.Column(db.DECIMAL, comment=u"价格变动")
-    pChange = db.Column(db.DECIMAL, comment=u"涨跌幅")
-    ma5 = db.Column(db.DECIMAL, comment=u"5日均价")
-    ma10 = db.Column(db.DECIMAL, comment=u"10日均价")
-    ma20 = db.Column(db.DECIMAL, comment=u"20日均价")
-    vMa5 = db.Column(db.DECIMAL, comment=u"5日均量")
-    vMa10 = db.Column(db.DECIMAL, comment=u"10日均量")
-    vMa20 = db.Column(db.DECIMAL, comment=u"20日均量")
-    turnover = db.Column(db.DECIMAL, comment=u"换手率[注：指数无此项]")
+    open = db.Column(db.DECIMAL(20, 4), comment=u"开盘价")
+    high = db.Column(db.DECIMAL(20, 4), comment=u"最高价")
+    close = db.Column(db.DECIMAL(20, 4), comment=u"收盘价")
+    low = db.Column(db.DECIMAL(20, 4), comment=u"最低价")
+    volume = db.Column(db.DECIMAL(20, 4), comment=u"成交量")
+    priceChange = db.Column(db.DECIMAL(20, 4), comment=u"价格变动")
+    pChange = db.Column(db.DECIMAL(20, 4), comment=u"涨跌幅")
+    ma5 = db.Column(db.DECIMAL(20, 4), comment=u"5日均价")
+    ma10 = db.Column(db.DECIMAL(20, 4), comment=u"10日均价")
+    ma20 = db.Column(db.DECIMAL(20, 4), comment=u"20日均价")
+    vMa5 = db.Column(db.DECIMAL(20, 4), comment=u"5日均量")
+    vMa10 = db.Column(db.DECIMAL(20, 4), comment=u"10日均量")
+    vMa20 = db.Column(db.DECIMAL(20, 4), comment=u"20日均量")
+    turnover = db.Column(db.DECIMAL(20, 4), comment=u"换手率[注：指数无此项]")
     createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
     updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
 
@@ -414,16 +421,16 @@ class HistoricalQuotes(db.Model):
 class RecoverData(db.Model):
     __tablename__ = 'stock_recover_data'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    code = db.Column(db.String(30), unique=True, nullable=False, comment=u"股票代码")
+    code = db.Column(db.String(30), nullable=False, comment=u"股票代码")
     name = db.Column(db.String(50), nullable=False, comment=u"股票名称")
 
     date = db.Column(db.String(30), comment=u"交易日期 (index)")
-    open = db.Column(db.DECIMAL, comment=u"开盘价")
-    high = db.Column(db.DECIMAL, comment=u"最高价")
-    close = db.Column(db.DECIMAL, comment=u"收盘价")
-    low = db.Column(db.DECIMAL, comment=u"收盘价")
+    open = db.Column(db.DECIMAL(20, 4), comment=u"开盘价")
+    high = db.Column(db.DECIMAL(20, 4), comment=u"最高价")
+    close = db.Column(db.DECIMAL(20, 4), comment=u"收盘价")
+    low = db.Column(db.DECIMAL(20, 4), comment=u"收盘价")
     volume = db.Column(db.INTEGER, comment=u"成交量")
-    amount = db.Column(db.DECIMAL, comment=u"成交金额")
+    amount = db.Column(db.DECIMAL(20, 4), comment=u"成交金额")
     createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
     updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
 
@@ -439,22 +446,22 @@ class RecoverData(db.Model):
 class RealTimeMarket(db.Model):
     __tablename__ = 'stock_real_time_market'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    code = db.Column(db.String(30), unique=True, nullable=False, comment=u"股票代码")
+    code = db.Column(db.String(30), nullable=False, comment=u"股票代码")
     name = db.Column(db.String(50), nullable=False, comment=u"股票名称")
 
-    changePercent = db.Column(db.DECIMAL, comment=u"涨跌幅")
-    trade = db.Column(db.DECIMAL, comment=u"现价")
-    open = db.Column(db.DECIMAL, comment=u"开盘价")
-    high = db.Column(db.DECIMAL, comment=u"最高价")
-    low = db.Column(db.DECIMAL, comment=u"最低价")
-    settlement = db.Column(db.DECIMAL, comment=u"昨日收盘价")
+    changePercent = db.Column(db.DECIMAL(20,  4), comment=u"涨跌幅")
+    trade = db.Column(db.DECIMAL(20, 4), comment=u"现价")
+    open = db.Column(db.DECIMAL(20, 4), comment=u"开盘价")
+    high = db.Column(db.DECIMAL(20, 4), comment=u"最高价")
+    low = db.Column(db.DECIMAL(20, 4), comment=u"最低价")
+    settlement = db.Column(db.DECIMAL(20, 4), comment=u"昨日收盘价")
     volume = db.Column(db.INTEGER, comment=u"成交量")
-    turnoverRatio = db.Column(db.DECIMAL, comment=u"换手率")
+    turnoverRatio = db.Column(db.DECIMAL(20, 4), comment=u"换手率")
     amount = db.Column(db.INTEGER, comment=u"成交量")
-    per = db.Column(db.DECIMAL, comment=u"市盈率")
-    pb = db.Column(db.DECIMAL, comment=u"市净率")
-    mktcap = db.Column(db.DECIMAL, comment=u"总市值")
-    nmc = db.Column(db.DECIMAL, comment=u"流通市值")
+    per = db.Column(db.DECIMAL(20, 4), comment=u"市盈率")
+    pb = db.Column(db.DECIMAL(20, 4), comment=u"市净率")
+    mktcap = db.Column(db.DECIMAL(20, 4), comment=u"总市值")
+    nmc = db.Column(db.DECIMAL(20, 4), comment=u"流通市值")
     createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
     updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
 
@@ -475,10 +482,10 @@ class HistoryPen(db.Model):
 
     dateTime = db.Column(db.DateTime, index=True, comment=u"当日时间")
     time = db.Column(db.String(30), comment=u"当日时间字符串")
-    price = db.Column(db.DECIMAL, comment=u"成交价格")
+    price = db.Column(db.DECIMAL(20, 4), comment=u"成交价格")
     change = db.Column(db.String(30), comment=u"价格变动")
     volume = db.Column(db.INTEGER, comment=u"成交手")
-    amount = db.Column(db.DECIMAL, comment=u"成交金额(元)")
+    amount = db.Column(db.DECIMAL(20, 4), comment=u"成交金额(元)")
     type = db.Column(db.String(20), comment=u"买卖类型【买盘、卖盘、中性盘】")
     createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
     updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
@@ -498,35 +505,35 @@ class RealTimePen(db.Model):
     code = db.Column(db.String(30), nullable=False, comment=u"股票代码")
     name = db.Column(db.String(50), nullable=False, comment=u"股票名称")
 
-    open = db.Column(db.DECIMAL, comment=u"开盘价")
-    preClose = db.Column(db.DECIMAL, comment=u"昨日收盘价")
-    price = db.Column(db.DECIMAL, comment=u"当前价格")
-    high = db.Column(db.DECIMAL, comment=u"今日最高价")
-    low = db.Column(db.DECIMAL, comment=u"今日最低价")
-    bid = db.Column(db.DECIMAL, comment=u"竞买价，即“买一”报价")
+    open = db.Column(db.DECIMAL(20,  4), comment=u"开盘价")
+    preClose = db.Column(db.DECIMAL(20, 4), comment=u"昨日收盘价")
+    price = db.Column(db.DECIMAL(20, 4), comment=u"当前价格")
+    high = db.Column(db.DECIMAL(20, 4), comment=u"今日最高价")
+    low = db.Column(db.DECIMAL(20, 4), comment=u"今日最低价")
+    bid = db.Column(db.DECIMAL(20,  4), comment=u"竞买价，即“买一”报价")
     ask = db.Column(db.INTEGER, comment=u"竞卖价，即“卖一”报价")
-    volume = db.Column(db.DECIMAL, comment=u"成交量 maybe you need do volume/100")
+    volume = db.Column(db.DECIMAL(20,  4), comment=u"成交量 maybe you need do volume/100")
     amount = db.Column(db.INTEGER, comment=u"成交金额（元 CNY）")
-    b1Volume = db.Column(db.DECIMAL, comment=u"委买一（笔数 bid volume）")
-    b1Price = db.Column(db.DECIMAL, comment=u"委卖一（价格 bid price）")
-    b2Volume = db.Column(db.DECIMAL, comment=u"委买二（笔数 bid volume）")
-    b2Price = db.Column(db.DECIMAL, comment=u"委买二（价格 bid price）")
-    b3Volume = db.Column(db.DECIMAL, comment=u"委买三（笔数 bid volume）")
-    b3Price = db.Column(db.DECIMAL, comment=u"委买三（价格 bid price）")
-    b4Volume = db.Column(db.DECIMAL, comment=u"委买四（笔数 bid volume）")
-    b4Price = db.Column(db.DECIMAL, comment=u"委买四（价格 bid price）")
-    b5Volume = db.Column(db.DECIMAL, comment=u"委买五（笔数 bid volume）")
-    b5Price = db.Column(db.DECIMAL, comment=u"委买五（价格 bid price）")
-    a1Volume = db.Column(db.DECIMAL, comment=u"委卖一（笔数 ask volume）")
-    a1Price = db.Column(db.DECIMAL, comment=u"委卖一（价格 bid price）")
-    a2Volume = db.Column(db.DECIMAL, comment=u"委卖二（笔数 ask volume）")
-    a2Price = db.Column(db.DECIMAL, comment=u"委卖二（价格 bid price）")
-    a3Volume = db.Column(db.DECIMAL, comment=u"委卖三（笔数 ask volume）")
-    a3Price = db.Column(db.DECIMAL, comment=u"委卖三（价格 bid price）")
-    a4Volume = db.Column(db.DECIMAL, comment=u"委卖四（笔数 ask volume）")
-    a4Price = db.Column(db.DECIMAL, comment=u"委卖四（价格 bid price）")
-    a5Volume = db.Column(db.DECIMAL, comment=u"委卖五（笔数 ask volume）")
-    a5Price = db.Column(db.DECIMAL, comment=u"委卖五（价格 bid price）")
+    b1Volume = db.Column(db.DECIMAL(20,  4), comment=u"委买一（笔数 bid volume）")
+    b1Price = db.Column(db.DECIMAL(20,  4), comment=u"委卖一（价格 bid price）")
+    b2Volume = db.Column(db.DECIMAL(20,  4), comment=u"委买二（笔数 bid volume）")
+    b2Price = db.Column(db.DECIMAL(20,  4), comment=u"委买二（价格 bid price）")
+    b3Volume = db.Column(db.DECIMAL(20,  4), comment=u"委买三（笔数 bid volume）")
+    b3Price = db.Column(db.DECIMAL(20,  4), comment=u"委买三（价格 bid price）")
+    b4Volume = db.Column(db.DECIMAL(20,  4), comment=u"委买四（笔数 bid volume）")
+    b4Price = db.Column(db.DECIMAL(20,  4), comment=u"委买四（价格 bid price）")
+    b5Volume = db.Column(db.DECIMAL(20,  4), comment=u"委买五（笔数 bid volume）")
+    b5Price = db.Column(db.DECIMAL(20,  4), comment=u"委买五（价格 bid price）")
+    a1Volume = db.Column(db.DECIMAL(20,  4), comment=u"委卖一（笔数 ask volume）")
+    a1Price = db.Column(db.DECIMAL(20,  4), comment=u"委卖一（价格 bid price）")
+    a2Volume = db.Column(db.DECIMAL(20,  4), comment=u"委卖二（笔数 ask volume）")
+    a2Price = db.Column(db.DECIMAL(20,  4), comment=u"委卖二（价格 bid price）")
+    a3Volume = db.Column(db.DECIMAL(20,  4), comment=u"委卖三（笔数 ask volume）")
+    a3Price = db.Column(db.DECIMAL(20,  4), comment=u"委卖三（价格 bid price）")
+    a4Volume = db.Column(db.DECIMAL(20,  4), comment=u"委卖四（笔数 ask volume）")
+    a4Price = db.Column(db.DECIMAL(20,  4), comment=u"委卖四（价格 bid price）")
+    a5Volume = db.Column(db.DECIMAL(20,  4), comment=u"委卖五（笔数 ask volume）")
+    a5Price = db.Column(db.DECIMAL(20,  4), comment=u"委卖五（价格 bid price）")
     dateTime = db.Column(db.DateTime, comment=u"当日时间")
     date = db.Column(db.String(20), comment=u"日期")
     time = db.Column(db.String(20), comment=u"时间")
@@ -550,11 +557,11 @@ class TodayHistoryPen(db.Model):
 
     dateTime = db.Column(db.DateTime, comment=u"当日时间")
     time = db.Column(db.String(30), comment=u"时间")
-    price = db.Column(db.DECIMAL, comment=u"当前价格")
-    pChange = db.Column(db.DECIMAL, comment=u"涨跌幅")
-    change = db.Column(db.DECIMAL, comment=u"价格变动")
+    price = db.Column(db.DECIMAL(20,  4), comment=u"当前价格")
+    pChange = db.Column(db.DECIMAL(20,  4), comment=u"涨跌幅")
+    change = db.Column(db.DECIMAL(20,  4), comment=u"价格变动")
     volume = db.Column(db.INTEGER, comment=u"成交手")
-    amount = db.Column(db.DECIMAL, comment=u"成交金额(元)")
+    amount = db.Column(db.DECIMAL(20,  4), comment=u"成交金额(元)")
     type = db.Column(db.String(30), comment=u"买卖类型【买盘、卖盘、中性盘】")
     createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
     updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
@@ -574,15 +581,15 @@ class MarketIndex(db.Model):
     code = db.Column(db.String(30), unique=True, nullable=False, comment=u"大盘指数代码")
     name = db.Column(db.String(50), nullable=False, comment=u"大盘指数名称")
 
-    change = db.Column(db.DECIMAL, comment=u"涨跌幅")
-    open = db.Column(db.DECIMAL, comment=u"开盘点位")
-    preClose = db.Column(db.DECIMAL, comment=u"昨日收盘点位")
-    close = db.Column(db.DECIMAL, comment=u"收盘点位")
+    change = db.Column(db.DECIMAL(20,  4), comment=u"涨跌幅")
+    open = db.Column(db.DECIMAL(20,  4), comment=u"开盘点位")
+    preClose = db.Column(db.DECIMAL(20,  4), comment=u"昨日收盘点位")
+    close = db.Column(db.DECIMAL(20,  4), comment=u"收盘点位")
 
-    high = db.Column(db.DECIMAL, comment=u"最高点位")
-    low = db.Column(db.DECIMAL, comment=u"最低点位")
+    high = db.Column(db.DECIMAL(20,  4), comment=u"最高点位")
+    low = db.Column(db.DECIMAL(20,  4), comment=u"最低点位")
     volume = db.Column(db.INTEGER, comment=u"成交量(手)")
-    amount = db.Column(db.DECIMAL, comment=u"成交金额（亿元）")
+    amount = db.Column(db.DECIMAL(20,  4), comment=u"成交金额（亿元）")
     createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
     updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
 
@@ -603,9 +610,9 @@ class BigSingleTransactionData(db.Model):
 
     dateTime = db.Column(db.DateTime, comment=u"当日时间")
     time = db.Column(db.DateTime, comment=u"时间")
-    price = db.Column(db.DECIMAL, comment=u"当前价格")
+    price = db.Column(db.DECIMAL(20,  4), comment=u"当前价格")
     volume = db.Column(db.INTEGER, comment=u"成交手")
-    prePrice = db.Column(db.DECIMAL, comment=u"上一笔价格")
+    prePrice = db.Column(db.DECIMAL(20,  4), comment=u"上一笔价格")
     type = db.Column(db.String(30), comment=u"买卖类型【买盘、卖盘、中性盘】")
     createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
     updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
@@ -625,9 +632,10 @@ class DistributionPlan(db.Model):
     code = db.Column(db.String(30), unique=True, nullable=False, comment=u"股票代码")
     name = db.Column(db.String(50), nullable=False, comment=u"股票名称")
 
+    dateTime = db.Column(db.DateTime, comment=u"分配预案时间")
     year = db.Column(db.String(10), comment=u"分配年份")
     reportDate = db.Column(db.DateTime, comment=u"公布日期")
-    divi = db.Column(db.DECIMAL, comment=u"分红金额（每10股）")
+    divi = db.Column(db.DECIMAL(20,  4), comment=u"分红金额（每10股）")
     shares = db.Column(db.INTEGER, comment=u"转增和送股数（每10股）")
     createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
     updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
@@ -647,10 +655,11 @@ class PerformanceNotice(db.Model):
     code = db.Column(db.String(30), unique=True, nullable=False, comment=u"股票代码")
     name = db.Column(db.String(50), nullable=False, comment=u"股票名称")
 
+    dateTime = db.Column(db.DateTime, comment=u"业绩预告时间")
     type = db.Column(db.String(10), comment=u"业绩变动类型【预增、预亏等】")
     reportDate = db.Column(db.DateTime, comment=u"发布日期")
-    preEps = db.Column(db.DECIMAL, comment=u"上年同期每股收益")
-    range = db.Column(db.DECIMAL, comment=u"业绩变动范围")
+    preEps = db.Column(db.DECIMAL(20,  4), comment=u"上年同期每股收益")
+    range = db.Column(db.DECIMAL(20,  4), comment=u"业绩变动范围")
     createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
     updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
 
@@ -669,9 +678,10 @@ class RestrictedSharesLifted(db.Model):
     code = db.Column(db.String(30), unique=True, nullable=False, comment=u"股票代码")
     name = db.Column(db.String(50), nullable=False, comment=u"股票名称")
 
+    dateTime = db.Column(db.DateTime, comment=u"限售股解禁时间")
     date = db.Column(db.String(20), comment=u"解禁日期")
-    count = db.Column(db.DECIMAL, comment=u"解禁数量（万股）")
-    ratio = db.Column(db.DECIMAL, comment=u"占总盘比率")
+    count = db.Column(db.DECIMAL(20,  4), comment=u"解禁数量（万股）")
+    ratio = db.Column(db.DECIMAL(20,  4), comment=u"占总盘比率")
     createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
     updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
 
@@ -690,13 +700,14 @@ class FundHoldings(db.Model):
     code = db.Column(db.String(30), unique=True, nullable=False, comment=u"股票代码")
     name = db.Column(db.String(50), nullable=False, comment=u"股票名称")
 
+    dateTime = db.Column(db.DateTime, comment=u"基金持股时间")
     date = db.Column(db.String(20), comment=u"报告日期")
     nums = db.Column(db.INTEGER, comment=u"基金家数")
     nlast = db.Column(db.INTEGER, comment=u"与上期相比（增加或减少了）")
-    count = db.Column(db.DECIMAL, comment=u"基金持股数（万股）")
-    clast = db.Column(db.DECIMAL, comment=u"与上期相比")
-    amount = db.Column(db.DECIMAL, comment=u"基金持股市值")
-    ratio = db.Column(db.DECIMAL, comment=u"占流通盘比率")
+    count = db.Column(db.DECIMAL(20,  4), comment=u"基金持股数（万股）")
+    clast = db.Column(db.DECIMAL(20,  4), comment=u"与上期相比")
+    amount = db.Column(db.DECIMAL(20,  4), comment=u"基金持股市值")
+    ratio = db.Column(db.DECIMAL(20,  4), comment=u"占流通盘比率")
     createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
     updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
 
@@ -715,15 +726,17 @@ class IpoData(db.Model):
     code = db.Column(db.String(30), unique=True, nullable=False, comment=u"股票代码")
     name = db.Column(db.String(120), nullable=False, comment=u"股票名称")
 
+    ipoDateTime = db.Column(db.DateTime, comment=u"IPO时间")
+    issueDateTime = db.Column(db.DateTime, comment=u"上市时间")
     ipoDate = db.Column(db.String(20), comment=u"上网发行日期")
     issueDate = db.Column(db.String(20), comment=u"上市日期")
     amount = db.Column(db.INTEGER, comment=u"发行数量(万股)")
     markets = db.Column(db.INTEGER, comment=u"上网发行数量(万股)")
-    price = db.Column(db.DECIMAL, comment=u"发行价格(元)")
-    pe = db.Column(db.DECIMAL, comment=u"发行市盈率")
-    limit = db.Column(db.DECIMAL, comment=u"个人申购上限(万股)")
-    funds = db.Column(db.DECIMAL, comment=u"募集资金(亿元)")
-    ballot = db.Column(db.DECIMAL, comment=u"网上中签率(%)")
+    price = db.Column(db.DECIMAL(20,  4), comment=u"发行价格(元)")
+    pe = db.Column(db.DECIMAL(20,  4), comment=u"发行市盈率")
+    limit = db.Column(db.DECIMAL(20,  4), comment=u"个人申购上限(万股)")
+    funds = db.Column(db.DECIMAL(20,  4), comment=u"募集资金(亿元)")
+    ballot = db.Column(db.DECIMAL(20,  4), comment=u"网上中签率(%)")
     createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
     updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
 
@@ -742,13 +755,14 @@ class ShMarginTrading(db.Model):
     code = db.Column(db.String(30), unique=True, nullable=False, comment=u"股票代码")
     name = db.Column(db.String(50), nullable=False, comment=u"股票名称")
 
+    dateTime = db.Column(db.DateTime, comment=u"交易日期时间")
     opDate = db.Column(db.String(20), comment=u"信用交易日期")
-    rzye = db.Column(db.DECIMAL, comment=u"本日融资余额(元)")
-    rzmre = db.Column(db.DECIMAL, comment=u"本日融资买入额(元)")
+    rzye = db.Column(db.DECIMAL(20,  4), comment=u"本日融资余额(元)")
+    rzmre = db.Column(db.DECIMAL(20,  4), comment=u"本日融资买入额(元)")
     rqyl = db.Column(db.INTEGER, comment=u"本日融券余量")
-    rqylje = db.Column(db.DECIMAL, comment=u"本日融券余量金额(元)")
+    rqylje = db.Column(db.DECIMAL(20,  4), comment=u"本日融券余量金额(元)")
     rqmcl = db.Column(db.INTEGER, comment=u"本日融券卖出量")
-    rzrqjyzl = db.Column(db.DECIMAL, comment=u"本日融资融券余额(元)")
+    rzrqjyzl = db.Column(db.DECIMAL(20,  4), comment=u"本日融资融券余额(元)")
     createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
     updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
 
@@ -767,12 +781,13 @@ class ShMarginTradingDetails(db.Model):
     code = db.Column(db.String(30), unique=True, nullable=False, comment=u"股票代码")
     name = db.Column(db.String(50), nullable=False, comment=u"股票名称")
 
+    dateTime = db.Column(db.DateTime, comment=u"融资融券详细时间")
     opDate = db.Column(db.String(20), comment=u"信用交易日期")
     stockCode = db.Column(db.String(30), comment=u"标的证券代码")
     securityAbbr = db.Column(db.String(50), comment=u"标的证券简称")
-    rzye = db.Column(db.DECIMAL, comment=u"本日融资余额(元)")
-    rzmre = db.Column(db.DECIMAL, comment=u"本日融资买入额(元)")
-    rzche = db.Column(db.DECIMAL, comment=u"本日融资偿还额(元)")
+    rzye = db.Column(db.DECIMAL(20,  4), comment=u"本日融资余额(元)")
+    rzmre = db.Column(db.DECIMAL(20,  4), comment=u"本日融资买入额(元)")
+    rzche = db.Column(db.DECIMAL(20,  4), comment=u"本日融资偿还额(元)")
     rqyl = db.Column(db.INTEGER, comment=u"本日融券余量")
     rqmcl = db.Column(db.INTEGER, comment=u"本日融券卖出量")
     rqchl = db.Column(db.INTEGER, comment=u"本日融券偿还量")
@@ -794,11 +809,12 @@ class SzMarginTrading(db.Model):
     code = db.Column(db.String(30), unique=True, nullable=False, comment=u"股票代码")
     name = db.Column(db.String(50), nullable=False, comment=u"股票名称")
 
+    dateTime = db.Column(db.DateTime, comment=u"融资融券时间")
     opDate = db.Column(db.String(20), comment=u"信用交易日期")
-    rzye = db.Column(db.DECIMAL, comment=u"本日融资余额(元)")
-    rzmre = db.Column(db.DECIMAL, comment=u"本日融资买入额(元)")
+    rzye = db.Column(db.DECIMAL(20,  4), comment=u"本日融资余额(元)")
+    rzmre = db.Column(db.DECIMAL(20,  4), comment=u"本日融资买入额(元)")
     rqyl = db.Column(db.INTEGER, comment=u"本日融券余量")
-    rqye = db.Column(db.DECIMAL, comment=u"本日融券余量(元)")
+    rqye = db.Column(db.DECIMAL(20,  4), comment=u"本日融券余量(元)")
     rqmcl = db.Column(db.INTEGER, comment=u"本日融券卖出量")
     createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
     updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
@@ -818,15 +834,16 @@ class SzMarginTradingDetails(db.Model):
     code = db.Column(db.String(30), unique=True, nullable=False, comment=u"股票代码")
     name = db.Column(db.String(50), nullable=False, comment=u"股票名称")
 
+    dateTime = db.Column(db.DateTime, comment=u"融资融券详细时间")
     opDate = db.Column(db.String(20), comment=u"信用交易日期")
     stockCode = db.Column(db.String(30), comment=u"标的证券代码")
     securityAbbr = db.Column(db.String(30), comment=u"标的证券简称")
-    rzye = db.Column(db.DECIMAL, comment=u"本日融资余额(元)")
-    rzmre = db.Column(db.DECIMAL, comment=u"本日融资买入额(元)")
+    rzye = db.Column(db.DECIMAL(20,  4), comment=u"本日融资余额(元)")
+    rzmre = db.Column(db.DECIMAL(20,  4), comment=u"本日融资买入额(元)")
     rqyl = db.Column(db.INTEGER, comment=u"本日融券余量")
-    rqye = db.Column(db.DECIMAL, comment=u"本日融券余量(元)")
+    rqye = db.Column(db.DECIMAL(20,  4), comment=u"本日融券余量(元)")
     rqmcl = db.Column(db.INTEGER, comment=u"本日融券卖出量")
-    rzrqye = db.Column(db.DECIMAL, comment=u"融资融券余额(元)")
+    rzrqye = db.Column(db.DECIMAL(20,  4), comment=u"融资融券余额(元)")
     createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
     updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
 
@@ -845,11 +862,12 @@ class DailyBillboard(db.Model):
     code = db.Column(db.String(30), unique=True, nullable=False, comment=u"股票代码")
     name = db.Column(db.String(50), nullable=False, comment=u"股票名称")
 
+    dateTime = db.Column(db.DateTime, comment=u"每日龙虎榜列表时间")
     pChange = db.Column(db.FLOAT, comment=u"当日涨跌幅")
-    amount = db.Column(db.DECIMAL, comment=u"龙虎榜成交额(万)")
-    buy = db.Column(db.DECIMAL, comment=u"买入额(万)")
+    amount = db.Column(db.DECIMAL(20,  4), comment=u"龙虎榜成交额(万)")
+    buy = db.Column(db.DECIMAL(20,  4), comment=u"买入额(万)")
     bRatio = db.Column(db.FLOAT, comment=u"买入占总成交比例")
-    sell = db.Column(db.DECIMAL, comment=u"卖出额(万)")
+    sell = db.Column(db.DECIMAL(20,  4), comment=u"卖出额(万)")
     sRatio = db.Column(db.FLOAT, comment=u"卖出占总成交比例")
     reason = db.Column(db.String(150), comment=u"上榜原因")
     date = db.Column(db.String(20), comment=u"日期")
@@ -871,10 +889,11 @@ class StockListCount(db.Model):
     code = db.Column(db.String(30), unique=True, nullable=False, comment=u"股票代码")
     name = db.Column(db.String(50), nullable=False, comment=u"股票名称")
 
+    dateTime = db.Column(db.DateTime, comment=u"个股上榜统计时间")
     count = db.Column(db.INTEGER, comment=u"上榜次数")
-    bamount = db.Column(db.DECIMAL, comment=u"累积购买额(万)")
-    samount = db.Column(db.DECIMAL, comment=u"累积卖出额(万)")
-    net = db.Column(db.DECIMAL, comment=u"净额(万)")
+    bamount = db.Column(db.DECIMAL(20,  4), comment=u"累积购买额(万)")
+    samount = db.Column(db.DECIMAL(20,  4), comment=u"累积卖出额(万)")
+    net = db.Column(db.DECIMAL(20,  4), comment=u"净额(万)")
     bcount = db.Column(db.INTEGER, comment=u"买入席位数")
     scount = db.Column(db.INTEGER, comment=u"卖出席位数")
     createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
@@ -895,10 +914,11 @@ class SalesDepartmentListCount(db.Model):
     code = db.Column(db.String(30), unique=True, nullable=False, comment=u"股票代码")
     name = db.Column(db.String(50), nullable=False, comment=u"股票名称")
 
+    dateTime = db.Column(db.DateTime, comment=u"营业部上榜统计时间")
     broker = db.Column(db.String(100), comment=u"营业部名称")
     count = db.Column(db.INTEGER, comment=u"上榜次数")
-    bamount = db.Column(db.DECIMAL, comment=u"累积购买额(万)")
-    samount = db.Column(db.DECIMAL, comment=u"累积卖出额(万)")
+    bamount = db.Column(db.DECIMAL(20,  4), comment=u"累积购买额(万)")
+    samount = db.Column(db.DECIMAL(20,  4), comment=u"累积卖出额(万)")
     bcount = db.Column(db.INTEGER, comment=u"买入席位数")
     scount = db.Column(db.INTEGER, comment=u"卖出席位数")
     top3 = db.Column(db.TEXT, comment=u"买入前三股票")
@@ -920,11 +940,12 @@ class OrganizationSeatTracking(db.Model):
     code = db.Column(db.String(30), unique=True, nullable=False, comment=u"股票代码")
     name = db.Column(db.String(120), nullable=False, comment=u"股票名称")
 
-    bamount = db.Column(db.DECIMAL, comment=u"累积买入额(万)")
+    dateTime = db.Column(db.DateTime, comment=u"机构席位追踪时间")
+    bamount = db.Column(db.DECIMAL(20,  4), comment=u"累积买入额(万)")
     bcount = db.Column(db.INTEGER, comment=u"买入次数")
-    samount = db.Column(db.DECIMAL, comment=u"累积卖出额(万)")
+    samount = db.Column(db.DECIMAL(20,  4), comment=u"累积卖出额(万)")
     scount = db.Column(db.INTEGER, comment=u"卖出次数")
-    net = db.Column(db.DECIMAL, comment=u"净额(万)")
+    net = db.Column(db.DECIMAL(20,  4), comment=u"净额(万)")
     createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
     updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
 
@@ -943,15 +964,80 @@ class AgencyTurnoverDetails(db.Model):
     code = db.Column(db.String(30), unique=True, nullable=False, comment=u"股票代码")
     name = db.Column(db.String(120), nullable=False, comment=u"股票名称")
 
+    dateTime = db.Column(db.DateTime, comment=u"机构成交明细时间")
     date = db.Column(db.String(20), comment=u"交易日期")
-    bamount = db.Column(db.DECIMAL, comment=u"机构席位买入额(万)")
-    samount = db.Column(db.DECIMAL, comment=u"机构席位卖出额(万)")
+    bamount = db.Column(db.DECIMAL(20,  4), comment=u"机构席位买入额(万)")
+    samount = db.Column(db.DECIMAL(20,  4), comment=u"机构席位卖出额(万)")
     type = db.Column(db.String(100), comment=u"类型")
     createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
     updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
 
     def __repr__(self):
         return '<AgencyTurnoverDetails %r>' % self.code
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+
+# 新闻
+# 即时新闻
+class LatestNews(db.Model):
+    __tablename__ = 'article_latest_news'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    classify = db.Column(db.String(30), nullable=False, comment=u"新闻类别")
+    title = db.Column(db.String(120), nullable=False, comment=u"新闻标题")
+
+    dateTime = db.Column(db.DateTime, comment=u"发布时间")
+    time = db.Column(db.String(20), comment=u"发布时间")
+    url = db.Column(db.DECIMAL(20,  4), comment=u"新闻链接")
+    content = db.Column(db.DECIMAL(20,  4), comment=u"新闻内容（在show_content为True的情况下出现）")
+    createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
+    updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
+
+    def __repr__(self):
+        return '<LatestNews %r>' % self.title
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+
+# 信息地雷
+class Notices(db.Model):
+    __tablename__ = 'article_notices'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    title = db.Column(db.String(120), nullable=False, comment=u"新闻标题")
+
+    dateTime = db.Column(db.DateTime, comment=u"发布时间")
+    date = db.Column(db.String(20), comment=u"公告日期")
+    type = db.Column(db.DECIMAL(20,  4), comment=u"信息类型")
+    url = db.Column(db.DECIMAL(20,  4), comment=u"信息内容URL")
+    createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
+    updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
+
+    def __repr__(self):
+        return '<Notices %r>' % self.title
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+
+# 新浪股吧
+class GubaSina(db.Model):
+    __tablename__ = 'article_guba_sina'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    title = db.Column(db.String(120), nullable=False, comment=u"新闻标题")
+
+    ptime = db.Column(db.String(30), comment=u"发布时间")
+    rcounts = db.Column(db.INTEGER, comment=u"阅读次数")
+    content = db.Column(db.String(200), comment=u"消息内容（show_content=True的情况下）")
+    createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
+    updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
+
+    def __repr__(self):
+        return '<GubaSina %r>' % self.title
 
     def save(self):
         db.session.add(self)

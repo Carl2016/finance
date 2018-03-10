@@ -5,6 +5,6 @@
 '''
 from flask import Blueprint
 
-stock = Blueprint('stock', __name__,)
+init = Blueprint('init', __name__,)
 
-from app.stock import views
+from app.init import views

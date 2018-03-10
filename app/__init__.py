@@ -49,9 +49,11 @@ def create_app(config_name):
 
     from app.auth.views import auth
     from app.stock.views import stock
+    from app.init.views import init
     from app.common.apsCheduler.views import scheduler
     app.register_blueprint(auth, url_prefix='/auth')
     app.register_blueprint(stock, url_prefix='/stock')
+    app.register_blueprint(init, url_prefix='/init')
     app.register_blueprint(scheduler, url_prefix='/scheduler')
 
     return app

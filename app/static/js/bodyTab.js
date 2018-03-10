@@ -13,7 +13,7 @@ layui.define(["element","jquery"],function(exports){
 
 	//弹出loading
     /*var loading = top.layer.load(0,{ shade: [0.3,'#000']});*/
-    $.ajax({
+    /*$.ajax({
         url : '/sys/menu/nav',
         type : 'get',
         async: false,
@@ -58,7 +58,7 @@ layui.define(["element","jquery"],function(exports){
             //top.layer.closeAll();
         }
     });
-
+*/
 
     function topNavBar(data){
         var pdata = $.parseJSON(data);

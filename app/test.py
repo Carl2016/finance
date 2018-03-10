@@ -18,7 +18,8 @@ import matplotlib.pyplot as plt
 # plt.ylabel('股价')
 # plt.title('中国平安收盘价，MA5，MA20时间序列')
 
-df = ts.get_report_data(2014,3)
+#df = ts.get_report_data(2014,3)
+df = ts.get_hist_data('600848') #一次性获取全部日k线数据
 #df = ts.get_stock_basics()
 print(df)
 #engine = create_engine('mysql://root:123456@127.0.0.1/stock?charset=utf8')
