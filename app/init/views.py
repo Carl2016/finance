@@ -164,23 +164,41 @@ def initStockGrowth():
 # 股票偿债能力
 @init.route('/initStockSolvency', methods=['GET'])
 def initStockSolvency():
-    df = ts.get_cashflow_data(2014, 3)
+    df = ts.get_debtpaying_data(2014,3)
     for index, row in df.iterrows():
         solvency = Solvency()
         solvency.code = row['code']
         solvency.name = row['name']
         if pd.notnull(row['currentratio']):
-            solvency.currentRatio = row['currentratio']
+            if isinstance(row['currentratio'], float):
+                solvency.currentRatio = row['currentratio']
+            elif row['currentratio'].find("--") == -1:
+                solvency.currentRatio = row['currentratio']
         if pd.notnull(row['quickratio']):
-            solvency.quickRatio = row['quickratio']
+            if isinstance(row['quickratio'], float):
+                solvency.quickRatio = row['quickratio']
+            elif row['quickratio'].find("--") == -1:
+                solvency.quickRatio = row['quickratio']
         if pd.notnull(row['cashratio']):
-            solvency.cashRatio = row['cashratio']
+            if isinstance(row['cashratio'], float):
+                solvency.cashRatio = row['cashratio']
+            elif row['cashratio'].find("--") == -1:
+                solvency.cashRatio = row['cashratio']
         if pd.notnull(row['icratio']):
-            solvency.icRatio = row['icratio']
+            if isinstance(row['icratio'], float):
+                solvency.icRatio = row['icratio']
+            elif row['icratio'].find("--") == -1:
+                solvency.icRatio = row['icratio']
         if pd.notnull(row['sheqratio']):
-            solvency.sheqRatio = row['sheqratio']
+            if isinstance(row['sheqratio'], float):
+                solvency.sheqRatio = row['sheqratio']
+            elif row['sheqratio'].find("--") == -1:
+                solvency.sheqRatio = row['sheqratio']
         if pd.notnull(row['adratio']):
-            solvency.adRatio = row['adratio']
+            if isinstance(row['adratio'], float):
+                solvency.adRatio = row['adratio']
+            elif row['adratio'].find("--") == -1:
+                solvency.adRatio = row['adratio']
         globals.db.add(solvency)
         globals.db.commit()
     return '成功'
@@ -189,23 +207,21 @@ def initStockSolvency():
 # 股票现金流量
 @init.route('/initStockCashFlow', methods=['GET'])
 def initStockCashFlow():
-    df = ts.get_debtpaying_data(2014, 3)
+    df = ts.get_cashflow_data(2014,3)
     for index, row in df.iterrows():
         cashFlow = CashFlow()
         cashFlow.code = row['code']
         cashFlow.name = row['name']
-        if pd.notnull(row['currentratio']):
-            cashFlow.currentRatio = row['currentratio']
-        if pd.notnull(row['quickratio']):
-            cashFlow.quickRatio = row['quickratio']
-        if pd.notnull(row['cashratio']):
-            cashFlow.cashRatio = row['cashratio']
-        if pd.notnull(row['icratio']):
-            cashFlow.icRatio = row['icratio']
-        if pd.notnull(row['sheqratio']):
-            cashFlow.sheqRatio = row['sheqratio']
-        if pd.notnull(row['adratio']):
-            cashFlow.adRatio = row['adratio']
+        if pd.notnull(row['cf_sales']):
+            cashFlow.cfSales = row['cf_sales']
+        if pd.notnull(row['rateofreturn']):
+            cashFlow.rateOfReturn = row['rateofreturn']
+        if pd.notnull(row['cf_nm']):
+            cashFlow.cfNm = row['cf_nm']
+        if pd.notnull(row['cf_liabilities']):
+            cashFlow.cfLiabilities = row['cf_liabilities']
+        if pd.notnull(row['cashflowratio']):
+            cashFlow.cashFlowRatio = row['cashflowratio']
         globals.db.add(cashFlow)
         globals.db.commit()
     return '成功'
@@ -219,6 +235,8 @@ def initStockHistoricalQuotess():
         historicalQuotes = HistoricalQuotes()
         historicalQuotes.code = u'600848'
         historicalQuotes.name = u'上海临港'
+
+        historicalQuotes.date = index
         if pd.notnull(row['open']):
             historicalQuotes.open = row['open']
         if pd.notnull(row['high']):
@@ -234,7 +252,7 @@ def initStockHistoricalQuotess():
         if pd.notnull(row['p_change']):
             historicalQuotes.pChange = row['p_change']
         if pd.notnull(row['ma5']):
-            historicalQuotes.ma10 = row['ma5']
+            historicalQuotes.ma5 = row['ma5']
         if pd.notnull(row['ma10']):
             historicalQuotes.ma10 = row['ma10']
         if pd.notnull(row['ma20']):
@@ -255,11 +273,12 @@ def initStockHistoricalQuotess():
 # 股票复权数据
 @init.route('/initRecoverData', methods=['GET'])
 def initStockRecoverData():
-    df = ts.get_stock_basics()
+    df = ts.get_h_data('002337', start='2015-01-01', end='2015-03-16') #两个日期之间的前复权数据
     for index, row in df.iterrows():
         recoverData = RecoverData()
         recoverData.code = u'600848'
         recoverData.name = u'上海临港'
+        recoverData.date = index
         if pd.notnull(row['open']):
             recoverData.open = row['open']
         if pd.notnull(row['high']):
@@ -353,6 +372,8 @@ def initStockRealTimePen():
             realTimePen.open = row['open']
         if pd.notnull(row['high']):
             realTimePen.high = row['high']
+        if pd.notnull(row['price']):
+            realTimePen.price = row['price']
         if pd.notnull(row['pre_close']):
             realTimePen.preClose = row['pre_close']
         if pd.notnull(row['low']):
@@ -529,9 +550,16 @@ def initPerformanceNotice():
             performanceNotice.type = row['type']
         if pd.notnull(row['pre_eps']):
             performanceNotice.preEps = row['pre_eps']
-        if pd.notnull(row['range']):
+        if pd.notnull(row['range']) :
             performanceNotice.range = row['range']
-        performanceNotice.dateTime = datetime.datetime.strptime(dtstr, "%Y-%m-%d %H:%M:%S")
+            # if row['range'].find("%") == -1:
+            #     performanceNotice.range = row['range']
+            # else:
+            #     range = row['range'].strip().lstrip().rstrip('%')
+            #     performanceNotice.range = range
+        if pd.notnull(dtstr):
+            performanceNotice.dateTime = datetime.datetime.strptime(dtstr, "%Y-%m-%d %H:%M:%S")
+            performanceNotice.reportDate = datetime.datetime.strptime(dtstr, "%Y-%m-%d %H:%M:%S")
         globals.db.add(performanceNotice)
         globals.db.commit()
     return '成功'

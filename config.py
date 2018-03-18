@@ -56,7 +56,7 @@ class DevelopmentConfig(Config):
     MAIL_USE_TLS = True
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
-    SQLALCHEMY_DATABASE_URI = 'mysql://carl:123456@localhost:3306/finance?charset=utf8'
+    SQLALCHEMY_DATABASE_URI = 'mysql://root:123456@localhost:3306/finance?charset=utf8'
 
 
 class TestingConfig(Config):

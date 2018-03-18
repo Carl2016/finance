@@ -18,26 +18,205 @@ def Response_headers(content):
     return resp
 
 
-@stock.route('/list', methods=["GET"])
+#股票列表
+@stock.route('/list', methods=["GET", "POST"])
 def list():
+    if request.method == 'POST':
+        page = request.form['page']
+        limit = request.form['limit']
+        pagination = Stock.query.paginate(int(page), int(limit), error_out=False)
+        count = Stock.query.paginate(int(page), int(limit), error_out=False).pages
+        items = pagination.items
+        result = {
+            "code": 0,
+            "msg": "获取成功",
+            "count": count,
+            "data": items
+        }
+        return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
     return render_template('stock/stock.html')
 
 
-@stock.route('/list/ajax', methods=["GET"])
-def listAjax():
-    #postValues = request.values.get()
-    page = request.args.get('page', 1, type=int)
-    limit = request.args.get('limit', 10, type=int)
-    pagination = Stock.query.paginate(page, limit, error_out=False)
-    stocks = pagination.items
-    #content = dict(stocks)
-    content = json.dumps(stocks, cls=AlchemyEncoder)
-    #content = json.dumps(stocks)
-    resp = Response_headers(content)
-    return resp
+#股票业绩预告
+@stock.route('/perNotice', methods=["GET", "POST"])
+def perNotice():
+    if request.method == 'POST':
+        page = request.form['page']
+        limit = request.form['limit']
+        pagination = PerformanceNotice.query.paginate(int(page), int(limit), error_out=False)
+        count = PerformanceNotice.query.paginate(int(page), int(limit), error_out=False).pages
+        items = pagination.items
+        result = {
+            "code": 0,
+            "msg": "获取成功",
+            "count": count,
+            "data": items
+        }
+        return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
+    return render_template('stock/stockPerNotice.html')
 
 
-@stock.route('/historyPen', methods=['GET','POST'])
+#股票盈利能力
+@stock.route('/profit', methods=["GET", "POST"])
+def profit():
+    if request.method == 'POST':
+        page = request.form['page']
+        limit = request.form['limit']
+        pagination = Profit.query.paginate(int(page), int(limit), error_out=False)
+        count = Profit.query.paginate(int(page), int(limit), error_out=False).pages
+        items = pagination.items
+        result = {
+            "code": 0,
+            "msg": "获取成功",
+            "count": count,
+            "data": items
+        }
+        return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
+    return render_template('stock/stockProfit.html')
+
+
+#股票运营能力
+@stock.route('/operating', methods=["GET", "POST"])
+def operating():
+    if request.method == 'POST':
+        page = request.form['page']
+        limit = request.form['limit']
+        pagination = Operating.query.paginate(int(page), int(limit), error_out=False)
+        count = Operating.query.paginate(int(page), int(limit), error_out=False).pages
+        items = pagination.items
+        result = {
+            "code": 0,
+            "msg": "获取成功",
+            "count": count,
+            "data": items
+        }
+        return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
+    return render_template('stock/stockOperating.html')
+
+
+#股票成长能力
+@stock.route('/growth', methods=["GET", "POST"])
+def growth():
+    if request.method == 'POST':
+        page = request.form['page']
+        limit = request.form['limit']
+        pagination = Growth.query.paginate(int(page), int(limit), error_out=False)
+        count = Growth.query.paginate(int(page), int(limit), error_out=False).pages
+        items = pagination.items
+        result = {
+            "code": 0,
+            "msg": "获取成功",
+            "count": count,
+            "data": items
+        }
+        return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
+    return render_template('stock/stockGrowth.html')
+
+
+#股票偿债能力
+@stock.route('/solvency', methods=["GET", "POST"])
+def solvency():
+    if request.method == 'POST':
+        page = request.form['page']
+        limit = request.form['limit']
+        pagination = Solvency.query.paginate(int(page), int(limit), error_out=False)
+        count = Solvency.query.paginate(int(page), int(limit), error_out=False).pages
+        items = pagination.items
+        result = {
+            "code": 0,
+            "msg": "获取成功",
+            "count": count,
+            "data": items
+        }
+        return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
+    return render_template('stock/stockSolency.html')
+
+
+#股票现金流量
+@stock.route('/cashFlow', methods=["GET", "POST"])
+def cashFlow():
+    if request.method == 'POST':
+        page = request.form['page']
+        limit = request.form['limit']
+        pagination = CashFlow.query.paginate(int(page), int(limit), error_out=False)
+        count = CashFlow.query.paginate(int(page), int(limit), error_out=False).pages
+        items = pagination.items
+        result = {
+            "code": 0,
+            "msg": "获取成功",
+            "count": count,
+            "data": items
+        }
+        return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
+    return render_template('stock/stockCashFlow.html')
+
+
+#交易数据-股票实时分笔
+@stock.route('/realTimePen', methods=["GET", "POST"])
+def realTimePen():
+    if request.method == 'POST':
+        page = request.form['page']
+        limit = request.form['limit']
+        pagination = RealTimePen.query.paginate(int(page), int(limit), error_out=False)
+        count = RealTimePen.query.paginate(int(page), int(limit), error_out=False).pages
+        items = pagination.items
+        result = {
+            "code": 0,
+            "msg": "获取成功",
+            "count": count,
+            "data": items
+        }
+        return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
+    return render_template('stock/stockRealTimePen.html')
+
+
+#交易数据-股票历史行情
+@stock.route('/historicalQuotes', methods=["GET", "POST"])
+def historicalQuotes():
+    if request.method == 'POST':
+        page = request.form['page']
+        limit = request.form['limit']
+        pagination = HistoricalQuotes.query.paginate(int(page), int(limit), error_out=False)
+        count = HistoricalQuotes.query.paginate(int(page), int(limit), error_out=False).pages
+        items = pagination.items
+        result = {
+            "code": 0,
+            "msg": "获取成功",
+            "count": count,
+            "data": items
+        }
+        return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
+    return render_template('stock/stockHistoricaQuotes.html')
+
+
+#交易数据-股票复权数据
+@stock.route('/recoverData', methods=["GET", "POST"])
+def recoverData():
+    if request.method == 'POST':
+        page = request.form['page']
+        limit = request.form['limit']
+        pagination = RecoverData.query.paginate(int(page), int(limit), error_out=False)
+        count = RecoverData.query.paginate(int(page), int(limit), error_out=False).pages
+        items = pagination.items
+        result = {
+            "code": 0,
+            "msg": "获取成功",
+            "count": count,
+            "data": items
+        }
+        return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
+    return render_template('stock/stockRecoverData.html')
+
+
+
+
+
+
+
+
+
+
+@stock.route('/historyPen', methods=['GET', 'POST'])
 def historyPen():
     if request.method == 'POST':
         datas = {

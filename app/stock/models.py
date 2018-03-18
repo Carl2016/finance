@@ -659,7 +659,7 @@ class PerformanceNotice(db.Model):
     type = db.Column(db.String(10), comment=u"业绩变动类型【预增、预亏等】")
     reportDate = db.Column(db.DateTime, comment=u"发布日期")
     preEps = db.Column(db.DECIMAL(20,  4), comment=u"上年同期每股收益")
-    range = db.Column(db.DECIMAL(20,  4), comment=u"业绩变动范围")
+    range = db.Column(db.String(30), comment=u"业绩变动范围")
     createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
     updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
 

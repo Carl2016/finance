@@ -43,7 +43,7 @@
             <div class="larry-separate"></div>
             <!-- 用户列表 -->
             <div class="layui-tab-item layui-show " style="padding: 10px 15px;">
-                <table id="stockTableList"  lay-filter="stockTableId" ></table>
+                <table id="profitList"  lay-filter="profitId" ></table>
             </div>
         </div>
     </div>
@@ -55,17 +55,17 @@
         base : "/static/js/"
     }).use(['form', 'table', 'layer','common'], function () {
          $ =  layui.$;
-                var form = layui.form,
-                table = layui.table,
-                layer = layui.layer,
-                common = layui.common;
+        var form = layui.form,
+        table = layui.table,
+        layer = layui.layer,
+        common = layui.common;
 
         var loading = layer.load(0,{ shade: [0.3,'#000']});
         /**用户表格加载*/
         table.render({
-            elem: '#stockTableList',
-            url: '/stock/list',
-            id:'stockTableId',
+            elem: '#profitList',
+            url: '/stock/profit',
+            id:'profitId',
             method: 'post',
             height:'full-140',
             skin:'row',
@@ -76,30 +76,15 @@
             cols: [[
                 //{type:"numbers"},
                 {type:"checkbox"},
-                {field:'code', title: '代码',align:'center' ,width: '6%'},
-                {field:'name', title: '名字',align:'center',width: '6%'},
-                {field:'industry', title: '行业',align:'center',width: '6%'},
-                {field:'area', title: '地区',align:'center',width: '6%'},
-                {field:'pe', title: '市盈率',align:'center',width: '6%'},
-                //{field:'timeToMarket', title: '上市日期',align:'center',width: '5%'},
-                {field:'outStanding', title: '流通股本(亿)',sort: true,align:'center',width: '7%'},
-                {field:'totalAssets', title: '总资产(万)',sort: true,align:'center',width: '6%'},
-                {field:'liquidAssets', title: '流动资产',sort: true,align:'center',width: '6%'},
-                {field:'totals', title: '总股本(亿)',sort: true,align:'center',width: '6%'},
-
-                {field:'undp', title: '未分利润',sort: true,align:'center',width: '6%'},
-                {field:'perundp', title: '每股未分配',sort: true,align:'center',width: '6%'},
-                {field:'esp', title: '每股收益',sort: true,align:'center',width: '6%'},
-                {field:'reserved', title: '公积金',sort: true,align:'center',width: '6%'},
-                {field:'reservedPerShare', title: '每股公积金',sort: true,align:'center',width: '6%'},
-
-                {field:'rev', title: '收入同比(%)',sort: true,align:'center',width: '7%'},
-                {field:'profit', title: '利润同比(%)',sort: true,align:'center',width: '7%'},
-
-                {field:'gpr', title: '毛利率(%)',sort: true,align:'center',width: '6%'},
-                {field:'npr', title: '净利润率(%)',sort: true,align:'center',width: '7%'},
-                {field:'holders', title: '股东人数',sort: true,align:'center',width: '6%'}
-
+                {field:'code', title: '代码',align:'center' ,width: '8%'},
+                {field:'name', title: '名字',align:'center',width: '8%'},
+                {field:'roe', title: '净资产收益率(%)',align:'center',width: '10%'},
+                {field:'netProfitRatio', title: '净利率(%)',align:'center',width: '10%'},
+                {field:'esp', title: '每股收益',align:'center',width: '8%'},
+                {field:'grossProfitRate', title: '毛利率(%)',align:'center',width: '8%'},
+                {field:'netProfits', title: '净利润(万元)',align:'center',width: '8%'},
+                {field:'businessIncome', title: '营业收入(百万元)',align:'center',width: '8%'},
+                {field:'bips', title: '每股主营业务收入(元)',sort: true,align:'center',width: '12%'}
                 //{title: '操作', align:'center', width: '10%',toolbar: '#userBar'}
             ]],
             done: function (res, curr, count) {
@@ -113,7 +98,7 @@
             var loading = layer.load(0,{ shade: [0.3,'#000']});
             //监听提交
             form.on('submit(userSearchFilter)', function (data) {
-                table.reload('stockTableId',{
+                table.reload('profitId',{
                     where: {
                             key:data.field.searchTerm,
                             value:data.field.searchContent
@@ -145,7 +130,7 @@
         /**批量失效*/
         $(".userBatchFail_btn").click(function(){
             //表格行操作
-            var checkStatus = table.checkStatus('stockTableId');
+            var checkStatus = table.checkStatus('profitId');
             if(checkStatus.data.length == 0){
                 common.cmsLayErrorMsg("请选择要失效的用户信息");
             }else{
@@ -188,7 +173,7 @@
         });
 
         /**监听工具条*/
-        table.on('tool(stockTableId)', function(obj){
+        table.on('tool(profitId)', function(obj){
             var data = obj.data; //获得当前行数据
             var layEvent = obj.event; //获得 lay-event 对应的值
             console.log(data);
