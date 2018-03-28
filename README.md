@@ -20,20 +20,24 @@
 - Jinja2
 - Flask-Login
 
-**前端技术
-
+**前端技术**
 - layui
 - jquery
 - echarts
 
 **功能简介**
-
-1.任务调度调度，定时爬取数据到数据库
-2.使用echarts图形化展现数据
-3.用户权限控制
+- 任务调度调度，定时爬取数据到数据库
+- 使用echarts图形化展现数据
+- 用户权限控制
 
 
 ## 项目部署
+
+配置数据库文件config.py
+
+```code
+SQLALCHEMY_DATABASE_URI = 'mysql://root:xxxx@localhost:3306/finance?charset=utf8'
+```
 
 1.下载项目到本地，以下是把项目克隆到本地
 
@@ -64,9 +68,9 @@ http://localhost:5000/auth/
 ```code
 # 初始化数据的接口在/app/init/views.py文件里
 
+# 这个地址只是初始化股票列表的数据
 http://localhost:5000/init/initStock
 ```
-
 
 
 **截图截图**
