@@ -10,6 +10,7 @@
 
 
 ## 项目简介
+
 **系统需求**
 -python3.0
 -Flask
@@ -20,14 +21,51 @@
 -Flask-Login
 
 **前端技术
+
 -layui
 -jquery
 -echarts
 
 **功能简介**
+
 1.任务调度调度，定时爬取数据到数据库
 2.使用echarts图形化展现数据
 3.用户权限控制
+
+
+## 项目部署
+
+1.下载项目到本地，以下是把项目克隆到本地
+
+```code
+git clone https://gitee.com/zcm2015/finance.git
+```
+
+2.初始化数据库，在项目根目录执行
+
+```code
+python manage.py create_db
+```
+
+3.启动项目，在项目根目录执行
+
+```code
+python manage.py runserver
+```
+
+4.访问项目地址
+
+```
+http://localhost:5000/auth/
+```
+
+5.初始化数据
+
+```code
+# 初始化数据的接口在/app/init/views.py文件里
+
+http://localhost:5000/init/initStock
+```
 
 
 
