@@ -12,19 +12,19 @@
 ## 项目简介
 
 **系统需求**
--python3.0
--Flask
--tushare
--pandas
--SQLAlchemy
--Jinja2
--Flask-Login
+- python3.0
+- Flask
+- tushare
+- pandas
+- SQLAlchemy
+- Jinja2
+- Flask-Login
 
 **前端技术
 
--layui
--jquery
--echarts
+- layui
+- jquery
+- echarts
 
 **功能简介**
 
