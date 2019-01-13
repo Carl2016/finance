@@ -2,7 +2,7 @@
 from sqlalchemy import create_engine
 import tushare as ts
 import pandas as pd
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
 # # %% 获取中国平安三年内K线数据
 # ZGPA = ts.get_hist_data('000001')
@@ -22,11 +22,11 @@ import matplotlib.pyplot as plt
 df = ts.get_hist_data('600848') #一次性获取全部日k线数据
 #df = ts.get_stock_basics()
 print(df)
-#engine = create_engine('mysql://root:123456@127.0.0.1/stock?charset=utf8')
+engine = create_engine('mysql://root:123456@127.0.0.1/stock?charset=utf8')
 
 # 存入数据库
-#df.to_sql('tick_data',engine)
+df.to_sql('tick_data',engine)
 
 # 追加数据到现有表
-# df.to_sql('tick_data', engine, if_exists='append')
-#df.to_sql('tick_data',engine,if_exists='append')
+df.to_sql('tick_data', engine, if_exists='append')
+df.to_sql('tick_data',engine,if_exists='append')

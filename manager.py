@@ -18,13 +18,14 @@ from flask_security import login_user, logout_user, current_user
 
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
+app.debug = False
 manager = Manager(app)
 migrate = Migrate(app, db)
 
 
 @loginmanager.user_loader
 def load_user(username):
-    print("调用了----------------------------------------------------------------")
+    # print("调用了----------------------------------------------------------------")
     return User.query.filter_by(username=username).first()
 
 
@@ -62,7 +63,7 @@ def deploy():
 
 @manager.command
 def initrole():
-    print ("Roles added!")
+    print("Roles added!")
 
 
 if __name__ == '__main__':

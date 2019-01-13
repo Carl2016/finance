@@ -27,14 +27,17 @@ layui.define(['layer'], function (exports) {
                     type : 'post',
                     async: false,
                     data : param,
-                    success : function(data) {
-                        if(data.code == 0000){
-                            top.layer.msg(data.message, {icon: 6});
+                    success : function(item) {
+                        console.log(item)
+                        console.log(item.code)
+                        if(item.code == "0000"){
+                            top.layer.msg(item.msg, {icon: 6});
                             location.reload();
                         }else{
-                            top.layer.msg(data.message,{icon: 5});
+                            alert(1)
+                            top.layer.msg(item.msg,{icon: 5});
                         }
-                    },error:function(data){
+                    },error:function(item){
 
                     }
                 });
@@ -46,7 +49,6 @@ layui.define(['layer'], function (exports) {
         },
         /**弹出层*/
         cmsLayOpen:function (title,url,width,height) {
-
             var index = layui.layer.open({
                 title : '<i class="larry-icon larry-bianji3"></i>'+title,
                 type : 2,

@@ -5,8 +5,6 @@ from flask_security import login_user, logout_user, current_user
 from app.user.models import *
 from app.auth import auth
 from .. import db
-from manager import app
-import json
 
 
 # 管理员登录

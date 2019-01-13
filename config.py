@@ -2,8 +2,6 @@
 import os
 # from app.stock.views import initHistoryPen
 basedir = os.path.abspath(os.path.dirname(__file__))
-
-
 DEBUG = True
 CSRF_ENABLED = False
 SECURITY_TRACKABLE = True
@@ -11,29 +9,8 @@ SECRET_KEY = os.urandom(24)
 WTF_CSRF_ENABLED = False
 
 
-def job_1(a, b):  # 一个函数，用来做定时任务的任务。
-    print(str(a) + ' ' + str(b))
-
-
 class Config:
-    # 任务调度
-    JOBS = [
-        # { # 任务字典（细节）
-        #     'id': 'job1',
-        #     'func': initHistoryPen,
-        #     'args': '',
-        #     'trigger': 'cron',
-        #     'hour': 19,
-        #     'minute': 27
-        # },
-        # {  # 第二个任务字典
-        #     'id': 'job2',
-        #     'func': job_1,
-        #     'args': (3, 4),
-        #     'trigger': 'interval',
-        #     'seconds': 5,
-        # }
-    ]
+
     SCHEDULER_API_ENABLED = True
 
     #
@@ -56,7 +33,17 @@ class DevelopmentConfig(Config):
     MAIL_USE_TLS = True
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
-    SQLALCHEMY_DATABASE_URI = 'mysql://root:123456@localhost:3306/finance?charset=utf8'
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:123456@localhost:3306/finance?charset=utf8'
+    # 设置是否在每次连接结束后自动提交数据库中的变动。
+    SQLALCHEMY_COMMIT_ON_TEARDOWN = True
+    # 数据库连接池的大小。默认是数据库引擎的默认值：5
+    SQLALCHEMY_POOL_SIZE = 10
+    # 控制在连接池达到最大值后可以创建的连接数。当这些额外的连接使用后回收到连接池后将会被断开和抛弃。保证连接池只有设置的大小
+    SQLALCHEMY_MAX_OVERFLOW = 5
+    # 指定数据库连接池的超时时间。默认是：10
+    SQLALCHEMY_POOL_TIMEOUT = 10
+    # 自动回收连接的秒数
+    SQLALCHEMY_POOL_RECYCLE = 1200
 
 
 class TestingConfig(Config):
