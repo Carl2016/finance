@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>后台管理系统</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="后台管理系统">
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="/static/img/favicon.ico">
+    <link rel="stylesheet" href="/static/plugins/layui_v2/css/layui.css">
+    <script src="/static/plugins/layui_v2/layui.js"></script>
+
+    <style>
+        .group_left {
+            float: left;
+        }
+    </style>
+
+</head>
+<body class="childrenBody" style="font-size: 12px;margin: 10px 10px 0;">
+<form class="layui-form layui-form-pane">
+    <input id="id" name="id" type="hidden" value="{{ id }}">
+{#    <div class="layui-form-item">#}
+{#        <label class="layui-form-label">方法名</label>#}
+{#        <div class="layui-input-block">#}
+{#            <input type="text" class="layui-input" name="name" lay-verify="required|name" maxlength="50"  value="{{ name }}" placeholder="请输入方法名" {% if id %} disabled {% endif %} >#}
+{#        </div>#}
+{#    </div>#}
+    <div class="layui-form-item">
+        <label class="layui-form-label">方法位置</label>
+        <div class="layui-input-block">
+            <input type="text" class="layui-input" name="func" lay-verify="required|func" maxlength="50"  value="{{ func }}" placeholder="请输入方法位置" {% if id %} disabled {% endif %} >
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">参数</label>
+        <div class="layui-input-block">
+            <input type="text" class="layui-input" name="args" maxlength="50"  value="{{ args }}" placeholder="请输入参数,例如(1,2)">
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <div class="group_left">
+                <label class="layui-form-label">秒</label>
+                <div class="layui-input-inline" style="width: 28%">
+                    <input type="text" class="layui-input" name="second" maxlength="20" value="{{ second }}" placeholder="如：*/3,秒">
+                </div>
+                <label class="layui-form-label">分</label>
+                <div class="layui-input-inline" style="width: 28%">
+                    <input type="text" class="layui-input" name="minute" maxlength="20" value="{{ minute }}" placeholder="如：30,分钟">
+                </div>
+            </div>
+            <div class="group_left">
+                <label class="layui-form-label">时</label>
+                <div class="layui-input-inline" style="width: 28%">
+                    <input type="text" class="layui-input" name="hour" maxlength="20" value="{{ hour }}" placeholder="如：*/2,小时">
+                </div>
+                <label class="layui-form-label">天</label>
+                <div class="layui-input-inline" style="width: 28%">
+                    <input type="text" class="layui-input" name="day" maxlength="20" value="{{ day }}" placeholder="如：3rd fri,日">
+                </div>
+            </div>
+            <div class="group_left">
+                <label class="layui-form-label">月</label>
+                <div class="layui-input-inline" style="width: 28%">
+                    <input type="text" class="layui-input" name="month" maxlength="20" value="{{ month }}" placeholder="如：6-8,月">
+                </div>
+                <label class="layui-form-label">年</label>
+                <div class="layui-input-inline" style="width: 28%">
+                    <input type="text" class="layui-input" name="year" maxlength="20" value="{{ year }}" placeholder="如：2018,年">
+                </div>
+            </div>
+            <div class="group_left">
+                <label class="layui-form-label">周</label>
+                <div class="layui-input-inline" style="width: 28%">
+                    <input type="text" class="layui-input" name="week" maxlength="20" value="{{ week }}" placeholder="如：2,一年中的第几周">
+                </div>
+                <label class="layui-form-label">星期几</label>
+                <div class="layui-input-inline" style="width: 28%">
+                    <input type="text" class="layui-input" name="dayOfWeek" maxlength="20" value="{{ day_of_week }}" placeholder="如：mon-fri,一周中的第几天">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">开始时间</label>
+        <div class="layui-input-block">
+            <input type="text" class="layui-input" id="startDate" name="startDate" maxlength="20" value="{{ startDate }}" placeholder="如：2018-12-12 00:00:00,开始时间">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">结束时间</label>
+        <div class="layui-input-block">
+            <input type="text" class="layui-input" id="endDate" name="endDate" maxlength="20" value="{{ endDate }}" placeholder="如：2018-12-12 00:00:00,结束时间">
+        </div>
+    </div>
+    {#<div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-block">
+            <textarea id="remark" name="remark" placeholder="请输入内容" class="layui-textarea" maxlength="50" style="resize:none;min-height:40px;" text="{{remark}}"></textarea>
+        </div>
+    </div>#}
+    <div class="layui-form-item" style="text-align: center;">
+        <button class="layui-btn" lay-submit="" lay-filter="saveSchedule">保存</button>
+        <button type="layui-btn" id="cancle" class="layui-btn layui-btn-primary">取消</button>
+    </div>
+</form>
+<script type="text/javascript">
+    layui.config({
+        base : "/static/js/"
+    }).use(['form','layer','jquery','common','laydate'],function(){
+        var $ = layui.$,
+                form = layui.form,
+                common = layui.common,
+                laydate = layui.laydate,
+                layer = parent.layer === undefined ? layui.layer : parent.layer;
+
+        laydate.render({
+            elem: '#startDate', //指定元素
+            type: 'datetime'
+        });
+        laydate.render({
+            elem: '#endDate', //指定元素
+            type: 'datetime'
+        });
+
+        /**表单验证*/
+        form.verify({
+            userName: function(value, item){
+                //验证登陆账号
+                if(!new RegExp("^[0-9A-Za-z_]{2,20}$").test(value)){
+                    return '登陆账号只能为英文、数字、下划线，长度2-20位';
+                }
+                //验证登陆账号是否存在
+            },
+            nickName: function(value, item){
+                //验证用户名
+                if(!new RegExp("^([\u4e00-\u9fa5]){2,10}$").test(value)){
+                    return '用户姓名只能为中文，长度2-7位';
+                }
+            }
+        });
+
+        /**保存*/
+        form.on("submit(saveSchedule)", function(data){
+            var scheduleSaveLoading = top.layer.msg('数据提交中，请稍候',{icon: 16,time:false,shade:0.8});
+            //登陆验证
+            $.ajax({
+                url : '/scheduler/add',
+                type : 'post',
+                async: false,
+                data : data.field,
+                success : function(data) {
+                    if(data.code == 0000){
+                        top.layer.close(scheduleSaveLoading);
+                        var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                        parent.layer.close(index); //再执行关闭                        //刷新父页面
+                        parent.location.reload();
+                    }else{
+                        top.layer.close(scheduleSaveLoading);
+                        common.cmsLayErrorMsg(data.message);
+                    }
+                },error:function(data){
+                    top.layer.close(index);
+                }
+            });
+            return false;
+        });
+
+        //取消
+        $("#cancle").click(function(){
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+            parent.layer.close(index); //再执行关闭
+        });
+    });
+
+</script>
+</body>
+</html>
