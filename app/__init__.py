@@ -47,7 +47,6 @@ def create_app(config_name):
     from app.apsCheduler import scheduler
     app.register_blueprint(auth, url_prefix='/auth')
     app.register_blueprint(stock, url_prefix='/stock')
-    # app.register_blueprint(init, url_prefix='/init')
     app.register_blueprint(scheduler, url_prefix='/scheduler')
 
     return app

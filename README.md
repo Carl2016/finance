@@ -48,30 +48,20 @@ git clone https://gitee.com/zcm2015/finance.git
 2.初始化数据库，在项目根目录执行
 
 ```code
-python manage.py create_db
+python manager.py create_db
 ```
 
 3.启动项目，在项目根目录执行
 
 ```code
-python manage.py runserver
+python manager.py runserver
 ```
 
 4.访问项目地址
 
 ```
-http://localhost:5000/auth/
+http://localhost:5000/auth/login
 ```
-
-5.初始化数据
-
-```code
-# 初始化数据的接口在/app/init/views.py文件里
-
-# 这个地址只是初始化股票列表的数据
-http://localhost:5000/init/initStock
-```
-
 
 **截图截图**
 

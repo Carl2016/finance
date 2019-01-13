@@ -10,7 +10,6 @@ from .. import db
 # 管理员登录
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
-    print("----------------------------------------------------------------------")
     if not current_user.is_anonymous:
         return redirect(url_for('auth.login'))
     if request.method == 'POST':
@@ -18,8 +17,8 @@ def login():
         username = request.form.get('username')
         password = request.form.get('password')
         remember_me = request.form.get('remember_me')
-        user = User.query.filter_by(username = username).first()
-        if user is None :
+        user = User.query.filter_by(username=username).first()
+        if user is None:
             flash('用户不存在')
         else:
             if user.verify_password(password):
@@ -47,7 +46,7 @@ def register():
 
 
 # 首页
-@auth.route('/')
+@auth.route('/index')
 @login_required
 def index():
     return render_template("index.html")
@@ -58,6 +57,6 @@ def index():
 @login_required
 def logout():
     logout_user()  # 登出用户
-    return redirect(url_for('auth.login'))
+    return redirect(url_for('auth/login'))
 
 
