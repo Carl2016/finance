@@ -9,6 +9,7 @@ from app.apsCheduler import scheduler
 from app.apsCheduler.config import schedulers
 from datetime import datetime
 from app.common.alchemyEncoder import AlchemyEncoder
+from flask_login import login_required
 import json
 
 
@@ -17,6 +18,7 @@ def tick():
 
 
 @scheduler.route('/list', methods=['GET', 'POST'])
+@login_required
 def list():
     if request.method == 'POST':
         page = request.form['page']
@@ -85,6 +87,7 @@ def jobfromparm(**jobargs):
 
 
 @scheduler.route('/batchPause', methods=['GET', 'POST'])
+@login_required
 def pause():
     ids = request.form.get('jobs')
     id_list = json.loads(ids)
@@ -95,6 +98,7 @@ def pause():
 
 
 @scheduler.route('/batchExecute', methods=['GET', 'POST'])
+@login_required
 def execute():
     ids = request.form.get('jobs')
     id_list = json.loads(ids)
@@ -105,6 +109,7 @@ def execute():
 
 
 @scheduler.route('/batchResume', methods=['GET', 'POST'])
+@login_required
 def resume():
     ids = request.form.get('jobs')
     id_list = json.loads(ids)
@@ -115,6 +120,7 @@ def resume():
 
 
 @scheduler.route('/batchDelete', methods=['GET', 'POST'])
+@login_required
 def delete():
     ids = request.form.get('jobs')
     id_list = json.loads(ids)
@@ -125,6 +131,7 @@ def delete():
 
 
 @scheduler.route('/add', methods=['GET', 'POST'])
+@login_required
 def add():
     if request.method == 'POST':
         data = {}
@@ -151,6 +158,7 @@ def add():
 
 
 @scheduler.route('/edit/<id>', methods=['GET', 'POST'])
+@login_required
 def edit(id):
     if request.method == 'POST':
         data = {}

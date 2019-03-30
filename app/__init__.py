@@ -12,9 +12,9 @@ import os
 
 # 登录初始化
 loginmanager = LoginManager()
-loginmanager.login_message_category = "info"
+loginmanager.login_message_category = 'info'
 loginmanager.session_protection = 'strong'
-loginmanager.login_view = "auth.login"  # 定义登录的 视图
+loginmanager.login_view = 'auth.login'  # 定义登录的 视图
 loginmanager.login_message = '请登录以访问此页面'  # 定义需要登录访问页面的提示消息
 
 mail = Mail()

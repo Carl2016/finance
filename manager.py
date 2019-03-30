@@ -7,18 +7,15 @@
 # @Software: PyCharm
 import os
 from app import create_app
-from exts import db
 from app.user.models import *
 from app.stock.models import *
 from flask_script import Manager, Shell
 from flask_migrate import Migrate, MigrateCommand
-from flask import request, flash, render_template, redirect, url_for, jsonify, globals
-from flask_login import login_required, LoginManager
-from flask_security import login_user, logout_user, current_user
+from flask import globals
 
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
-app.debug = False
+# app.debug = False
 manager = Manager(app)
 migrate = Migrate(app, db)
 

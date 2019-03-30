@@ -36,7 +36,7 @@ def register():
         username = request.form.get('username')
         password = request.form.get('password')
         if username is not None and password is not None:
-            user = User(username,password)
+            user = User(username, password)
             # user.username = username
             # user.password_hash = user.password(password)
             db.session.add(user)
@@ -57,6 +57,6 @@ def index():
 @login_required
 def logout():
     logout_user()  # 登出用户
-    return redirect(url_for('auth/login'))
+    return render_template("system/login.html")
 
 
