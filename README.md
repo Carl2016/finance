@@ -33,7 +33,7 @@
 
 ## 项目部署
 
-配置数据库文件config.py
+配置数据库文件config.py ,并且导入数据库脚本在db目录下
 
 ```code
 SQLALCHEMY_DATABASE_URI = 'mysql://root:xxxx@localhost:3306/finance?charset=utf8'
