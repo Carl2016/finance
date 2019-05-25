@@ -1,0 +1,279 @@
+<!doctype html>
+<html class="x-admin-sm">
+    <head>
+        <meta charset="UTF-8">
+        <title>Zeus</title>
+        <meta name="renderer" content="webkit|ie-comp|ie-stand">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+        <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+        <link rel="stylesheet" href="/static/css/font.css">
+        <link rel="stylesheet" href="/static/css/xadmin.css">
+        <script src="/static/lib/layui/layui.js" charset="utf-8"></script>
+        <script type="text/javascript" src="/static/js/xadmin.js"></script>
+        <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
+    </head>
+    <body>
+        <div class="layui-fluid">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-body ">
+                            <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+                            <div id="main" style="width: 100%;height:400px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+
+        layui.config({
+            base : "/static/lib/layui/lay/modules/"
+        }).use(['form', 'layer','jquery'],
+            function() {
+                $ = layui.jquery;
+                var form = layui.form,
+                    layer = layui.layer;
+
+
+                // 基于准备好的dom，初始化echarts实例
+                var myChart = echarts.init(document.getElementById('main'));
+
+
+                // 指定图表的配置项和数据
+                // 数据意义：开盘(open)，收盘(close)，最低(lowest)，最高(highest)
+
+                var data0 = null;
+                $.ajax({
+                    type : "POST",
+                    async : false,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+                    url : "/stock/stockDaily",    //请求发送到Servlet处
+                    contentType : "application/json;charset=utf-8",
+                    data : '{"page":1, "limit":100, "code":"000001", "name":"正邦科技"}',
+                    dataType : "json",        //返回数据形式为json
+                    success : function(result) {
+                        //请求成功时执行该函数内容，result即为服务器返回的json对象
+                        if (result) {
+                            data0 = splitData(result.data);
+                        }
+                    }
+                });
+
+                function splitData(rawData) {
+                    var categoryData = [];
+                    var values = []
+                    for (var i = 0; i < rawData.length; i++) {
+                        categoryData.push(rawData[i].splice(0, 1)[0]);
+                        values.push(rawData[i])
+                    }
+                    return {
+                        categoryData: categoryData,
+                        values: values
+                    };
+                }
+
+                function calculateMA(dayCount) {
+                    var result = [];
+                    for (var i = 0, len = data0.values.length; i < len; i++) {
+                        if (i < dayCount) {
+                            result.push('-');
+                            continue;
+                        }
+                        var sum = 0;
+                        for (var j = 0; j < dayCount; j++) {
+                            sum += data0.values[i - j][1];
+                        }
+                        result.push(sum / dayCount);
+                    }
+                    return result;
+                }
+
+
+
+                option = {
+                    title: {
+                        text: '上证指数',
+                        left: 0
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'line'
+                        }
+                    },
+                    legend: {
+                        data: ['日K', 'MA5', 'MA10', 'MA20', 'MA30']
+                    },
+                    grid: {
+                        left: '10%',
+                        right: '10%',
+                        bottom: '15%'
+                    },
+                    xAxis: {
+                        type: 'category',
+                        data: data0.categoryData,
+                        scale: true,
+                        boundaryGap : false,
+                        axisLine: {onZero: false},
+                        splitLine: {show: false},
+                        splitNumber: 20,
+                        min: 'dataMin',
+                        max: 'dataMax'
+                    },
+                    yAxis: {
+                        scale: true,
+                        splitArea: {
+                            show: true
+                        }
+                    },
+                    dataZoom: [
+                        {
+                            type: 'inside',
+                            start: 50,
+                            end: 100
+                        },
+                        {
+                            show: true,
+                            type: 'slider',
+                            y: '90%',
+                            start: 50,
+                            end: 100
+                        }
+                    ],
+                    series: [
+                        {
+                            name: '日K',
+                            type: 'candlestick',
+                            data: data0.values,
+                            markPoint: {
+                                label: {
+                                    normal: {
+                                        formatter: function (param) {
+                                            return param != null ? Math.round(param.value) : '';
+                                        }
+                                    }
+                                },
+                                data: [
+                                    {
+                                        name: 'XX标点',
+                                        coord: ['2013/5/31', 2300],
+                                        value: 2300,
+                                        itemStyle: {
+                                            normal: {color: 'rgb(41,60,85)'}
+                                        }
+                                    },
+                                    {
+                                        name: 'highest value',
+                                        type: 'max',
+                                        valueDim: 'highest'
+                                    },
+                                    {
+                                        name: 'lowest value',
+                                        type: 'min',
+                                        valueDim: 'lowest'
+                                    },
+                                    {
+                                        name: 'average value on close',
+                                        type: 'average',
+                                        valueDim: 'close'
+                                    }
+                                ],
+                                tooltip: {
+                                    formatter: function (param) {
+                                        return param.name + '<br>' + (param.data.coord || '');
+                                    }
+                                }
+                            },
+                            markLine: {
+                                symbol: ['none', 'none'],
+                                data: [
+                                    [
+                                        {
+                                            name: 'from lowest to highest',
+                                            type: 'min',
+                                            valueDim: 'lowest',
+                                            symbol: 'circle',
+                                            symbolSize: 10,
+                                            label: {
+                                                normal: {show: false},
+                                                emphasis: {show: false}
+                                            }
+                                        },
+                                        {
+                                            type: 'max',
+                                            valueDim: 'highest',
+                                            symbol: 'circle',
+                                            symbolSize: 10,
+                                            label: {
+                                                normal: {show: false},
+                                                emphasis: {show: false}
+                                            }
+                                        }
+                                    ],
+                                    {
+                                        name: 'min line on close',
+                                        type: 'min',
+                                        valueDim: 'close'
+                                    },
+                                    {
+                                        name: 'max line on close',
+                                        type: 'max',
+                                        valueDim: 'close'
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            name: 'MA5',
+                            type: 'line',
+                            data: calculateMA(5),
+                            smooth: true,
+                            lineStyle: {
+                                normal: {opacity: 0.5}
+                            }
+                        },
+                        {
+                            name: 'MA10',
+                            type: 'line',
+                            data: calculateMA(10),
+                            smooth: true,
+                            lineStyle: {
+                                normal: {opacity: 0.5}
+                            }
+                        },
+                        {
+                            name: 'MA20',
+                            type: 'line',
+                            data: calculateMA(20),
+                            smooth: true,
+                            lineStyle: {
+                                normal: {opacity: 0.5}
+                            }
+                        },
+                        {
+                            name: 'MA30',
+                            type: 'line',
+                            data: calculateMA(30),
+                            smooth: true,
+                            lineStyle: {
+                                normal: {opacity: 0.5}
+                            }
+                        },
+
+                    ]
+                };
+
+                // 使用刚指定的配置项和数据显示图表。
+                myChart.setOption(option);
+
+
+
+        });
+
+    </script>
+
+</body>
+</html>

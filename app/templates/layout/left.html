@@ -1,118 +1,335 @@
 <!-- 左侧导航-->
-<div class="layui-side layui-bg-black">
-    <div class="user-photo">
-        <a class="img" title="我的头像" ><img src="/static/img/zcm2015.jpeg"></a>
-        <p>你好！<span class="userName" id="userNameSpan">carl</span>, 欢迎登录</p>
+<div class="left-nav">
+    <div id="side-nav">
+        <ul id="nav">
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont left-nav-li" lay-tips="系统设置">&#xe723;</i>
+                    <cite>系统设置</cite>
+                    <i class="iconfont nav_right">&#xe697;</i>
+                </a>
+                <ul class="sub-menu">
+                    <li>
+                        <a onclick="xadmin.add_tab('任务调度','/scheduler/list')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>任务调度</cite>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont left-nav-li" lay-tips="基本面数据">&#xe6b8;</i>
+                    <cite>基本面数据</cite>
+                    <i class="iconfont nav_right">&#xe697;</i>
+                </a>
+                <ul class="sub-menu">
+                    <li>
+                        <a onclick="xadmin.add_tab('股票列表','/stock/list')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>股票列表</cite>
+                        </a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('业绩报告','/stock/perNotice')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>业绩报告</cite>
+                        </a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('盈利能力','/stock/profit',true)">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>盈利能力</cite>
+                        </a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('营运能力','/stock/operating')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>营运能力</cite>
+                        </a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('成长能力','/stock/growth')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>成长能力</cite>
+                        </a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('偿债能力','/stock/solvency')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>偿债能力</cite>
+                        </a>
+                    </li>
+                     <li>
+                        <a onclick="xadmin.add_tab('现金流量','/stock/cashFlow')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>现金流量</cite>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont left-nav-li" lay-tips="交易数据">&#xe6b8;</i>
+                    <cite>交易数据</cite>
+                    <i class="iconfont nav_right">&#xe697;</i>
+                </a>
+                <ul class="sub-menu">
+                    <li>
+                        <a onclick="xadmin.add_tab('股票日线行情','/stock/stockDaily')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>股票日线行情</cite>
+                        </a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('历史行情','/stock/historicalQuotes')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>历史行情</cite>
+                        </a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('复权数据','/stock/recoverData',true)">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>复权数据</cite>
+                        </a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('实时行情','/stock/realTimeMarket')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>实时行情</cite>
+                        </a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('历史分笔','/stock/historyPen')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>历史分笔</cite>
+                        </a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('当日历史分笔','/stock/todayHistoryPen')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>当日历史分笔</cite>
+                        </a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('大盘指数行情列表','/stock/marketIndex')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>大盘指数行情列表</cite>
+                        </a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('大单交易数据','/stock/bigSingleTransactionData')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>大单交易数据</cite>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            {#<li>
+                <a href="javascript:;">
+                    <i class="iconfont left-nav-li" lay-tips="订单管理">&#xe723;</i>
+                    <cite>订单管理</cite>
+                    <i class="iconfont nav_right">&#xe697;</i></a>
+                <ul class="sub-menu">
+                    <li>
+                        <a onclick="xadmin.add_tab('订单列表','order-list.html')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>订单列表</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('订单列表1','order-list1.html')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>订单列表1</cite></a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont left-nav-li" lay-tips="分类管理">&#xe723;</i>
+                    <cite>分类管理</cite>
+                    <i class="iconfont nav_right">&#xe697;</i></a>
+                <ul class="sub-menu">
+                    <li>
+                        <a onclick="xadmin.add_tab('多级分类','cate.html')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>多级分类</cite></a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont left-nav-li" lay-tips="城市联动">&#xe723;</i>
+                    <cite>城市联动</cite>
+                    <i class="iconfont nav_right">&#xe697;</i></a>
+                <ul class="sub-menu">
+                    <li>
+                        <a onclick="xadmin.add_tab('三级地区联动','city.html')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>三级地区联动</cite></a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont left-nav-li" lay-tips="管理员管理">&#xe726;</i>
+                    <cite>管理员管理</cite>
+                    <i class="iconfont nav_right">&#xe697;</i></a>
+                <ul class="sub-menu">
+                    <li>
+                        <a onclick="xadmin.add_tab('管理员列表','admin-list.html')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>管理员列表</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('角色管理','admin-role.html')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>角色管理</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('权限分类','admin-cate.html')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>权限分类</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('权限管理','admin-rule.html')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>权限管理</cite></a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont left-nav-li" lay-tips="系统统计">&#xe6ce;</i>
+                    <cite>系统统计</cite>
+                    <i class="iconfont nav_right">&#xe697;</i></a>
+                <ul class="sub-menu">
+                    <li>
+                        <a onclick="xadmin.add_tab('拆线图','echarts1.html')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>拆线图</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('拆线图','echarts2.html')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>拆线图</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('地图','echarts3.html')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>地图</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('饼图','echarts4.html')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>饼图</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('雷达图','echarts5.html')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>雷达图</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('k线图','echarts6.html')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>k线图</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('热力图','echarts7.html')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>热力图</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('仪表图','echarts8.html')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>仪表图</cite></a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont left-nav-li" lay-tips="图标字体">&#xe6b4;</i>
+                    <cite>图标字体</cite>
+                    <i class="iconfont nav_right">&#xe697;</i></a>
+                <ul class="sub-menu">
+                    <li>
+                        <a onclick="xadmin.add_tab('图标对应字体','unicode.html')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>图标对应字体</cite></a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont left-nav-li" lay-tips="其它页面">&#xe6b4;</i>
+                    <cite>其它页面</cite>
+                    <i class="iconfont nav_right">&#xe697;</i></a>
+                <ul class="sub-menu">
+                    <li>
+                        <a href="login.html" target="_blank">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>登录页面</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('错误页面','error.html')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>错误页面</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('示例页面','demo.html')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>示例页面</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('更新日志','log.html')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>更新日志</cite></a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont left-nav-li" lay-tips="第三方组件">&#xe6b4;</i>
+                    <cite>layui第三方组件</cite>
+                    <i class="iconfont nav_right">&#xe697;</i></a>
+                <ul class="sub-menu">
+                    <li>
+                        <a onclick="xadmin.add_tab('滑块验证','https://fly.layui.com/extend/sliderVerify/')" target="">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>滑块验证</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('富文本编辑器','https://fly.layui.com/extend/layedit/')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>富文本编辑器</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('eleTree 树组件','https://fly.layui.com/extend/eleTree/')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>eleTree 树组件</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('图片截取','https://fly.layui.com/extend/croppers/')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>图片截取</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('formSelects 4.x 多选框','https://fly.layui.com/extend/formSelects/')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>formSelects 4.x 多选框</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('Magnifier 放大镜','https://fly.layui.com/extend/Magnifier/')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>Magnifier 放大镜</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('notice 通知控件','https://fly.layui.com/extend/notice/')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>notice 通知控件</cite></a>
+                    </li>
+                </ul>
+            </li>#}
+        </ul>
     </div>
-    <!-- 左侧菜单-->
-    <div class="navBar layui-side-scroll" id="navBarId">
-
-
-        <ul class="layui-nav layui-nav-tree layui-left-nav">
-            <li class="layui-nav-item layui-nav-itemed"><a href="javascript:;">
-                <i class="layui-icon larry-icon larry-xitongshezhi1" data-icon="larry-xitongshezhi1"></i><cite>系统设置</cite><span class="layui-nav-more"></span></a>
-                <dl class="layui-nav-child">
-                    <dd>
-                        <a href="javascript:;" data-url="/scheduler/list">
-                            <i class="layui-icon larry-icon larry-yonghuliebiao" data-icon="larry-yonghuliebiao"></i><cite>任务调度</cite>
-                        </a>
-                    </dd>
-                </dl>
-            </li>
-            <span class="layui-nav-bar" style="top: 22.5px; height: 0px; opacity: 0;"></span></ul>
-
-        <ul class="layui-nav layui-nav-tree layui-left-nav">
-            <li class="layui-nav-item"><a href="javascript:;">
-                <i class="layui-icon larry-icon larry-xitongshezhi1" data-icon="larry-xitongshezhi1"></i><cite>基本面数据</cite><span class="layui-nav-more"></span></a>
-                <dl class="layui-nav-child">
-                    <dd>
-                        <a href="javascript:;" data-url="/stock/list">
-                            <i class="layui-icon larry-icon larry-yonghuliebiao" data-icon="larry-yonghuliebiao"></i><cite>股票列表</cite>
-                        </a>
-                    </dd>
-                    <dd>
-                        <a href="javascript:;" data-url="/stock/perNotice">
-                            <i class="layui-icon larry-icon larry-10103" data-icon="larry-10103"></i><cite>业绩报告</cite>
-                        </a>
-                    </dd>
-                    <dd>
-                        <a href="javascript:;" data-url="/stock/profit">
-                            <i class="layui-icon larry-icon larry-kechengguanli" data-icon="larry-kechengguanli"></i><cite>盈利能力</cite>
-                        </a>
-                    </dd>
-                    <dd>
-                        <a href="javascript:;" data-url="/stock/operating">
-                            <i class="layui-icon larry-icon larry-jueseguanli" data-icon="larry-jueseguanli"></i><cite>营运能力</cite>
-                        </a>
-                    </dd>
-                    <dd>
-                        <a href="javascript:;" data-url="/stock/growth">
-                            <i class="layui-icon larry-icon larry-caidanguanli" data-icon="larry-caidanguanli"></i><cite>成长能力</cite>
-                        </a>
-                    </dd>
-                    <dd>
-                        <a href="javascript:;" data-url="/stock/solvency">
-                            <i class="layui-icon larry-icon larry-databasesql" data-icon="larry-databasesql"></i><cite>偿债能力</cite>
-                        </a>
-                    </dd>
-                    <dd>
-                        <a href="javascript:;" data-url="/stock/cashFlow">
-                            <i class="layui-icon larry-icon larry-jiankong" data-icon="larry-jiankong"></i><cite>现金流量</cite>
-                        </a>
-                    </dd>
-                </dl>
-            </li>
-            <span class="layui-nav-bar" style="top: 22.5px; height: 0px; opacity: 0;"></span></ul>
-
-        <ul class="layui-nav layui-nav-tree layui-left-nav">
-            <li class="layui-nav-item"><a href="javascript:;">
-                <i class="layui-icon larry-icon larry-xitongshezhi1" data-icon="larry-xitongshezhi1"></i><cite>交易数据</cite><span class="layui-nav-more"></span></a>
-                <dl class="layui-nav-child">
-                    <dd>
-                        <a href="javascript:;" data-url="/stock/realTimePen">
-                            <i class="layui-icon larry-icon larry-yonghuliebiao" data-icon="larry-yonghuliebiao"></i><cite>实时分笔</cite>
-                        </a>
-                    </dd>
-                    <dd>
-                        <a href="javascript:;" data-url="/stock/historicalQuotes">
-                            <i class="layui-icon larry-icon larry-10103" data-icon="larry-10103"></i><cite>历史行情</cite>
-                        </a>
-                    </dd>
-                    <dd>
-                        <a href="javascript:;" data-url="/stock/recoverData">
-                            <i class="layui-icon larry-icon larry-kechengguanli" data-icon="larry-kechengguanli"></i><cite>复权数据</cite>
-                        </a>
-                    </dd>
-                    <dd>
-                        <a href="javascript:;" data-url="/stock/realTimeMarket">
-                            <i class="layui-icon larry-icon larry-jueseguanli" data-icon="larry-jueseguanli"></i><cite>实时行情</cite>
-                        </a>
-                    </dd>
-                    <dd>
-                        <a href="javascript:;" data-url="/stock/historyPen">
-                            <i class="layui-icon larry-icon larry-caidanguanli" data-icon="larry-caidanguanli"></i><cite>历史分笔</cite>
-                        </a>
-                    </dd>
-                    <dd>
-                        <a href="javascript:;" data-url="/stock/todayHistoryPen">
-                            <i class="layui-icon larry-icon larry-databasesql" data-icon="larry-databasesql"></i><cite>当日历史分笔</cite>
-                        </a>
-                    </dd>
-                    <dd>
-                        <a href="javascript:;" data-url="/stock/marketIndex">
-                            <i class="layui-icon larry-icon larry-jiankong" data-icon="larry-jiankong"></i><cite>大盘指数行情列表</cite>
-                        </a>
-                    </dd>
-                    <dd>
-                        <a href="javascript:;" data-url="/stock/bigSingleTransactionData">
-                            <i class="layui-icon larry-icon larry-jiankong" data-icon="larry-jiankong"></i><cite>大单交易数据</cite>
-                        </a>
-                    </dd>
-                </dl>
-            </li>
-            <span class="layui-nav-bar" style="top: 22.5px; height: 0px; opacity: 0;"></span></ul>
-    </div>
-
 </div>
-
 
