@@ -4,7 +4,9 @@ from app.main.stock import stock
 import json
 from app.main.stock.models import *
 from app.main.common.alchemyEncoder import AlchemyEncoder
-import string
+import datetime
+from app.main.utils import utils
+
 
 def Response_headers(content):
     resp = Response(content)
@@ -12,9 +14,9 @@ def Response_headers(content):
     return resp
 
 
-#股票列表
+# 股票列表
 @stock.route('/list', methods=["GET", "POST"])
-def list():
+def stockList():
     if request.method == 'POST':
         page = request.form['page']
         limit = request.form['limit']
@@ -31,332 +33,409 @@ def list():
     return render_template('stock/stock.html')
 
 
+# 股票上市公司基本信息
+@stock.route('/company', methods=["GET", "POST"])
+def stockCompany():
+    if request.method == 'POST':
+        page = request.form['page']
+        limit = request.form['limit']
+        pagination = StockCompany.query.paginate(int(page), int(limit), error_out=False)
+        count = StockCompany.query.paginate(int(page), int(limit), error_out=False).pages
+        items = pagination.items
+        result = {
+            "code": 0,
+            "msg": "获取成功",
+            "count": count,
+            "data": items
+        }
+        return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
+    return render_template('stock/stockCompany.html')
+
+
+# 股票IPO新股列表
+@stock.route('/newShare', methods=["GET", "POST"])
+def stockNewShare():
+    if request.method == 'POST':
+        page = request.form['page']
+        limit = request.form['limit']
+        pagination = StockNewShare.query.paginate(int(page), int(limit), error_out=False)
+        count = StockNewShare.query.paginate(int(page), int(limit), error_out=False).pages
+        items = pagination.items
+        result = {
+            "code": 0,
+            "msg": "获取成功",
+            "count": count,
+            "data": items
+        }
+        return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
+    return render_template('stock/stockNewShare.html')
+
+
+# 股票A股复权行情
+@stock.route('/proBar', methods=["GET", "POST"])
+def stockProBar():
+    if request.method == 'POST':
+        page = request.form['page']
+        limit = request.form['limit']
+        pagination = StockProBar.query.paginate(int(page), int(limit), error_out=False)
+        count = StockProBar.query.paginate(int(page), int(limit), error_out=False).pages
+        items = pagination.items
+        result = {
+            "code": 0,
+            "msg": "获取成功",
+            "count": count,
+            "data": items
+        }
+        return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
+    return render_template('stock/stockProBar.html')
+
+
+# 股票复权因子
+@stock.route('/adjFactor', methods=["GET", "POST"])
+def stockAdjFactor():
+    if request.method == 'POST':
+        page = request.form['page']
+        limit = request.form['limit']
+        pagination = StockAdjFactor.query.paginate(int(page), int(limit), error_out=False)
+        count = StockAdjFactor.query.paginate(int(page), int(limit), error_out=False).pages
+        items = pagination.items
+        result = {
+            "code": 0,
+            "msg": "获取成功",
+            "count": count,
+            "data": items
+        }
+        return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
+    return render_template('stock/stockAdjFactor.html')
+
+
+# 股票每日指标
+@stock.route('/dailyBasic', methods=["GET", "POST"])
+def stockDailyBasic():
+    if request.method == 'POST':
+        page = request.form['page']
+        limit = request.form['limit']
+        pagination = StockDailyBasic.query.paginate(int(page), int(limit), error_out=False)
+        count = StockDailyBasic.query.paginate(int(page), int(limit), error_out=False).pages
+        items = pagination.items
+        result = {
+            "code": 0,
+            "msg": "获取成功",
+            "count": count,
+            "data": items
+        }
+        return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
+    return render_template('stock/stockDailyBasic.html')
+
+
+# 股票停复牌
+@stock.route('/suspend', methods=["GET", "POST"])
+def stockSuspend():
+    if request.method == 'POST':
+        page = request.form['page']
+        limit = request.form['limit']
+        pagination = StockSuspend.query.paginate(int(page), int(limit), error_out=False)
+        count = StockSuspend.query.paginate(int(page), int(limit), error_out=False).pages
+        items = pagination.items
+        result = {
+            "code": 0,
+            "msg": "获取成功",
+            "count": count,
+            "data": items
+        }
+        return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
+    return render_template('stock/stockSuspend.html')
+
+
+# 股票利润表
+@stock.route('/income', methods=["GET", "POST"])
+def stockIncome():
+    if request.method == 'POST':
+        page = request.form['page']
+        limit = request.form['limit']
+        pagination = StockIncome.query.paginate(int(page), int(limit), error_out=False)
+        count = StockIncome.query.paginate(int(page), int(limit), error_out=False).pages
+        items = pagination.items
+        result = {
+            "code": 0,
+            "msg": "获取成功",
+            "count": count,
+            "data": items
+        }
+        return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
+    return render_template('stock/stockIncome.html')
+
+
+# 股票资产负债表
+@stock.route('/balanceSheet', methods=["GET", "POST"])
+def stockBalanceSheet():
+    if request.method == 'POST':
+        page = request.form['page']
+        limit = request.form['limit']
+        pagination = StockBalanceSheet.query.paginate(int(page), int(limit), error_out=False)
+        count = StockBalanceSheet.query.paginate(int(page), int(limit), error_out=False).pages
+        items = pagination.items
+        result = {
+            "code": 0,
+            "msg": "获取成功",
+            "count": count,
+            "data": items
+        }
+        return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
+    return render_template('stock/stockBalanceSheet.html')
+
+
+# 股票现金流量表
+@stock.route('/cashFlow', methods=["GET", "POST"])
+def stockCashFlow():
+    if request.method == 'POST':
+        page = request.form['page']
+        limit = request.form['limit']
+        pagination = StockCashFlow.query.paginate(int(page), int(limit), error_out=False)
+        count = StockCashFlow.query.paginate(int(page), int(limit), error_out=False).pages
+        items = pagination.items
+        result = {
+            "code": 0,
+            "msg": "获取成功",
+            "count": count,
+            "data": items
+        }
+        return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
+    return render_template('stock/stockCashFlow.html')
+
+
+# 股票业绩预告
+@stock.route('/foreCast', methods=["GET", "POST"])
+def stockForeCast():
+    if request.method == 'POST':
+        page = request.form['page']
+        limit = request.form['limit']
+        pagination = StockForeCast.query.paginate(int(page), int(limit), error_out=False)
+        count = StockForeCast.query.paginate(int(page), int(limit), error_out=False).pages
+        items = pagination.items
+        result = {
+            "code": 0,
+            "msg": "获取成功",
+            "count": count,
+            "data": items
+        }
+        return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
+    return render_template('stock/stockForeCast.html')
+
+
+# 股票业绩快报
+@stock.route('/express', methods=["GET", "POST"])
+def stockExpress():
+    if request.method == 'POST':
+        page = request.form['page']
+        limit = request.form['limit']
+        pagination = StockExpress.query.paginate(int(page), int(limit), error_out=False)
+        count = StockExpress.query.paginate(int(page), int(limit), error_out=False).pages
+        items = pagination.items
+        result = {
+            "code": 0,
+            "msg": "获取成功",
+            "count": count,
+            "data": items
+        }
+        return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
+    return render_template('stock/stockExpress.html')
+
+
+# 股票分红送股
+@stock.route('/dividend', methods=["GET", "POST"])
+def stockDividend():
+    if request.method == 'POST':
+        page = request.form['page']
+        limit = request.form['limit']
+        pagination = StockDividend.query.paginate(int(page), int(limit), error_out=False)
+        count = StockDividend.query.paginate(int(page), int(limit), error_out=False).pages
+        items = pagination.items
+        result = {
+            "code": 0,
+            "msg": "获取成功",
+            "count": count,
+            "data": items
+        }
+        return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
+    return render_template('stock/stockDividend.html')
+
+
+# 财务审计意见
+@stock.route('/finaAudit', methods=["GET", "POST"])
+def stockFinaAudit():
+    if request.method == 'POST':
+        page = request.form['page']
+        limit = request.form['limit']
+        pagination = StockFinaAudit.query.paginate(int(page), int(limit), error_out=False)
+        count = StockFinaAudit.query.paginate(int(page), int(limit), error_out=False).pages
+        items = pagination.items
+        result = {
+            "code": 0,
+            "msg": "获取成功",
+            "count": count,
+            "data": items
+        }
+        return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
+    return render_template('stock/stockFinaAudit.html')
+
+
+# 财务审计意见
+@stock.route('/finaMainbz', methods=["GET", "POST"])
+def stockFinaMainbz():
+    if request.method == 'POST':
+        page = request.form['page']
+        limit = request.form['limit']
+        pagination = StockFinaMainbz.query.paginate(int(page), int(limit), error_out=False)
+        count = StockFinaMainbz.query.paginate(int(page), int(limit), error_out=False).pages
+        items = pagination.items
+        result = {
+            "code": 0,
+            "msg": "获取成功",
+            "count": count,
+            "data": items
+        }
+        return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
+    return render_template('stock/stockFinaMainbz.html')
+
+
 #股票日线行情
-@stock.route('/stockDaily', methods=["GET", "POST"])
+@stock.route('/daily', methods=["GET", "POST"])
 def stockDaily():
     if request.method == 'POST':
         params = request.get_json()
-        page = params['page']
-        limit = params['limit']
-        code = params['code']
-        name = params['name']
-        pagination = StockDaily.query.paginate(int(page), int(limit), error_out=False)
-        count = StockBasic.query.paginate(int(page), int(limit), error_out=False).pages
-        items = pagination.items
 
+        if params is None:
+            start_date = request.form['startDate']
+            end_date = request.form['endDate']
+            code = request.form['code']
+        else:
+            start_date = params['startDate']
+            end_date = params['endDate']
+            code = params['code']
+
+        if start_date == '' or end_date == '':
+            current_date = utils.getTheMonth(datetime.datetime.today(), 6)
+            stock_daily = StockDaily.query.filter(StockDaily.code == code, StockDaily.trade_date >= current_date).order_by(StockDaily.trade_date.asc()).all()
+        else:
+            stock_daily = StockDaily.query.filter(StockDaily.code == code, StockDaily.trade_date >= start_date, StockDaily.trade_date < end_date).order_by(StockDaily.trade_date.asc()).all()
+
+        count = len(stock_daily)
+        name = None
+        if count > 0:
+            name = stock_daily[1].name
         data2 = []
         for i in range(count):
             data1 = []
-            data1.append(items[i].trade_date.strftime("%Y/%m/%d"))
-            data1.append(float(items[i].open))
-            data1.append(float(items[i].close))
-            data1.append(float(items[i].low))
-            data1.append(float(items[i].high))
+            data1.append(stock_daily[i].trade_date.strftime("%Y/%m/%d"))
+            data1.append(float(stock_daily[i].open))
+            data1.append(float(stock_daily[i].close))
+            data1.append(float(stock_daily[i].low))
+            data1.append(float(stock_daily[i].high))
             data2.append(data1)
 
         result = {
             "code": 0,
             "msg": "获取成功",
             "count": count,
+            "name": name,
             "data": data2
         }
         return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
     return render_template('stock/stockDaily.html')
 
 
-# #股票业绩预告
-# @stock.route('/perNotice', methods=["GET", "POST"])
-# def perNotice():
-#     if request.method == 'POST':
-#         page = request.form['page']
-#         limit = request.form['limit']
-#         pagination = PerformanceNotice.query.paginate(int(page), int(limit), error_out=False)
-#         count = PerformanceNotice.query.paginate(int(page), int(limit), error_out=False).pages
-#         items = pagination.items
-#         result = {
-#             "code": 0,
-#             "msg": "获取成功",
-#             "count": count,
-#             "data": items
-#         }
-#         return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
-#     return render_template('stock/stockPerNotice.html')
-#
-#
-# #股票盈利能力
-# @stock.route('/profit', methods=["GET", "POST"])
-# def profit():
-#     if request.method == 'POST':
-#         page = request.form['page']
-#         limit = request.form['limit']
-#         pagination = Profit.query.paginate(int(page), int(limit), error_out=False)
-#         count = Profit.query.paginate(int(page), int(limit), error_out=False).pages
-#         items = pagination.items
-#         result = {
-#             "code": 0,
-#             "msg": "获取成功",
-#             "count": count,
-#             "data": items
-#         }
-#         return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
-#     return render_template('stock/stockProfit.html')
-#
-#
-# #股票运营能力
-# @stock.route('/operating', methods=["GET", "POST"])
-# def operating():
-#     if request.method == 'POST':
-#         page = request.form['page']
-#         limit = request.form['limit']
-#         pagination = Operating.query.paginate(int(page), int(limit), error_out=False)
-#         count = Operating.query.paginate(int(page), int(limit), error_out=False).pages
-#         items = pagination.items
-#         result = {
-#             "code": 0,
-#             "msg": "获取成功",
-#             "count": count,
-#             "data": items
-#         }
-#         return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
-#     return render_template('stock/stockOperating.html')
-#
-#
-# #股票成长能力
-# @stock.route('/growth', methods=["GET", "POST"])
-# def growth():
-#     if request.method == 'POST':
-#         page = request.form['page']
-#         limit = request.form['limit']
-#         pagination = Growth.query.paginate(int(page), int(limit), error_out=False)
-#         count = Growth.query.paginate(int(page), int(limit), error_out=False).pages
-#         items = pagination.items
-#         result = {
-#             "code": 0,
-#             "msg": "获取成功",
-#             "count": count,
-#             "data": items
-#         }
-#         return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
-#     return render_template('stock/stockGrowth.html')
-#
-#
-# #股票偿债能力
-# @stock.route('/solvency', methods=["GET", "POST"])
-# def solvency():
-#     if request.method == 'POST':
-#         page = request.form['page']
-#         limit = request.form['limit']
-#         pagination = Solvency.query.paginate(int(page), int(limit), error_out=False)
-#         count = Solvency.query.paginate(int(page), int(limit), error_out=False).pages
-#         items = pagination.items
-#         result = {
-#             "code": 0,
-#             "msg": "获取成功",
-#             "count": count,
-#             "data": items
-#         }
-#         return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
-#     return render_template('stock/stockSolency.html')
-#
-#
-# #股票现金流量
-# @stock.route('/cashFlow', methods=["GET", "POST"])
-# def cashFlow():
-#     if request.method == 'POST':
-#         page = request.form['page']
-#         limit = request.form['limit']
-#         pagination = CashFlow.query.paginate(int(page), int(limit), error_out=False)
-#         count = CashFlow.query.paginate(int(page), int(limit), error_out=False).pages
-#         items = pagination.items
-#         result = {
-#             "code": 0,
-#             "msg": "获取成功",
-#             "count": count,
-#             "data": items
-#         }
-#         return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
-#     return render_template('stock/stockCashFlow.html')
-#
-#
-# #交易数据-股票实时分笔
-# @stock.route('/realTimePen', methods=["GET", "POST"])
-# def realTimePen():
-#     if request.method == 'POST':
-#         page = request.form['page']
-#         limit = request.form['limit']
-#         pagination = RealTimePen.query.paginate(int(page), int(limit), error_out=False)
-#         count = RealTimePen.query.paginate(int(page), int(limit), error_out=False).pages
-#         items = pagination.items
-#         result = {
-#             "code": 0,
-#             "msg": "获取成功",
-#             "count": count,
-#             "data": items
-#         }
-#         return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
-#     return render_template('stock/stockRealTimePen.html')
-#
-#
-# #交易数据-股票历史行情
-# @stock.route('/historicalQuotes', methods=["GET", "POST"])
-# def historicalQuotes():
-#     if request.method == 'POST':
-#         page = request.form['page']
-#         limit = request.form['limit']
-#         pagination = HistoricalQuotes.query.paginate(int(page), int(limit), error_out=False)
-#         count = HistoricalQuotes.query.paginate(int(page), int(limit), error_out=False).pages
-#         items = pagination.items
-#         result = {
-#             "code": 0,
-#             "msg": "获取成功",
-#             "count": count,
-#             "data": items
-#         }
-#         return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
-#     return render_template('stock/stockHistoricaQuotes.html')
-#
-#
-# #交易数据-股票复权数据
-# @stock.route('/recoverData', methods=["GET", "POST"])
-# def recoverData():
-#     if request.method == 'POST':
-#         page = request.form['page']
-#         limit = request.form['limit']
-#         pagination = RecoverData.query.paginate(int(page), int(limit), error_out=False)
-#         count = RecoverData.query.paginate(int(page), int(limit), error_out=False).pages
-#         items = pagination.items
-#         result = {
-#             "code": 0,
-#             "msg": "获取成功",
-#             "count": count,
-#             "data": items
-#         }
-#         return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
-#     return render_template('stock/stockRecoverData.html')
-#
-#
-# #交易数据-股票实时行情
-# @stock.route('/realTimeMarket', methods=["GET", "POST"])
-# def realTimeMarket():
-#     if request.method == 'POST':
-#         page = request.form['page']
-#         limit = request.form['limit']
-#         pagination = RealTimeMarket.query.paginate(int(page), int(limit), error_out=False)
-#         count = RealTimeMarket.query.paginate(int(page), int(limit), error_out=False).pages
-#         items = pagination.items
-#         result = {
-#             "code": 0,
-#             "msg": "获取成功",
-#             "count": count,
-#             "data": items
-#         }
-#         return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
-#     return render_template('stock/stockRealTimeMarket.html')
-#
-#
-# #交易数据-股票历史分笔
-# @stock.route('/historyPen', methods=["GET", "POST"])
-# def historyPen():
-#     if request.method == 'POST':
-#         page = request.form['page']
-#         limit = request.form['limit']
-#         pagination = HistoryPen.query.paginate(int(page), int(limit), error_out=False)
-#         count = HistoryPen.query.paginate(int(page), int(limit), error_out=False).pages
-#         items = pagination.items
-#         result = {
-#             "code": 0,
-#             "msg": "获取成功",
-#             "count": count,
-#             "data": items
-#         }
-#         return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
-#     return render_template('stock/stockHistoryPen.html')
-#
-#
-# #交易数据-股票当日历史分笔
-# @stock.route('/todayHistoryPen', methods=["GET", "POST"])
-# def todayHistoryPen():
-#     if request.method == 'POST':
-#         page = request.form['page']
-#         limit = request.form['limit']
-#         pagination = TodayHistoryPen.query.paginate(int(page), int(limit), error_out=False)
-#         count = TodayHistoryPen.query.paginate(int(page), int(limit), error_out=False).pages
-#         items = pagination.items
-#         result = {
-#             "code": 0,
-#             "msg": "获取成功",
-#             "count": count,
-#             "data": items
-#         }
-#         return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
-#     return render_template('stock/stockTodayHistoryPen.html')
-#
-#
-# #交易数据-股票大盘指数行情列表
-# @stock.route('/marketIndex', methods=["GET", "POST"])
-# def marketIndex():
-#     if request.method == 'POST':
-#         page = request.form['page']
-#         limit = request.form['limit']
-#         pagination = MarketIndex.query.paginate(int(page), int(limit), error_out=False)
-#         count = MarketIndex.query.paginate(int(page), int(limit), error_out=False).pages
-#         items = pagination.items
-#         result = {
-#             "code": 0,
-#             "msg": "获取成功",
-#             "count": count,
-#             "data": items
-#         }
-#         return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
-#     return render_template('stock/stockMarketIndex.html')
-#
-#
-# #交易数据-股票大单交易数据
-# @stock.route('/bigSingleTransactionData', methods=["GET", "POST"])
-# def bigSingleTransactionData():
-#     if request.method == 'POST':
-#         page = request.form['page']
-#         limit = request.form['limit']
-#         pagination = BigSingleTransactionData.query.paginate(int(page), int(limit), error_out=False)
-#         count = BigSingleTransactionData.query.paginate(int(page), int(limit), error_out=False).pages
-#         items = pagination.items
-#         result = {
-#             "code": 0,
-#             "msg": "获取成功",
-#             "count": count,
-#             "data": items
-#         }
-#         return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
-#     return render_template('stock/stockBigSingleTransactionData.html')
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-# @stock.route('/historyPen', methods=['GET', 'POST'])
-# def historyPen():
-#     if request.method == 'POST':
-#         datas = {
-#             "data": [
-#                 {"name": "allpe", "num": 100},
-#                 {"name": "peach", "num": 123},
-#                 {"name": "Pear", "num": 234},
-#                 {"name": "avocado", "num": 20},
-#                 {"name": "cantaloupe", "num": 1},
-#                 {"name": "Banana", "num": 77},
-#                 {"name": "Grape", "num": 43},
-#                 {"name": "apricot", "num": 0}
-#             ]
-#         }
-#         content = json.dumps(datas)
-#         resp = Response_headers(content)
-#         return resp
-#     return render_template("stock/historyPen.html")
+#股票周线行情
+@stock.route('/weekly', methods=["GET", "POST"])
+def stockWeekly():
+    if request.method == 'POST':
+        params = request.get_json()
+
+        if params is None:
+            start_date = request.form['startDate']
+            end_date = request.form['endDate']
+            code = request.form['code']
+        else:
+            start_date = params['startDate']
+            end_date = params['endDate']
+            code = params['code']
+
+        if start_date == '' or end_date == '':
+            current_date = utils.getTheMonth(datetime.datetime.today(), 12)
+            stocks = StockWeekly.query.filter(StockWeekly.code == code, StockWeekly.trade_date >= current_date).order_by(StockWeekly.trade_date.asc()).all()
+        else:
+            stocks = StockWeekly.query.filter(StockWeekly.code == code, StockWeekly.trade_date >= start_date, StockWeekly.trade_date < end_date).order_by(StockWeekly.trade_date.asc()).all()
+
+        count = len(stocks)
+        name = None
+        if count > 0:
+            name = stocks[1].name
+        data2 = []
+        for i in range(count):
+            data1 = []
+            data1.append(stocks[i].trade_date.strftime("%Y/%m/%d"))
+            data1.append(float(stocks[i].open))
+            data1.append(float(stocks[i].close))
+            data1.append(float(stocks[i].low))
+            data1.append(float(stocks[i].high))
+            data2.append(data1)
+
+        result = {
+            "code": 0,
+            "msg": "获取成功",
+            "count": count,
+            "name": name,
+            "data": data2
+        }
+        return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
+    return render_template('stock/stockWeekly.html')
+
+
+#股票月线行情
+@stock.route('/monthly', methods=["GET", "POST"])
+def stockMonthly():
+    if request.method == 'POST':
+        params = request.get_json()
+
+        if params is None:
+            start_date = request.form['startDate']
+            end_date = request.form['endDate']
+            code = request.form['code']
+        else:
+            start_date = params['startDate']
+            end_date = params['endDate']
+            code = params['code']
+
+        if start_date == '' or end_date == '':
+            current_date = utils.getTheMonth(datetime.datetime.today(), 24)
+            stocks = StockMonthly.query.filter(StockMonthly.code == code, StockMonthly.trade_date >= current_date).order_by(StockMonthly.trade_date.asc()).all()
+        else:
+            stocks = StockMonthly.query.filter(StockMonthly.code == code, StockMonthly.trade_date >= start_date, StockMonthly.trade_date < end_date).order_by(StockMonthly.trade_date.asc()).all()
+
+        count = len(stocks)
+        name = None
+        if count > 0:
+            name = stocks[1].name
+        data2 = []
+        for i in range(count):
+            data1 = []
+            data1.append(stocks[i].trade_date.strftime("%Y/%m/%d"))
+            data1.append(float(stocks[i].open))
+            data1.append(float(stocks[i].close))
+            data1.append(float(stocks[i].low))
+            data1.append(float(stocks[i].high))
+            data2.append(data1)
+
+        result = {
+            "code": 0,
+            "msg": "获取成功",
+            "count": count,
+            "name": name,
+            "data": data2
+        }
+        return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
+    return render_template('stock/stockWeekly.html')
+
 
 
 

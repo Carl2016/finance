@@ -13,79 +13,91 @@
     <script src="/static/lib/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="/static/js/xadmin.js"></script>
     <link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_9h680jcse4620529.css">
-    <script src="/static/plugins/layui_v2/layui.js"></script>
 <body>
 
-
-<div class="larry-grid layui-anim layui-anim-upbit larryTheme-A ">
-    <div class="larry-personal">
-        <div class="layui-tab">
-            <blockquote class="layui-elem-quote mylog-info-tit">
-                <div class="x-nav">
-                    <span class="layui-breadcrumb">
-                        <a href="">首页</a>
-                        <a href="">演示</a>
-                        <a>
-                            <cite>导航元素</cite></a>
-                    </span>
-                    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" onclick="location.reload()" title="刷新">
-                        <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i>
-                    </a>
+    <div class="x-nav">
+        <span class="layui-breadcrumb">
+            <a href="/index">首页</a>
+            <a>
+                <cite>任务调度</cite>
+            </a>
+        </span>
+        <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" onclick="location.reload()" title="刷新">
+            <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i>
+        </a>
+    </div>
+    <div class="layui-fluid">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-body ">
+                        <blockquote class="layui-elem-quote mylog-info-tit">
+                            <div class="layui-inline">
+                                <form class="layui-form" id="userSearchForm">
+                                    <div class="layui-input-inline" style="width:110px;">
+                                        <select name="searchTerm" >
+                                            <option value="code">ID</option>
+                                            <option value="name">方法名</option>
+                                        </select>
+                                    </div>
+                                    <div class="layui-input-inline" style="width:145px;">
+                                        <input type="text" name="searchContent" value="" placeholder="请输入关键字" class="layui-input search_input">
+                                    </div>
+                                    <a class="layui-btn userSearchList_btn" lay-submit lay-filter="userSearchFilter"><i class="layui-icon larry-icon larry-chaxun7"></i>查询</a>
+                                </form>
+                            </div>
+                            <div class="layui-inline">
+                                <a class="layui-btn layui-btn-normal add_btn" > <i class="layui-icon larry-icon larry-xinzeng1"></i>新增</a>
+                            </div>
+                            <div class="layui-inline">
+                                <a class="layui-btn layui-btn-danger batchFail_btn"><i class="layui-icon larry-icon larry-huishouzhan1"></i>删除</a>
+                            </div>
+                            <div class="layui-inline">
+                                <a class="layui-btn layui-btn-warm batchPause_btn"  > <i class="layui-icon larry-icon larry-danye"></i>暂停</a>
+                            </div>
+                            <div class="layui-inline">
+                                <a class="layui-btn batchResume_btn" style="background-color: #fa6fb7" > <i class="layui-icon larry-icon larry-danye"></i>恢复</a>
+                            </div>
+                        </blockquote>
+                    </div>
+                    <div class="layui-card-body ">
+                        <table class="layui-table" lay-data="{url:'/scheduler/list',method:'POST',page:true,toolbar: '#toolbarDemo',id:'schedulerTableId'}" lay-filter="schedulerTableId">
+                            <thead>
+                                <tr>
+                                    <th lay-data="{type:'checkbox'}">ID</th>
+                                    {#<th lay-data="{field:'id', width:'16%', sort: true}">ID</th>#}
+                                    <th lay-data="{field:'name', align:'center', width:'10%'}">方法名字</th>
+                                    <th lay-data="{field:'next_run_time', align:'center', width:'12%'}">下次执行时间</th>
+                                    <th lay-data="{field:'func_ref', width:'15%', align:'center'}">方法位置</th>
+                                    <th lay-data="{field:'args', width: '5%', align:'center'}">参数</th>
+                                    <th lay-data="{field:'max_instances', width: '5%', align:'center'}">实例</th>
+                                    <th lay-data="{field:'misfire_grace_time', width: '8%', align:'center'}">容错时间</th>
+                                    <th lay-data="{field:'cron', align:'center', width: '10%', edit: 'text'}">cron</th>
+                                    <th lay-data="{field:'state', align:'center', width: '10%', templet: '#statusTpl'}">状态</th>
+                                    <th lay-data="{align:'center', width: '8%', toolbar: '#userBar'}">操作</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
-                <div class="layui-inline">
-                    <form class="layui-form" id="userSearchForm">
-                        <div class="layui-input-inline" style="width:110px;">
-                            <select name="searchTerm" >
-                                <option value="code">ID</option>
-                                <option value="name">方法名</option>
-                            </select>
-                        </div>
-                        <div class="layui-input-inline" style="width:145px;">
-                            <input type="text" name="searchContent" value="" placeholder="请输入关键字" class="layui-input search_input">
-                        </div>
-                        <a class="layui-btn userSearchList_btn" lay-submit lay-filter="userSearchFilter"><i class="layui-icon larry-icon larry-chaxun7"></i>查询</a>
-                    </form>
-                </div>
-                <div class="layui-inline">
-                    <a class="layui-btn layui-btn-normal add_btn" > <i class="layui-icon larry-icon larry-xinzeng1"></i>新增</a>
-                </div>
-                <div class="layui-inline">
-                    <a class="layui-btn layui-btn-danger batchFail_btn"><i class="layui-icon larry-icon larry-huishouzhan1"></i>删除</a>
-                </div>
-                <div class="layui-inline">
-                    <a class="layui-btn layui-btn-warm batchPause_btn"  > <i class="layui-icon larry-icon larry-danye"></i>暂停</a>
-                </div>
-                <div class="layui-inline">
-                    <a class="layui-btn batchResume_btn" style="background-color: #fa6fb7" > <i class="layui-icon larry-icon larry-danye"></i>恢复</a>
-                </div>
-            </blockquote>
-            <div class="larry-separate"></div>
-            <!-- 用户列表 -->
-            {#<div class="layui-tab-item layui-show " style="padding: 10px 15px;">
-                <table id="schedulerTableList"  lay-filter="schedulerTableId" ></table>
-            </div>#}
-            <div class="layui-card-body ">
-                <table class="layui-table" lay-data="{url:'/scheduler/list',method:'POST',page:true,toolbar: '#toolbarDemo',id:'test'}" lay-filter="test">
-                    <thead>
-                        <tr>
-                            <th lay-data="{type:'checkbox'}">ID</th>
-                            <th lay-data="{field:'id', width:'20%', sort: true}">ID</th>
-                            <th lay-data="{field:'name', align:'center', width:'10%'}">方法名字</th>
-                            <th lay-data="{field:'next_run_time', align:'center', width:'10%'}">下次执行时间</th>
-                            <th lay-data="{field:'func_ref', width:'15%', align:'center'}">方法位置</th>
-                            <th lay-data="{field:'args', width: '5%', align:'center'}">参数</th>
-                            <th lay-data="{field:'max_instances', width: '5%', align:'center'}">实例</th>
-                            <th lay-data="{field:'misfire_grace_time', width: '5%', align:'center'}">容错时间</th>
-                            <th lay-data="{field:'cron', align:'center', width: '15%', edit: 'text'}">cron</th>
-                            <th lay-data="{field:'state', align:'center', width: '10%', templet: '#statusTpl'}">状态</th>
-
-                        </tr>
-                    </thead>
-                </table>
             </div>
         </div>
     </div>
-</div>
+
+
+{#<div class="larry-grid layui-anim layui-anim-upbit larryTheme-A ">#}
+{#    <div class="larry-personal">#}
+{#        <div class="layui-tab">#}
+{##}
+{#            <div class="larry-separate"></div>#}
+{#            <!-- 用户列表 -->#}
+            {#<div class="layui-tab-item layui-show " style="padding: 10px 15px;">
+{#                <table id="schedulerTableList"  lay-filter="schedulerTableId" ></table>#}
+{#            </div>#}
+{##}
+{#        </div>#}
+{#    </div>#}
+{#</div>#}
 
 
 <script type="text/html" id="toolbarDemo">
@@ -108,12 +120,17 @@
 </script>
 
 <script>
-        layui.use('table',
-        function() {
-            var table = layui.table;
+        layui.config({
+            base : "/static/js/"
+        }).use(['form', 'table', 'layer','common'], function () {
+                var $ =  layui.$;
+                var form = layui.form,
+                table = layui.table,
+                layer = layui.layer,
+                common = layui.common;
 
             //监听单元格编辑
-            table.on('edit(test)',
+            table.on('edit(schedulerTableId)',
             function(obj) {
                 var value = obj.value //得到修改后的值
                 ,
@@ -124,7 +141,7 @@
             });
 
             //头工具栏事件
-            table.on('toolbar(test)',
+            table.on('toolbar(schedulerTableId)',
             function(obj) {
                 var checkStatus = table.checkStatus(obj.config.id);
                 switch (obj.event) {
@@ -140,6 +157,106 @@
                     layer.msg(checkStatus.isAll ? '全选': '未全选');
                     break;
                 };
+            });
+
+            /**查询*/
+            $(".userSearchList_btn").click(function(){
+                var loading = layer.load(0,{ shade: [0.3,'#000']});
+                //监听提交
+                form.on('submit(userSearchFilter)', function (data) {
+                    table.reload('schedulerTableId',{
+                        where: {
+                                key:data.field.searchTerm,
+                                value:data.field.searchContent
+                        },
+                        height: 'full-140',
+                        page: true,
+                        done: function (res, curr, count) {
+                            common.resizeGrid();
+                            layer.close(loading);
+
+                        }
+                    });
+                });
+            });
+
+             /**新增任务*/
+            $(".add_btn").click(function(){
+                var url = "/scheduler/add";
+                common.cmsLayOpen('新增任务',url,'650px','590px');
+            });
+
+            /**批量删除任务*/
+            $(".batchFail_btn").click(function(){
+                var checkStatus = table.checkStatus('schedulerTableId');
+                if(checkStatus.data.length == 0){
+                    common.cmsLayErrorMsg("请选择至少1个任务!");
+                }else{
+                    var ids = [];
+                    $(checkStatus.data).each(function(index, item){
+                        ids.push(item.id);
+                    });
+                    var url = "/scheduler/batchDelete";
+                    var param = {jobs:JSON.stringify(ids)};
+                    common.ajaxCmsConfirm('系统提示', '确认要删除任务吗?', url, param);
+                }
+            });
+
+            /**批量暂停任务*/
+            $(".batchPause_btn").click(function(){
+                var checkStatus = table.checkStatus('schedulerTableId');
+                if(checkStatus.data.length == 0){
+                    common.cmsLayErrorMsg("请选择至少1个任务!");
+                }else{
+                    var status = false;
+                    var ids = [];
+                    $(checkStatus.data).each(function(index, item) {
+                        ids.push(item.id);
+                        //任务已暂停
+                        if (item.state == 1) {
+                            status = true;
+                            return false;
+                        } else {
+                            status = false;
+                        }
+                    });
+                    if (status == true) {
+                        common.cmsLayErrorMsg("当前选择的任务已暂停");
+                        return false;
+                    }
+                    var url = "/scheduler/batchPause";
+                    var param = {jobs:JSON.stringify(ids)};
+                    common.ajaxCmsConfirm('系统提示', '确认要暂停任务吗?', url, param);
+                }
+            });
+
+            /**批量恢复任务*/
+            $(".batchResume_btn").click(function() {
+                var checkStatus = table.checkStatus('schedulerTableId');
+                if (checkStatus.data.length == 0) {
+                    common.cmsLayErrorMsg("请选择至少1个任务!");
+                } else {
+                    var ids = [];
+                    $(checkStatus.data).each(function(index, item){
+                        ids.push(item.id);
+                    });
+                    var url = "/scheduler/batchResume";
+                    var param = {jobs:JSON.stringify(ids)};
+                    common.ajaxCmsConfirm('系统提示', '确认要恢复任务吗?', url, param);
+                }
+            });
+
+            /**监听工具条*/
+            table.on('tool(schedulerTableId)', function(obj){
+                var data = obj.data; //获得当前行数据
+                var layEvent = obj.event; //获得 lay-event 对应的值
+                console.log(data);
+                //编辑任务
+                if (layEvent === 'scheduler_edit') {
+                    var id = data.id;
+                    var url =  "/scheduler/edit/"+id;
+                    common.cmsLayOpen('编辑任务',url,'650px','590px');
+                }
             });
         });
 
@@ -305,12 +422,12 @@
 {##}
 {#</script>#}
 {##}
-{#<!--工具条 -->#}
-{#<script type="text/html" id="userBar">#}
-{#    <div class="layui-btn-group">#}
-{#        <a class="layui-btn layui-btn-xs user_edit" lay-event="scheduler_edit"><i class="layui-icon larry-icon larry-bianji2"></i> 编辑</a>#}
-{#    </div>#}
-{#</script>#}
+<!--工具条 -->
+<script type="text/html" id="userBar">
+    <div class="layui-btn-group">
+        <a class="layui-btn layui-btn-xs user_edit" lay-event="scheduler_edit"><i class="layui-icon larry-icon larry-bianji2"></i> 编辑</a>
+    </div>
+</script>
 
 </body>
 </html>

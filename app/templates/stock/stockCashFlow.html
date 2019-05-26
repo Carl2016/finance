@@ -8,12 +8,13 @@
     <meta name="description" content="">
 
     <link rel="shortcut icon" href="/static/img/favicon.ico">
-    <link rel="stylesheet" href="/static/plugins/layui_v2/css/layui.css">
-    <link rel="stylesheet" href="/static/css/global.css">
-    <link rel="stylesheet" type="text/css" href="/static/css/common.css" media="all">
-    <link rel="stylesheet" type="text/css" href="/static/css/personal.css" media="all">
+    <link rel="stylesheet" href="/static/css/font.css">
+    <link rel="stylesheet" href="/static/css/xadmin.css">
+    <!-- <link rel="stylesheet" href="./css/theme5.css"> -->
+    <script src="/static/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/js/xadmin.js"></script>
     <link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_9h680jcse4620529.css">
-    <script src="/static/plugins/layui_v2/layui.js"></script>
+
 <body>
 <div class="larry-grid layui-anim layui-anim-upbit larryTheme-A ">
     <div class="larry-personal">
@@ -43,7 +44,7 @@
             <div class="larry-separate"></div>
             <!-- 用户列表 -->
             <div class="layui-tab-item layui-show " style="padding: 10px 15px;">
-                <table id="cashFlowList"  lay-filter="cashFlowId" ></table>
+                <table id="stockTableList"  lay-filter="stockTableId" ></table>
             </div>
         </div>
     </div>
@@ -55,17 +56,17 @@
         base : "/static/js/"
     }).use(['form', 'table', 'layer','common'], function () {
          $ =  layui.$;
-        var form = layui.form,
-        table = layui.table,
-        layer = layui.layer,
-        common = layui.common;
+                var form = layui.form,
+                table = layui.table,
+                layer = layui.layer,
+                common = layui.common;
 
         var loading = layer.load(0,{ shade: [0.3,'#000']});
         /**用户表格加载*/
         table.render({
-            elem: '#cashFlowList',
+            elem: '#stockTableList',
             url: '/stock/cashFlow',
-            id:'cashFlowId',
+            id:'stockTableId',
             method: 'post',
             height:'full-140',
             skin:'row',
@@ -76,13 +77,25 @@
             cols: [[
                 //{type:"numbers"},
                 {type:"checkbox"},
-                {field:'code', title: '代码',align:'center' ,width: '8%'},
-                {field:'name', title: '名字',align:'center',width: '8%'},
-                {field:'cfSales', title: '经营现金净流量对销售收入比率',align:'center',width: '10%'},
-                {field:'rateOfReturn', title: '资产的经营现金流量回报率',align:'center',width: '10%'},
-                {field:'cfNm', title: '经营现金净流量与净利润的比率',align:'center',width: '8%'},
-                {field:'cfLiabilities', title: '经营现金净流量对负债比率',align:'center',width: '8%'},
-                {field:'cashFlowRatio', title: '现金流量比率',align:'center',width: '8%'}
+                {field:'code', title: '代码',align:'center' ,width: '6%'},
+                {field:'name', title: '名字',align:'center',width: '6%'},
+                {field:'ann_date_str', title: '公告日期',align:'center',width: '6%'},
+                {field:'comp_type', title: '公司类型',align:'center',width: '6%'},
+                {field:'net_profit', title: '净利润',align:'center',width: '6%'},
+                {field:'finan_exp', title: '财务费用',align:'center',width: '12%'},
+                {field:'c_fr_sale_sg', title: '销售商品收到的现金',align:'center',width: '6%'},
+                {field:'n_incr_loans_cb', title: '向中央银行借款净增加额',align:'center',width: '6%'},
+                {field:'c_paid_goods_s', title: '购买商品支付的现金',align:'center',width: '6%'},
+
+                {field:'c_paid_to_for_empl', title: '支付给职工支付的现金',align:'center',width: '6%'},
+                {field:'st_cash_out_act', title: '经营活动现金流出小计',align:'center',width: '6%'},
+                {field:'n_cashflow_act', title: '经营活动产生的现金流量净额',align:'center',width: '6%'},
+                {field:'c_disp_withdrwl_invest', title: '收回投资收到的现金',align:'center',width: '7%'},
+                {field:'c_recp_return_invest', title: '取得投资收益收到的现金',align:'center',width: '7%'},
+                {field:'c_paid_invest', title: '投资支付的现金',align:'center',width: '7%'},
+                {field:'c_disp_withdrwl_invest', title: '收回投资收到的现金',align:'center',width: '7%'},
+                {field:'end_bal_cash', title: '现金的期末余额',align:'center',width: '7%'},
+                {field:'beg_bal_cash', title: '现金的期初余额',align:'center',width: '7%'}
                 //{title: '操作', align:'center', width: '10%',toolbar: '#userBar'}
             ]],
             done: function (res, curr, count) {
@@ -96,7 +109,7 @@
             var loading = layer.load(0,{ shade: [0.3,'#000']});
             //监听提交
             form.on('submit(userSearchFilter)', function (data) {
-                table.reload('cashFlowId',{
+                table.reload('stockTableId',{
                     where: {
                             key:data.field.searchTerm,
                             value:data.field.searchContent
@@ -128,7 +141,7 @@
         /**批量失效*/
         $(".userBatchFail_btn").click(function(){
             //表格行操作
-            var checkStatus = table.checkStatus('cashFlowId');
+            var checkStatus = table.checkStatus('stockTableId');
             if(checkStatus.data.length == 0){
                 common.cmsLayErrorMsg("请选择要失效的用户信息");
             }else{
@@ -171,7 +184,7 @@
         });
 
         /**监听工具条*/
-        table.on('tool(cashFlowId)', function(obj){
+        table.on('tool(stockTableId)', function(obj){
             var data = obj.data; //获得当前行数据
             var layEvent = obj.event; //获得 lay-event 对应的值
             console.log(data);

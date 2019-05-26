@@ -1,18 +1,20 @@
 # coding:utf-8
 import json
-from datetime import datetime
+import datetime
 import requests
 from app.main.stock.models import *
 from app.main import schedulers
 import threading
+import tushare as ts
 
 
 # ts.set_token('')
 # pro = ts.pro_api()
+pro = ts.pro_api('9fa73a58ea99ddfe8fa4a2cf2b9b265a486ea47f50376d7226faab40')
 
 
 def req_http_api(req_params):
-    req = requests.post('http://api.tushare.pro', json.dumps(req_params).encode('utf-8'))
+    req = requests.post('http://api.waditu.com', json.dumps(req_params).encode('utf-8'))
     req.encoding
     result = json.loads(req.text)
     if result['code'] != 0:
@@ -23,7 +25,7 @@ def req_http_api(req_params):
 def query(api_name, fields, **kwargs):
     req_params = {
         'api_name': api_name,
-        'token': '',
+        'token': '9fa73a58ea99ddfe8fa4a2cf2b9b265a486ea47f50376d7226faab40',
         'params': kwargs,
         'fields': fields
     }
@@ -37,26 +39,26 @@ def query(api_name, fields, **kwargs):
 # 股票列表
 def initStock():
     fields = 'ts_code,symbol,name,area,industry,fullname,enname,exchange,curr_type,list_status,is_hs,market,list_date,delist_date'
-    params = {'list_status': 'L'}
-    data = query('stock_basic', fields, **params)
+    df = pro.query('stock_basic', list_status='L', fields=fields)
+    data = json.loads(df.to_json(orient='records'))
     items = []
     with schedulers.app.app_context():
         for i in range(len(data)):
             stock = StockBasic()
-            stock.symbol = data[i][0]
-            stock.code = data[i][1]
-            stock.name = data[i][2]
-            stock.area = data[i][3]
-            stock.industry = data[i][4]
-            stock.fullname = data[i][5]
-            stock.enname = data[i][6]
-            stock.market = data[i][7]
-            stock.exchange = data[i][8]
-            stock.curr_type = data[i][9]
-            stock.list_status = data[i][10]
-            stock.is_hs = data[i][13]
-            list_time = data[i][11]
-            delist_time = data[i][12]
+            stock.symbol = data[i]['ts_code']
+            stock.code = data[i]['symbol']
+            stock.name = data[i]['name']
+            stock.area = data[i]['area']
+            stock.industry = data[i]['industry']
+            stock.fullname = data[i]['fullname']
+            stock.enname = data[i]['enname']
+            stock.market = data[i]['market']
+            stock.exchange = data[i]['exchange']
+            stock.curr_type = data[i]['curr_type']
+            stock.list_status = data[i]['list_status']
+            stock.is_hs = data[i]['is_hs']
+            list_time = data[i]['list_date']
+            delist_time = data[i]['delist_date']
             if delist_time is not None:
                 delist_date_time = delist_time[0:4] + "-" + delist_time[4:6] + "-" + delist_time[6:8]
                 stock.delist_date = datetime.strptime(delist_date_time, "%Y-%m-%d")
@@ -64,7 +66,7 @@ def initStock():
                 list_date_time = list_time[0:4] + "-" + list_time[4:6] + "-" + list_time[6:8]
                 stock.list_date = datetime.strptime(list_date_time, "%Y-%m-%d")
             # 判断是否存在
-            flag = StockBasic.query.filter(StockBasic.symbol == data[i][0]).first()
+            flag = StockBasic.query.filter(StockBasic.code == data[i]['symbol']).first()
             if flag is not None:
                 continue
             items.append(stock)
@@ -79,47 +81,47 @@ def initStock():
 # 上市公司基本信息
 def initStockCompany():
     fields = 'ts_code,exchange,chairman,manager,secretary,reg_capital,setup_date,province,city,introduction,website,email,office,employees,main_business,business_scope'
-    params = {'exchange': 'SZSE'}
-    data = query('stock_company', fields, **params)
+    df = pro.query('stock_company', exchange='SZSE', fields=fields)
+    data = json.loads(df.to_json(orient='records'))
     items = []
     with schedulers.app.app_context():
         for i in range(len(data)):
             item = StockCompany()
-            item.code = data[i][0][0:6]
-            item.symbol = data[i][0]
-            item.exchange = data[i][1]
-            item.chairman = data[i][2]
-            item.manager = data[i][3]
-            item.secretary = data[i][4]
-            item.reg_capital = data[i][5]
-            item.setup_date = data[i][6]
-            item.province = data[i][7]
-            item.city = data[i][8]
-            item.introduction = data[i][9]
-            item.website = data[i][10]
-            item.email = data[i][11]
-            item.office = data[i][12]
-            item.business_scope = data[i][13]
-            item.employees = data[i][14]
-            item.main_business = data[i][15]
+            item.code = data[i]['ts_code'][0:6]
+            item.symbol = data[i]['ts_code']
+            item.exchange = data[i]['exchange']
+            item.chairman = data[i]['chairman']
+            item.manager = data[i]['manager']
+            item.secretary = data[i]['secretary']
+            item.reg_capital = data[i]['reg_capital']
+            item.setup_date = data[i]['setup_date']
+            item.province = data[i]['province']
+            item.city = data[i]['city']
+            item.introduction = data[i]['introduction']
+            item.website = data[i]['website']
+            item.email = data[i]['email']
+            item.office = data[i]['office']
+            item.business_scope = data[i]['business_scope']
+            item.employees = data[i]['employees']
+            item.main_business = data[i]['main_business']
             # 判断是否存在
-            flag = StockCompany.query.filter(StockCompany.symbol == data[i][0]).first()
+            flag = StockCompany.query.filter(StockCompany.symbol == data[i]['ts_code']).first()
             if flag is not None:
-                flag.exchange = data[i][1]
-                flag.chairman = data[i][2]
-                flag.manager = data[i][3]
-                flag.secretary = data[i][4]
-                flag.reg_capital = data[i][5]
-                flag.setup_date = data[i][6]
-                flag.province = data[i][7]
-                flag.city = data[i][8]
-                flag.introduction = data[i][9]
-                flag.website = data[i][10]
-                flag.email = data[i][11]
-                flag.office = data[i][12]
-                flag.business_scope = data[i][13]
-                flag.employees = data[i][14]
-                flag.main_business = data[i][15]
+                flag.exchange = data[i]['exchange']
+                flag.chairman = data[i]['chairman']
+                flag.manager = data[i]['manager']
+                flag.secretary = data[i]['secretary']
+                flag.reg_capital = data[i]['reg_capital']
+                flag.setup_date = data[i]['setup_date']
+                flag.province = data[i]['province']
+                flag.city = data[i]['city']
+                flag.introduction = data[i]['introduction']
+                flag.website = data[i]['website']
+                flag.email = data[i]['email']
+                flag.office = data[i]['office']
+                flag.business_scope = data[i]['business_scope']
+                flag.employees = data[i]['employees']
+                flag.main_business = data[i]['main_business']
                 db.session.commit()
                 continue
             items.append(item)
@@ -134,28 +136,28 @@ def initStockCompany():
 # 上市IPO新股列表
 def initStockNewShare():
     fields = 'ts_code,sub_code,name,ipo_date,issue_date,amount,market_amount,price,pe,limit_amount,funds,ballot'
-    start_date = datetime.now().strftime('%Y%m%d')
-    params = {'start_date': start_date}
-    data = query('new_share', fields, **params)
+    end_date = datetime.now().strftime('%Y%m%d')
+    df = pro.query('new_share', start_date='20080101', end_date=end_date, fields=fields)
+    data = json.loads(df.to_json(orient='records'))
     items = []
     with schedulers.app.app_context():
         for i in range(len(data)):
             item = StockNewShare()
-            item.symbol = data[i][0]
-            item.code = data[i][0][0:6]
-            item.sub_code = data[i][1]
-            item.name = data[i][2]
-            item.ipo_date = data[i][3]
-            item.issue_date = data[i][4]
-            item.amount = data[i][5]
-            item.market_amount = data[i][6]
-            item.price = data[i][7]
-            item.pe = data[i][8]
-            item.limit_amount = data[i][9]
-            item.funds = data[i][10]
-            item.ballot = data[i][11]
+            item.symbol = data[i]['ts_code']
+            item.code = data[i]['ts_code'][0:6]
+            item.sub_code = data[i]['sub_code']
+            item.name = data[i]['name']
+            item.ipo_date = data[i]['ipo_date']
+            item.issue_date = data[i]['issue_date']
+            item.amount = data[i]['amount']
+            item.market_amount = data[i]['market_amount']
+            item.price = data[i]['price']
+            item.pe = data[i]['pe']
+            item.limit_amount = data[i]['limit_amount']
+            item.funds = data[i]['funds']
+            item.ballot = data[i]['ballot']
             # 判断是否存在
-            flag = StockNewShare.query.filter(StockNewShare.symbol == data[i][0]).first()
+            flag = StockNewShare.query.filter(StockNewShare.symbol == data[i]['ts_code']).first()
             if flag is not None:
                 continue
             items.append(item)
@@ -170,32 +172,36 @@ def initStockNewShare():
 # 日线行情
 def initStockDaily():
     fields = 'ts_code,trade_date,open,high,low,close,pre_close,change,pct_chg,vol,amount'
-    start_date = datetime.now().strftime('%Y%m%d')
+    end_date = datetime.now().strftime('%Y%m%d')
     with schedulers.app.app_context():
         stockBasics = StockBasic.query.all()
         for j in range(len(stockBasics)):
-            params = {'ts_code': stockBasics[j].symbol, 'trade_date': '', 'start_date': ''}
-            data = query('daily', fields, **params)
+            # 查询最新的一天记录日期,然后根据时间去跑数据
+            daily = StockDaily.query.filter(StockDaily.symbol == stockBasics[j].symbol).order_by(StockDaily.trade_date_str.desc()).first()
+            if daily is not None:
+                df = pro.query('daily', ts_code=stockBasics[j].symbol, start_date=daily.trade_date_str, end_date=end_date, fields=fields)
+            else:
+                df = pro.query('daily', ts_code=stockBasics[j].symbol, start_date='19901201', end_date=end_date, fields=fields)
+            data = json.loads(df.to_json(orient='records'))
             items = []
             for i in range(len(data)):
                 item = StockDaily()
                 item.name = stockBasics[j].name
-                item.symbol = data[i][0]
-                item.code = data[i][0][0:6]
-                date_time = data[i][1][0:4] + "-" + data[i][1][4:6] + "-" + data[i][1][6:8]
-                item.trade_date = datetime.strptime(date_time, "%Y-%m-%d")
-                item.trade_date_str = data[i][1]
-                item.open = data[i][2]
-                item.high = data[i][3]
-                item.low = data[i][4]
-                item.close = data[i][5]
-                item.pre_close = data[i][6]
-                item.change = data[i][7]
-                item.pct_chg = data[i][8]
-                item.vol = data[i][9]
-                item.amount = data[i][10]
+                item.symbol = data[i]['ts_code']
+                item.code = data[i]['ts_code'][0:6]
+                item.trade_date = datetime.datetime.strptime(data[i]['trade_date'], '%Y%m%d')
+                item.trade_date_str = data[i]['trade_date']
+                item.open = data[i]['open']
+                item.high = data[i]['high']
+                item.low = data[i]['low']
+                item.close = data[i]['close']
+                item.pre_close = data[i]['pre_close']
+                item.change = data[i]['change']
+                item.pct_chg = data[i]['pct_chg']
+                item.vol = data[i]['vol']
+                item.amount = data[i]['amount']
                 # 判断是否存在
-                flag = StockDaily.query.filter(StockDaily.symbol == data[i][0]).first()
+                flag = StockDaily.query.filter(StockDaily.symbol == data[i]['ts_code']).first()
                 if flag is not None:
                     continue
                 items.append(item)
@@ -283,41 +289,40 @@ def initStockMonthly():
                 db.session.commit()
     db.session.remove()
 
-
-# 每日行情
+# 每日指标
 def initDailyBasic():
-    fields = ''
+    fields = 'ts_code,trade_date,close,turnover_rate,turnover_rate_f,volume_ratio,pe,pe_ttm,pb,ps,ps_ttm,total_share,float_share,free_share,total_mv,circ_mv'
     start_date = datetime.now().strftime('%Y%m%d')
     with schedulers.app.app_context():
         stockBasics = StockBasic.query.all()
         for j in range(len(stockBasics)):
-            params = {'ts_code': stockBasics[j].symbol, 'trade_date': '', 'start_date': ''}
-            data = query('daily_basic', fields, **params)
+            df = pro.query('daily_basic', ts_code=stockBasics[j].symbol, fields=fields)
+            data = json.loads(df.to_json(orient='records'))
             items = []
             for i in range(len(data)):
                 item = StockDailyBasic()
                 item.name = stockBasics[j].name
-                item.symbol = data[i][0]
-                item.code = data[i][0][0:6]
-                date_time = data[i][1][0:4] + "-" + data[i][1][4:6] + "-" + data[i][1][6:8]
+                item.symbol = data[i]['ts_code']
+                item.code = data[i]['ts_code'][0:6]
+                date_time = data[i]['trade_date'][0:4] + "-" + data[i]['trade_date'][4:6] + "-" + data[i]['trade_date'][6:8]
                 item.trade_date = datetime.strptime(date_time, "%Y-%m-%d")
-                item.trade_date_str = data[i][1]
-                item.close = data[i][2]
-                item.turnover_rate = data[i][3]
-                item.turnover_rate_f = data[i][4]
-                item.volume_ratio = data[i][5]
-                item.pe = data[i][6]
-                item.pe_ttm = data[i][7]
-                item.pb = data[i][8]
-                item.ps = data[i][9]
-                item.ps_ttm = data[i][10]
-                item.total_share = data[i][11]
-                item.float_share = data[i][12]
-                item.free_share = data[i][13]
-                item.total_mv = data[i][14]
-                item.circ_mv = data[i][15]
+                item.trade_date_str = data[i]['trade_date']
+                item.close = data[i]['close']
+                item.turnover_rate = data[i]['turnover_rate']
+                item.turnover_rate_f = data[i]['turnover_rate_f']
+                item.volume_ratio = data[i]['volume_ratio']
+                item.pe = data[i]['pe']
+                item.pe_ttm = data[i]['pe_ttm']
+                item.pb = data[i]['pb']
+                item.ps = data[i]['ps']
+                item.ps_ttm = data[i]['ps_ttm']
+                item.total_share = data[i]['total_share']
+                item.float_share = data[i]['float_share']
+                item.free_share = data[i]['free_share']
+                item.total_mv = data[i]['total_mv']
+                item.circ_mv = data[i]['circ_mv']
                 # 判断是否存在
-                flag = StockDailyBasic.query.filter(StockDailyBasic.symbol == data[i][0]).first()
+                flag = StockDailyBasic.query.filter(StockDailyBasic.symbol == data[i]['ts_code'], StockDailyBasic.trade_date_str == data[i]['trade_date']).first()
                 if flag is not None:
                     continue
                 items.append(item)
@@ -885,4 +890,42 @@ def initStockDividend():
     db.session.remove()
 
 
-
+# 分红送股
+def initStockDividend():
+    fields = ''
+    start_date = datetime.now().strftime('%Y%m%d')
+    with schedulers.app.app_context():
+        stockBasics = StockBasic.query.all()
+        for j in range(len(stockBasics)):
+            params = {'ts_code': stockBasics[j].symbol, 'trade_date': '', 'start_date': ''}
+            data = query('dividend', fields, **params)
+            items = []
+            for i in range(len(data)):
+                item = StockDividend()
+                item.name = stockBasics[j].name
+                item.symbol = data[i][0]
+                item.code = data[i][0][0:6]
+                date_time = data[i][1][0:4] + "-" + data[i][1][4:6] + "-" + data[i][1][6:8]
+                item.ann_date = datetime.strptime(date_time, "%Y-%m-%d")
+                item.ann_date_str = data[i][1]
+                item.div_proc = data[i][2]
+                item.stk_div = data[i][3]
+                item.stk_bo_rate = data[i][4]
+                item.stk_co_rate = data[i][5]
+                item.cash_div = data[i][6]
+                item.cash_div_tax = data[i][7]
+                item.record_date = data[i][8]
+                item.ex_date = data[i][9]
+                item.pay_date = data[i][10]
+                item.div_listdate = data[i][11]
+                item.imp_ann_date = data[i][12]
+                # 判断是否存在
+                flag = StockDividend.query.filter(StockDividend.symbol == data[i][0]).first()
+                if flag is not None:
+                    continue
+                items.append(item)
+            # 添加不存在的
+            if items:
+                db.session.add_all(items)
+                db.session.commit()
+    db.session.remove()

@@ -20,7 +20,6 @@ class User(db.Model, UserMixin):
         self.username = username
         self.password = password
 
-
     @property
     def password(self):
         return self.password_hash

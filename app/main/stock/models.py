@@ -7,9 +7,9 @@ from sqlalchemy.sql import func
 class StockBasic(db.Model):
     __tablename__ = 'stock_basic'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
-    code = db.Column(db.String(20), comment=u"股票代码")
-    name = db.Column(db.String(30), comment=u"股票名称")
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(20), index=True, comment=u"股票代码")
+    name = db.Column(db.String(30), index=True, comment=u"股票名称")
     industry = db.Column(db.String(30), comment=u"所属行业")
     area = db.Column(db.String(30), comment=u"地区")
     fullname = db.Column(db.String(50), comment=u"股票全称")
@@ -33,8 +33,8 @@ class StockBasic(db.Model):
 class StockCompany(db.Model):
     __tablename__ = 'stock_company'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
-    code = db.Column(db.String(30), comment=u"股票代码")
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     exchange = db.Column(db.String(50), comment=u"交易所代码 ，SSE上交所 SZSE深交所")
     chairman = db.Column(db.String(50), comment=u"法人代表")
@@ -66,8 +66,8 @@ class StockCompany(db.Model):
 class StockNewShare(db.Model):
     __tablename__ = 'stock_new_share'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
-    code = db.Column(db.String(30), comment=u"股票代码")
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     sub_code = db.Column(db.String(30), comment=u"申购代码")
     ipo_date = db.Column(db.String(50), comment=u"上网发行日期")
@@ -94,11 +94,11 @@ class StockNewShare(db.Model):
 class StockDaily(db.Model):
     __tablename__ = 'stock_daily'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
-    code = db.Column(db.String(30), comment=u"股票代码")
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     trade_date_str = db.Column(db.String(50), comment=u"交易日期")
-    trade_date = db.Column(db.Date, comment=u"交易日期")
+    trade_date = db.Column(db.Date, index=True, comment=u"交易日期")
     open = db.Column(db.DECIMAL(20, 4), comment=u"开盘价")
     high = db.Column(db.DECIMAL(20, 4), comment=u"最高价")
     low = db.Column(db.DECIMAL(20, 4), comment=u"最低价")
@@ -123,11 +123,11 @@ class StockDaily(db.Model):
 class StockWeekly(db.Model):
     __tablename__ = 'stock_weekly'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
-    code = db.Column(db.String(30), comment=u"股票代码")
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     trade_date_str = db.Column(db.String(50), comment=u"交易日期")
-    trade_date = db.Column(db.Date, comment=u"交易日期")
+    trade_date = db.Column(db.Date, index=True, comment=u"交易日期")
     open = db.Column(db.DECIMAL(20, 4), comment=u"周开盘价")
     high = db.Column(db.DECIMAL(20, 4), comment=u"周最高价")
     low = db.Column(db.DECIMAL(20, 4), comment=u"周最低价")
@@ -152,11 +152,11 @@ class StockWeekly(db.Model):
 class StockMonthly(db.Model):
     __tablename__ = 'stock_monthly'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
-    code = db.Column(db.String(30), comment=u"股票代码")
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     trade_date_str = db.Column(db.String(50), comment=u"交易日期")
-    trade_date = db.Column(db.Date, comment=u"交易日期")
+    trade_date = db.Column(db.Date, index=True, comment=u"交易日期")
     open = db.Column(db.DECIMAL(20, 4), comment=u"月开盘价")
     high = db.Column(db.DECIMAL(20, 4), comment=u"月最高价")
     low = db.Column(db.DECIMAL(20, 4), comment=u"月最低价")
@@ -181,8 +181,8 @@ class StockMonthly(db.Model):
 class StockProBar(db.Model):
     __tablename__ = 'stock_pro_bar'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
-    code = db.Column(db.String(30), comment=u"股票代码")
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     start_date = db.Column(db.String(50), comment=u"开始日期 (格式：YYYYMMDD)")
     end_date = db.Column(db.String(50), comment=u"结束日期 (格式：YYYYMMDD)")
@@ -205,8 +205,8 @@ class StockProBar(db.Model):
 class StockAdjFactor(db.Model):
     __tablename__ = 'stock_adj_factor'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
-    code = db.Column(db.String(30), comment=u"股票代码")
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     trade_date = db.Column(db.String(50), comment=u"交易日期")
     adj_factor = db.Column(db.DECIMAL(20, 4), comment=u"复权因子")
@@ -223,12 +223,225 @@ class StockAdjFactor(db.Model):
         db.session.commit()
 
 
+
+
+
+# 个股资金流向
+class StockMoneyflow(db.Model):
+    __tablename__ = 'stock_money_flow'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
+    name = db.Column(db.String(50), comment=u"股票名称")
+    trade_date = db.Column(db.Date, comment=u"交易日期")
+    trade_date_str = db.Column(db.String(50), comment=u"交易日期")
+    buy_sm_vol = db.Column(db.DECIMAL(20, 4), comment=u"小单买入量（手）")
+    buy_sm_amount = db.Column(db.DECIMAL(20, 4), comment=u"小单买入金额（万元）")
+    sell_sm_vol = db.Column(db.DECIMAL(20, 4), comment=u"小单卖出量（手）")
+    sell_sm_amount = db.Column(db.DECIMAL(20, 4), comment=u"小单卖出金额（万元）")
+    buy_md_vol = db.Column(db.DECIMAL(20, 4), comment=u"中单买入量（手）")
+    buy_md_amount = db.Column(db.DECIMAL(20, 4), comment=u"中单买入金额（万元）")
+    sell_md_vol = db.Column(db.DECIMAL(20, 4), comment=u"市净率（中单卖出量（手）")
+    sell_md_amount = db.Column(db.DECIMAL(20, 4), comment=u"中单卖出金额（万元）")
+    buy_lg_vol = db.Column(db.DECIMAL(20, 4), comment=u"大单买入量（手）")
+    buy_lg_amount = db.Column(db.DECIMAL(20, 4), comment=u"大单买入金额（万元）")
+    sell_lg_vol = db.Column(db.DECIMAL(20, 4), comment=u"大单卖出量（手）")
+    sell_lg_amount = db.Column(db.DECIMAL(20, 4), comment=u"大单卖出金额（万元）")
+    buy_elg_vol = db.Column(db.DECIMAL(20, 4), comment=u"特大单买入量（手）")
+    buy_elg_amount = db.Column(db.DECIMAL(20, 4), comment=u"特大单买入金额（万元）")
+    sell_elg_vol = db.Column(db.DECIMAL(20, 4), comment=u"特大单卖出量（手）")
+    sell_elg_amount = db.Column(db.DECIMAL(20, 4), comment=u"特大单卖出金额（万元）")
+    net_mf_vol = db.Column(db.DECIMAL(20, 4), comment=u"净流入量（手）")
+    net_mf_amount = db.Column(db.DECIMAL(20, 4), comment=u"净流入额（万元）")
+
+    createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
+    updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
+
+    def __repr__(self):
+        return '<StockMoneyflow %r>' % self.code
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+
+# 指数基本信息
+class StockIndexBasic(db.Model):
+    __tablename__ = 'stock_index_basic'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    index_code = db.Column(db.String(30), index=True, comment=u"指数代码")
+    index_name = db.Column(db.String(50), comment=u"指数名称")
+    exp_date = db.Column(db.Date, comment=u"终止日期")
+    exp_date_str = db.Column(db.String(50), comment=u"终止日期")
+    c_name = db.Column(db.String(100), comment=u"简称")
+    fullname = db.Column(db.String(100), comment=u"指数全称")
+    market = db.Column(db.String(100), comment=u"市场")
+    publisher = db.Column(db.String(100), comment=u"发布方")
+    index_type = db.Column(db.String(100), comment=u"指数风格")
+    category = db.Column(db.String(100), comment=u"指数类别")
+    base_date = db.Column(db.String(100), comment=u"基期")
+    base_point = db.Column(db.DECIMAL(20, 4), comment=u"基点")
+    list_date = db.Column(db.String(50), comment=u"发布日期")
+    weight_rule = db.Column(db.String(100), comment=u"加权方式")
+    desc = db.Column(db.String(200), comment=u"描述")
+    createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
+    updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
+
+    def __repr__(self):
+        return '<StockIndexBasic %r>' % self.code
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+
+# 指数日线行情
+class StockIndexDaily(db.Model):
+    __tablename__ = 'stock_index_daily'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    index_code = db.Column(db.String(30), index=True, comment=u"指数代码")
+    index_name = db.Column(db.String(50), comment=u"指数名称")
+    trade_date = db.Column(db.DATE, index=True, comment=u"交易日期")
+    trade_date_str = db.Column(db.String(50), comment=u"交易日期")
+    close = db.Column(db.DECIMAL(20, 4), comment=u"收盘点位")
+    open = db.Column(db.DECIMAL(20, 4), comment=u"开盘点位")
+    high = db.Column(db.DECIMAL(20, 4), comment=u"最高点位")
+    low = db.Column(db.DECIMAL(20, 4), comment=u"最低点位")
+    pre_close = db.Column(db.DECIMAL(20, 4), comment=u"昨日收盘点")
+    change = db.Column(db.DECIMAL(20, 4), comment=u"涨跌点")
+    pct_chg = db.Column(db.DECIMAL(20, 4), comment=u"涨跌幅（%）")
+    vol = db.Column(db.DECIMAL(20, 4), comment=u"成交量（手）")
+    amount = db.Column(db.DECIMAL(20, 4), comment=u"成交额（千元）")
+
+    createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
+    updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
+
+    def __repr__(self):
+        return '<StockIndexDaily %r>' % self.code
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+
+# 指数周线行情
+class StockIndexWeekly(db.Model):
+    __tablename__ = 'stock_index_weekly'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    index_code = db.Column(db.String(30), index=True, comment=u"指数代码")
+    index_name = db.Column(db.String(50), comment=u"指数名称")
+    trade_date = db.Column(db.DATE, index=True, comment=u"交易日期")
+    trade_date_str = db.Column(db.String(50), comment=u"交易日期")
+    close = db.Column(db.DECIMAL(20, 4), comment=u"收盘点位")
+    open = db.Column(db.DECIMAL(20, 4), comment=u"开盘点位")
+    high = db.Column(db.DECIMAL(20, 4), comment=u"最高点位")
+    low = db.Column(db.DECIMAL(20, 4), comment=u"最低点位")
+    pre_close = db.Column(db.DECIMAL(20, 4), comment=u"昨日收盘点")
+    change = db.Column(db.DECIMAL(20, 4), comment=u"涨跌点")
+    pct_chg = db.Column(db.DECIMAL(20, 4), comment=u"涨跌幅（%）")
+    vol = db.Column(db.DECIMAL(20, 4), comment=u"成交量（手）")
+    amount = db.Column(db.DECIMAL(20, 4), comment=u"成交额（千元）")
+
+    createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
+    updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
+
+    def __repr__(self):
+        return '<StockIndexWeekly %r>' % self.code
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+
+# 指数月线行情
+class StockIndexMonthly(db.Model):
+    __tablename__ = 'stock_index_monthly'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    index_code = db.Column(db.String(30), index=True, comment=u"指数代码")
+    index_name = db.Column(db.String(50), comment=u"指数名称")
+    trade_date = db.Column(db.DATE, index=True, comment=u"交易日期")
+    trade_date_str = db.Column(db.String(50), comment=u"交易日期")
+    close = db.Column(db.DECIMAL(20, 4), comment=u"收盘点位")
+    open = db.Column(db.DECIMAL(20, 4), comment=u"开盘点位")
+    high = db.Column(db.DECIMAL(20, 4), comment=u"最高点位")
+    low = db.Column(db.DECIMAL(20, 4), comment=u"最低点位")
+    pre_close = db.Column(db.DECIMAL(20, 4), comment=u"昨日收盘点")
+    change = db.Column(db.DECIMAL(20, 4), comment=u"涨跌点")
+    pct_chg = db.Column(db.DECIMAL(20, 4), comment=u"涨跌幅（%）")
+    vol = db.Column(db.DECIMAL(20, 4), comment=u"成交量（手）")
+    amount = db.Column(db.DECIMAL(20, 4), comment=u"成交额（千元）")
+
+    createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
+    updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
+
+    def __repr__(self):
+        return '<StockIndexMonthly %r>' % self.code
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+
+# 指数成分和权重
+class StockIndexWeight(db.Model):
+    __tablename__ = 'stock_index_weight'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
+    name = db.Column(db.String(50), comment=u"股票名称")
+    index_code = db.Column(db.String(50), comment=u"指数代码")
+    trade_date = db.Column(db.DATE, index=True, comment=u"交易日期")
+    trade_date_str = db.Column(db.String(50), comment=u"交易日期")
+    weight = db.Column(db.DECIMAL(20, 4), comment=u"权重")
+    createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
+    updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
+
+    def __repr__(self):
+        return '<StockIndexWeight %r>' % self.code
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+
+# 大盘指数每日指标
+class StockIndexDailyBasic(db.Model):
+    __tablename__ = 'stock_index_daily_basic'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
+    name = db.Column(db.String(50), comment=u"股票名称")
+    index_code = db.Column(db.String(50), comment=u"指数代码")
+    trade_date = db.Column(db.DATE, index=True, comment=u"交易日期")
+    trade_date_str = db.Column(db.String(50), comment=u"交易日期")
+    total_mv = db.Column(db.DECIMAL(20, 4), comment=u"当日总市值（元）")
+    float_mv = db.Column(db.DECIMAL(20, 4), comment=u"当日流通市值（元）")
+    total_share = db.Column(db.DECIMAL(20, 4), comment=u"当日总股本（股）")
+    float_share = db.Column(db.DECIMAL(20, 4), comment=u"当日流通股本（股）")
+    free_share = db.Column(db.DECIMAL(20, 4), comment=u"当日自由流通股本（股）")
+    turnover_rate = db.Column(db.DECIMAL(20, 4), comment=u"换手率")
+    turnover_rate_f = db.Column(db.DECIMAL(20, 4), comment=u"换手率(基于自由流通股本)")
+    pe = db.Column(db.DECIMAL(20, 4), comment=u"市盈率")
+    pe_ttm = db.Column(db.DECIMAL(20, 4), comment=u"市盈率TTM")
+    pb = db.Column(db.DECIMAL(20, 4), comment=u"市净率")
+    createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
+    updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
+
+    def __repr__(self):
+        return '<StockIndexWeight %r>' % self.code
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+
 # 股票每日指标
 class StockDailyBasic(db.Model):
     __tablename__ = 'stock_daily_basic'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
-    code = db.Column(db.String(30), comment=u"股票代码")
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     trade_date = db.Column(db.Date, comment=u"交易日期")
     trade_date_str = db.Column(db.String(50), comment=u"交易日期")
@@ -257,12 +470,12 @@ class StockDailyBasic(db.Model):
         db.session.commit()
 
 
-# 股票 停复牌信息
+# 股票停复牌信息
 class StockSuspend(db.Model):
     __tablename__ = 'stock_suspend'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
-    code = db.Column(db.String(30), comment=u"股票代码")
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     suspend_date = db.Column(db.String(50), comment=u"停牌日期")
     resume_date = db.Column(db.String(50), comment=u"复牌日期")
@@ -280,14 +493,14 @@ class StockSuspend(db.Model):
         db.session.commit()
 
 
-# 股票 利润表
+# 股票利润表
 class StockIncome(db.Model):
     __tablename__ = 'stock_income'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
-    code = db.Column(db.String(30), comment=u"股票代码")
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
-    ann_date = db.Column(db.Date, comment=u"公告日期")
+    ann_date = db.Column(db.Date, index=True, comment=u"公告日期")
     ann_date_str = db.Column(db.String(50), comment=u"公告日期")
     f_ann_date = db.Column(db.String(50), comment=u"实际公告日期，即发生过数据变更的最终日期")
     end_date = db.Column(db.String(50), comment=u"报告期")
@@ -363,14 +576,14 @@ class StockIncome(db.Model):
         db.session.commit()
 
 
-# 股票 资产负债表
+# 股票资产负债表
 class StockBalanceSheet(db.Model):
     __tablename__ = 'stock_balance_sheet'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
-    code = db.Column(db.String(30), comment=u"股票代码")
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
-    ann_date = db.Column(db.Date, comment=u"公告日期")
+    ann_date = db.Column(db.Date, index=True, comment=u"公告日期")
     ann_date_str = db.Column(db.String(50), comment=u"公告日期")
     f_ann_date = db.Column(db.String(50), comment=u"实际公告日期，即发生过数据变更的最终日期")
     end_date = db.Column(db.String(50), comment=u"报告期")
@@ -519,14 +732,14 @@ class StockBalanceSheet(db.Model):
         db.session.commit()
 
 
-# 股票 现金流量表
+# 股票现金流量表
 class StockCashFlow(db.Model):
     __tablename__ = 'stock_cash_flow'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
-    code = db.Column(db.String(30), comment=u"股票代码")
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
-    ann_date = db.Column(db.Date, comment=u"公告日期")
+    ann_date = db.Column(db.Date, index=True, comment=u"公告日期")
     ann_date_str = db.Column(db.String(50), comment=u"公告日期")
     f_ann_date = db.Column(db.String(50), comment=u"实际公告日期，即发生过数据变更的最终日期")
     end_date = db.Column(db.String(50), comment=u"报告期")
@@ -627,10 +840,10 @@ class StockCashFlow(db.Model):
 class StockForeCast(db.Model):
     __tablename__ = 'stock_fore_cast'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
-    code = db.Column(db.String(30), comment=u"股票代码")
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
-    ann_date = db.Column(db.Date, comment=u"公告日期")
+    ann_date = db.Column(db.Date, index=True, comment=u"公告日期")
     ann_date_str = db.Column(db.String(50), comment=u"公告日期")
     end_date = db.Column(db.String(50), comment=u"报告期")
     type = db.Column(db.String(50), comment=u"业绩预告类型(预增/预减/扭亏/首亏/续亏/续盈/略增/略减)")
@@ -657,10 +870,10 @@ class StockForeCast(db.Model):
 class StockExpress(db.Model):
     __tablename__ = 'stock_express'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
-    code = db.Column(db.String(30), comment=u"股票代码")
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
-    ann_date = db.Column(db.Date, comment=u"公告日期")
+    ann_date = db.Column(db.Date, index=True, comment=u"公告日期")
     ann_date_str = db.Column(db.String(50), comment=u"公告日期")
     end_date = db.Column(db.String(50), comment=u"报告期")
     revenue = db.Column(db.DECIMAL(20, 4), comment=u"营业收入(元)")
@@ -707,10 +920,10 @@ class StockExpress(db.Model):
 class StockDividend(db.Model):
     __tablename__ = 'stock_dividend'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
-    code = db.Column(db.String(30), comment=u"股票代码")
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
-    ann_date = db.Column(db.Date, comment=u"预案公告日")
+    ann_date = db.Column(db.Date, index=True, comment=u"预案公告日")
     ann_date_str = db.Column(db.String(50), comment=u"预案公告日")
     end_date = db.Column(db.String(30), comment=u"分红年度")
     div_proc = db.Column(db.String(30), comment=u"实施进度")
@@ -741,10 +954,10 @@ class StockDividend(db.Model):
 class StockFinaAudit(db.Model):
     __tablename__ = 'stock_fina_audit'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
-    code = db.Column(db.String(30), comment=u"股票代码")
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
-    ann_date = db.Column(db.Date, comment=u"公告日期")
+    ann_date = db.Column(db.Date, index=True, comment=u"公告日期")
     ann_date_str = db.Column(db.String(50), comment=u"公告日期")
     end_date = db.Column(db.Date, comment=u"报告期")
     end_date_str = db.Column(db.String(50), comment=u"报告期")
@@ -767,10 +980,10 @@ class StockFinaAudit(db.Model):
 class StockFinaIndicator(db.Model):
     __tablename__ = 'stock_fina_indicator'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
-    code = db.Column(db.String(30), comment=u"股票代码")
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
-    ann_date = db.Column(db.Date, comment=u"公告日期")
+    ann_date = db.Column(db.Date, index=True, comment=u"公告日期")
     ann_date_str = db.Column(db.String(50), comment=u"公告日期")
     end_date = db.Column(db.Date, comment=u"报告期")
     end_date_str = db.Column(db.String(50), comment=u"报告期")
@@ -793,10 +1006,10 @@ class StockFinaIndicator(db.Model):
 class StockFinaMainbz(db.Model):
     __tablename__ = 'stock_fina_mainbz'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
-    code = db.Column(db.String(30), comment=u"股票代码")
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
-    end_date = db.Column(db.Date, comment=u"报告期")
+    end_date = db.Column(db.Date, index=True, comment=u"报告期")
     end_date_str = db.Column(db.String(50), comment=u"报告期")
     bz_item = db.Column(db.String(50), comment=u"主营业务来源")
     bz_sales = db.Column(db.DECIMAL(20, 4), comment=u"主营业务收入(元)")
@@ -819,10 +1032,10 @@ class StockFinaMainbz(db.Model):
 class StockMoneyFlowHsgt(db.Model):
     __tablename__ = 'stock_money_flow_hsgt'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
-    code = db.Column(db.String(30), comment=u"股票代码")
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
-    trade_date = db.Column(db.Date, comment=u"交易日期")
+    trade_date = db.Column(db.Date, index=True, comment=u"交易日期")
     trade_date_str = db.Column(db.String(50), comment=u"交易日期")
     ggt_ss = db.Column(db.DECIMAL(20, 4), comment=u"港股通（上海）")
     ggt_sz = db.Column(db.DECIMAL(20, 4), comment=u"港股通（深圳）")
@@ -845,10 +1058,10 @@ class StockMoneyFlowHsgt(db.Model):
 class StockHsgtTop(db.Model):
     __tablename__ = 'stock_hsgt_top'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
-    code = db.Column(db.String(30), comment=u"股票代码")
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
-    trade_date = db.Column(db.Date, comment=u"交易日期")
+    trade_date = db.Column(db.Date, index=True, comment=u"交易日期")
     trade_date_str = db.Column(db.String(50), comment=u"交易日期")
     close = db.Column(db.DECIMAL(20, 4), comment=u"收盘价")
     change = db.Column(db.DECIMAL(20, 4), comment=u"涨跌额")
@@ -873,10 +1086,10 @@ class StockHsgtTop(db.Model):
 class StockGgtTop(db.Model):
     __tablename__ = 'stock_ggt_top'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
-    code = db.Column(db.String(30), comment=u"股票代码")
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
-    trade_date = db.Column(db.Date, comment=u"交易日期")
+    trade_date = db.Column(db.Date, index=True, comment=u"交易日期")
     trade_date_str = db.Column(db.String(50), comment=u"交易日期")
     close = db.Column(db.DECIMAL(20, 4), comment=u"收盘价")
     change = db.Column(db.DECIMAL(20, 4), comment=u"涨跌额")
@@ -903,4 +1116,580 @@ class StockGgtTop(db.Model):
         db.session.commit()
 
 
+# 融资融券交易汇总
+class StockMargin(db.Model):
+    __tablename__ = 'stock_margin'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
+    name = db.Column(db.String(50), comment=u"股票名称")
+    trade_date = db.Column(db.Date, index=True, comment=u"交易日期")
+    trade_date_str = db.Column(db.String(50), comment=u"交易日期")
+    exchange_id = db.Column(db.String(50), comment=u"交易所代码")
+    rzye = db.Column(db.DECIMAL(20, 4), comment=u"融资余额(元)")
+    rzmre = db.Column(db.DECIMAL(20, 4), comment=u"融资买入额(元)")
+    rzche = db.Column(db.DECIMAL(20, 4), comment=u"融资偿还额(元)")
+    rqye = db.Column(db.DECIMAL(20, 4), comment=u"融券余额(元)")
+    rqmcl = db.Column(db.DECIMAL(20, 4), comment=u"融券卖出量(股,份,手)")
+    rzrqye = db.Column(db.DECIMAL(20, 4), comment=u"融资融券余额(元)")
+    createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
+    updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
 
+    def __repr__(self):
+        return '<StockMargin %r>' % self.code
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+
+# 融资融券交易明细
+class StockMarginDetail(db.Model):
+    __tablename__ = 'stock_margin_detail'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
+    name = db.Column(db.String(50), comment=u"股票名称")
+    trade_date = db.Column(db.Date, index=True, comment=u"交易日期")
+    trade_date_str = db.Column(db.String(50), comment=u"交易日期")
+    exchange_id = db.Column(db.String(50), comment=u"交易所代码")
+    rzye = db.Column(db.DECIMAL(20, 4), comment=u"融资余额(元)")
+    rzmre = db.Column(db.DECIMAL(20, 4), comment=u"融资买入额(元)")
+    rzche = db.Column(db.DECIMAL(20, 4), comment=u"融资偿还额(元)")
+    rqye = db.Column(db.DECIMAL(20, 4), comment=u"融券余额(元)")
+    rqmcl = db.Column(db.DECIMAL(20, 4), comment=u"融券卖出量(股,份,手)")
+    rzrqye = db.Column(db.DECIMAL(20, 4), comment=u"融资融券余额(元)")
+    createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
+    updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
+
+    def __repr__(self):
+        return '<StockMarginDetail %r>' % self.code
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+
+# 前十大股东
+class StockTopHolders(db.Model):
+    __tablename__ = 'stock_top_holders'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
+    name = db.Column(db.String(50), comment=u"股票名称")
+    ann_date = db.Column(db.Date, index=True, comment=u"公告日期")
+    ann_date_str = db.Column(db.String(50), comment=u"公告日期")
+    end_date = db.Column(db.String(50), comment=u"报告期")
+    holder_name = db.Column(db.String(50), comment=u"股东名称")
+    hold_amount = db.Column(db.DECIMAL(20, 4), comment=u"持有数量（股）")
+    hold_ratio = db.Column(db.DECIMAL(20, 4), comment=u"持有比例")
+    createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
+    updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
+
+    def __repr__(self):
+        return '<StockTopHolders %r>' % self.code
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+
+# 前十大流通股东
+class StockTopFloatHolders(db.Model):
+    __tablename__ = 'stock_top_float_holders'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
+    name = db.Column(db.String(50), comment=u"股票名称")
+    ann_date = db.Column(db.Date, index=True, comment=u"公告日期")
+    ann_date_str = db.Column(db.String(50), comment=u"公告日期")
+    end_date = db.Column(db.String(50), comment=u"报告期")
+    holder_name = db.Column(db.String(50), comment=u"股东名称")
+    hold_amount = db.Column(db.DECIMAL(20, 4), comment=u"持有数量（股）")
+    createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
+    updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
+
+    def __repr__(self):
+        return '<StockTopFloatHolders %r>' % self.code
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+
+# 龙虎榜每日明细
+class StockTopList(db.Model):
+    __tablename__ = 'stock_top_list'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
+    name = db.Column(db.String(50), comment=u"股票名称")
+    trade_date = db.Column(db.Date, index=True, comment=u"交易日期")
+    trade_date_str = db.Column(db.String(50), comment=u"交易日期")
+    close = db.Column(db.DECIMAL(20, 4), comment=u"收盘价")
+    pct_change = db.Column(db.DECIMAL(20, 4), comment=u"涨跌幅")
+    turnover_rate = db.Column(db.DECIMAL(20, 4), comment=u"换手率")
+    l_sell = db.Column(db.DECIMAL(20, 4), comment=u"龙虎榜卖出额")
+    l_buy = db.Column(db.DECIMAL(20, 4), comment=u"龙虎榜买入额")
+    l_amount = db.Column(db.DECIMAL(20, 4), comment=u"龙虎榜成交额")
+    net_amount = db.Column(db.DECIMAL(20, 4), comment=u"龙虎榜净买入额")
+    net_rate = db.Column(db.DECIMAL(20, 4), comment=u"龙虎榜净买额占比")
+    amount_rate = db.Column(db.DECIMAL(20, 4), comment=u"龙虎榜成交额占比")
+    float_values = db.Column(db.DECIMAL(20, 4), comment=u"当日流通市值")
+    reason = db.Column(db.String(150), comment=u"上榜理由")
+    createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
+    updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
+
+    def __repr__(self):
+        return '<StockTopList %r>' % self.code
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+
+# 龙虎榜机构明细
+class StockTopInst(db.Model):
+    __tablename__ = 'stock_top_inst'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
+    name = db.Column(db.String(50), comment=u"股票名称")
+    trade_date = db.Column(db.Date, index=True, comment=u"交易日期")
+    trade_date_str = db.Column(db.String(50), comment=u"交易日期")
+    exalter = db.Column(db.String(100), comment=u"营业部名称")
+    buy = db.Column(db.DECIMAL(20, 4), comment=u"买入额（万）")
+    buy_rate = db.Column(db.DECIMAL(20, 4), comment=u"买入占总成交比例")
+    sell = db.Column(db.DECIMAL(20, 4), comment=u"卖出额（万）")
+    sell_rate = db.Column(db.DECIMAL(20, 4), comment=u"卖出占总成交比例")
+    net_buy = db.Column(db.DECIMAL(20, 4), comment=u"净成交额（万）")
+    createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
+    updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
+
+    def __repr__(self):
+        return '<StockTopInst %r>' % self.code
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+
+# 股权质押统计数据
+class StockPledgeStat(db.Model):
+    __tablename__ = 'stock_pledge_stat'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
+    name = db.Column(db.String(50), comment=u"股票名称")
+    end_date = db.Column(db.Date, index=True, comment=u"截至日期")
+    end_date_str = db.Column(db.String(50), comment=u"截至日期")
+    pledge_count = db.Column(db.Integer, comment=u"质押次数")
+    unrest_pledge = db.Column(db.DECIMAL(20, 4), comment=u"无限售股质押数量（万）")
+    rest_pledge = db.Column(db.DECIMAL(20, 4), comment=u"限售股份质押数量（万）")
+    total_share = db.Column(db.DECIMAL(20, 4), comment=u"总股本")
+    pledge_ratio = db.Column(db.DECIMAL(20, 4), comment=u"质押比例")
+    createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
+    updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
+
+    def __repr__(self):
+        return '<StockPledgeStat %r>' % self.code
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+
+# 股权质押明细
+class StockPledgeDetail(db.Model):
+    __tablename__ = 'stock_pledge_detail'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
+    name = db.Column(db.String(50), comment=u"股票名称")
+    ann_date = db.Column(db.Date, index=True, comment=u"公告日期")
+    ann_date_str = db.Column(db.String(50), comment=u"公告日期")
+    holder_name = db.Column(db.String(50), comment=u"股东名称")
+    pledge_amount = db.Column(db.DECIMAL(20, 4), comment=u"质押数量")
+    start_date = db.Column(db.String(50), comment=u"质押开始日期")
+    end_date = db.Column(db.String(50), comment=u"质押结束日期")
+    is_release = db.Column(db.String(50), comment=u"是否已解押")
+    release_date = db.Column(db.String(50), comment=u"解押日期")
+    pledgor = db.Column(db.String(50), comment=u"质押方")
+    holding_amount = db.Column(db.DECIMAL(20, 4), comment=u"持股总数")
+    pledged_amount = db.Column(db.DECIMAL(20, 4), comment=u"质押总数")
+    p_total_ratio = db.Column(db.DECIMAL(20, 4), comment=u"本次质押占总股本比例")
+    h_total_ratio = db.Column(db.DECIMAL(20, 4), comment=u"持股总数占总股本比例")
+    is_buyback = db.Column(db.String(50), comment=u"是否回购")
+    createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
+    updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
+
+    def __repr__(self):
+        return '<StockPledgeDetail %r>' % self.code
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+
+# 股票回购
+class StockRepurchase(db.Model):
+    __tablename__ = 'stock_repurchase'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
+    name = db.Column(db.String(50), comment=u"股票名称")
+    ann_date = db.Column(db.Date, index=True, comment=u"公告日期")
+    ann_date_str = db.Column(db.String(50), comment=u"公告日期")
+    end_date = db.Column(db.String(50), comment=u"截止日期")
+    proc = db.Column(db.String(50), comment=u"进度")
+    exp_date = db.Column(db.DECIMAL(20, 4), comment=u"过期日期")
+    vol = db.Column(db.String(50), comment=u"回购数量")
+    amount = db.Column(db.String(50), comment=u"回购金额")
+    high_limit = db.Column(db.String(50), comment=u"回购最高价")
+    low_limit = db.Column(db.String(50), comment=u"回购最低价")
+    createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
+    updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
+
+    def __repr__(self):
+        return '<StockRepurchase %r>' % self.code
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+
+# 概念股分类
+class StockConcept(db.Model):
+    __tablename__ = 'stock_concept'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
+    name = db.Column(db.String(50), comment=u"股票名称")
+    ts_id = db.Column(db.String(50), comment=u"概念分类ID")
+    ts_name = db.Column(db.String(50), comment=u"概念分类名称")
+    src = db.Column(db.String(50), comment=u"来源")
+    createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
+    updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
+
+    def __repr__(self):
+        return '<StockConcept %r>' % self.code
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+
+# 概念股列表
+class StockConceptDetail(db.Model):
+    __tablename__ = 'stock_concept_detail'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
+    name = db.Column(db.String(50), comment=u"股票名称")
+    ts_id = db.Column(db.String(50), comment=u"概念分类ID")
+    ts_name = db.Column(db.String(50), comment=u"概念分类名称")
+    in_date = db.Column(db.String(50), comment=u"纳入日期")
+    out_date = db.Column(db.String(50), comment=u"剔除日期")
+    createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
+    updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
+
+    def __repr__(self):
+        return '<StockConceptDetail %r>' % self.code
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+
+# 限售股解禁
+class StockShareFloat(db.Model):
+    __tablename__ = 'stock_share_float'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
+    name = db.Column(db.String(50), comment=u"股票名称")
+    ann_date = db.Column(db.Date, index=True, comment=u"公告日期")
+    ann_date_str = db.Column(db.String(50), comment=u"公告日期")
+    float_date = db.Column(db.String(50), comment=u"解禁日期")
+    float_share = db.Column(db.DECIMAL(20, 4), comment=u"流通股份")
+    float_ratio = db.Column(db.DECIMAL(20, 4), comment=u"流通股份占总股本比率")
+    holder_name = db.Column(db.String(100), comment=u"股东名称")
+    share_type = db.Column(db.String(50), comment=u"股份类型")
+    createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
+    updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
+
+    def __repr__(self):
+        return '<StockShareFloat %r>' % self.code
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+
+# 大宗交易
+class StockBlockTrade(db.Model):
+    __tablename__ = 'stock_block_trade'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
+    name = db.Column(db.String(50), comment=u"股票名称")
+    trade_date = db.Column(db.Date, index=True, comment=u"交易日历")
+    trade_date_str = db.Column(db.String(50), comment=u"交易日历")
+    price = db.Column(db.DECIMAL(20, 4), comment=u"成交价")
+    vol = db.Column(db.DECIMAL(20, 4), comment=u"成交量（万股）")
+    amount = db.Column(db.DECIMAL(20, 4), comment=u"成交金额")
+    buyer = db.Column(db.String(100), comment=u"买方营业部")
+    seller = db.Column(db.String(100), comment=u"卖方营业部")
+    createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
+    updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
+
+    def __repr__(self):
+        return '<StockBlockTrade %r>' % self.code
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+
+# 股票账户开户数据
+class StockStkAccount(db.Model):
+    __tablename__ = 'stock_stk_account'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    date = db.Column(db.Date, index=True, comment=u"统计周期")
+    date_str = db.Column(db.String(50), comment=u"统计周期")
+    weekly_new = db.Column(db.DECIMAL(20, 4), comment=u"本周新增（万）")
+    total = db.Column(db.DECIMAL(20, 4), comment=u"期末总账户数（万）")
+    weekly_hold = db.Column(db.DECIMAL(20, 4), comment=u"本周持仓账户数（万）")
+    weekly_trade = db.Column(db.DECIMAL(20, 4), comment=u"本周参与交易账户数（万）")
+    createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
+    updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
+
+    def __repr__(self):
+        return '<StockStkAccount %r>' % self.code
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+
+# 股东人数
+class StockStkHolderNumber(db.Model):
+    __tablename__ = 'stock_stk_holder_number'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
+    name = db.Column(db.String(50), comment=u"股票名称")
+    ann_date = db.Column(db.Date, index=True, comment=u"公告日期")
+    ann_date_str = db.Column(db.String(50), comment=u"公告日期")
+    end_date = db.Column(db.String(50), comment=u"截止日期")
+    holder_num = db.Column(db.DECIMAL(20, 4), comment=u"股东户数")
+    createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
+    updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
+
+    def __repr__(self):
+        return '<StockStkHolderNumber %r>' % self.code
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+
+# 股东增减持
+class StockStkHolderTrade(db.Model):
+    __tablename__ = 'stock_stk_holder_trade'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
+    name = db.Column(db.String(50), comment=u"股票名称")
+    ann_date = db.Column(db.Date, index=True, comment=u"公告日期")
+    ann_date_str = db.Column(db.String(50), comment=u"公告日期")
+    holder_name = db.Column(db.String(100), comment=u"股东名称")
+    holder_type = db.Column(db.String(50), comment=u"股东类型G高管P个人C公司")
+    in_de = db.Column(db.String(100), comment=u"类型IN增持DE减持")
+    change_vol = db.Column(db.DECIMAL(20, 4), comment=u"变动数量")
+    change_ratio = db.Column(db.DECIMAL(20, 4), comment=u"占流通比例（%）")
+    after_share = db.Column(db.DECIMAL(20, 4), comment=u"变动后持股")
+    after_ratio = db.Column(db.DECIMAL(20, 4), comment=u"变动后占流通比例（%）")
+    avg_price = db.Column(db.DECIMAL(20, 4), comment=u"平均价格")
+    total_share = db.Column(db.DECIMAL(20, 4), comment=u"持股总数")
+    begin_date = db.Column(db.String(50), comment=u"增减持开始日期")
+    close_date = db.Column(db.String(50), comment=u"增减持结束日期")
+    createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
+    updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
+
+    def __repr__(self):
+        return '<StockStkHolderTrade %r>' % self.code
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+
+# 新闻数据
+# 电影月度票房
+class StockBoMonthly(db.Model):
+    __tablename__ = 'stock_bo_monthly'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(150), comment=u"影片名称")
+    date = db.Column(db.String(50), index=True, comment=u"日期")
+    list_date = db.Column(db.Date, index=True, comment=u"上映日期")
+    list_date_str = db.Column(db.String(50), comment=u"上映日期")
+    avg_price = db.Column(db.DECIMAL(20, 4), comment=u"平均票价")
+    month_amount = db.Column(db.DECIMAL(20, 4), comment=u"当月票房（万）")
+    list_day = db.Column(db.Integer, comment=u"月内天数")
+    p_pc = db.Column(db.Integer, comment=u"场均人次")
+    wom_index = db.Column(db.DECIMAL(20, 4), comment=u"口碑指数")
+    m_ratio = db.Column(db.DECIMAL(20, 4), comment=u"月度占比（%）")
+    rank = db.Column(db.DECIMAL(20, 4), comment=u"排名")
+    createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
+    updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
+
+    def __repr__(self):
+        return '<StockBoMonthly %r>' % self.code
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+
+# 电影周度票房
+class StockBoWeekly(db.Model):
+    __tablename__ = 'stock_bo_weekly'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(150), comment=u"影片名称")
+    date = db.Column(db.Date, index=True, comment=u"上映日期")
+    date_str = db.Column(db.String(50), comment=u"上映日期")
+    avg_price = db.Column(db.DECIMAL(20, 4), comment=u"平均票价")
+    week_amount = db.Column(db.DECIMAL(20, 4), comment=u"当周票房（万）")
+    total = db.Column(db.DECIMAL(20, 4), comment=u"累计票房（万）")
+    list_day = db.Column(db.Integer, comment=u"上映天数")
+    p_pc = db.Column(db.Integer, comment=u"场均人次")
+    wom_index = db.Column(db.DECIMAL(20, 4), comment=u"口碑指数")
+    up_ratio = db.Column(db.DECIMAL(20, 4), comment=u"环比变化(%)")
+    rank = db.Column(db.Integer, comment=u"排名")
+    createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
+    updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
+
+    def __repr__(self):
+        return '<StockBoWeekly %r>' % self.code
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+
+# 电影日度票房
+class StockBoDaily(db.Model):
+    __tablename__ = 'stock_bo_daily'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(150), comment=u"影片名称")
+    date = db.Column(db.Date, index=True, comment=u"上映日期")
+    date_str = db.Column(db.String(50), comment=u"上映日期")
+    avg_price = db.Column(db.DECIMAL(20, 4), comment=u"平均票价")
+    day_amount = db.Column(db.DECIMAL(20, 4), comment=u"当日票房（万）")
+    total = db.Column(db.DECIMAL(20, 4), comment=u"累计票房（万）")
+    list_day = db.Column(db.Integer, comment=u"上映天数")
+    p_pc = db.Column(db.Integer, comment=u"场均人次")
+    wom_index = db.Column(db.DECIMAL(20, 4), comment=u"口碑指数")
+    up_ratio = db.Column(db.DECIMAL(20, 4), comment=u"环比变化(%)")
+    rank = db.Column(db.Integer, comment=u"排名")
+    createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
+    updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
+
+    def __repr__(self):
+        return '<StockBoDaily %r>' % self.code
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+
+# 影院每日票房
+class StockBoCinema(db.Model):
+    __tablename__ = 'stock_bo_cinema'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(150), comment=u"影院名称")
+    aud_count = db.Column(db.Integer, comment=u"观众人数")
+    att_ratio = db.Column(db.DECIMAL(20, 4), comment=u"上座率")
+    date = db.Column(db.Date, index=True, comment=u"日期")
+    date_str = db.Column(db.String(50), comment=u"日期")
+    day_amount = db.Column(db.DECIMAL(20, 4), comment=u"当日票房（万）")
+    day_showcount = db.Column(db.DECIMAL(20, 4), comment=u"当日场次（万）")
+    avg_price = db.Column(db.DECIMAL(20, 4), comment=u"场均票价（元）")
+    p_pc = db.Column(db.DECIMAL(20, 4), comment=u"场均人次")
+    rank = db.Column(db.Integer, comment=u"排名")
+    createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
+    updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
+
+    def __repr__(self):
+        return '<StockBoCinema %r>' % self.code
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+
+# 新闻资讯
+class StockNews(db.Model):
+    __tablename__ = 'stock_news'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    date = db.Column(db.Date, index=True, comment=u"新闻时间")
+    date_str = db.Column(db.String(50), comment=u"新闻时间")
+    channels = db.Column(db.String(50), comment=u"分类")
+    title = db.Column(db.String(200), comment=u"标题")
+    content = db.Column(db.TEXT, comment=u"内容")
+    createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
+    updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
+
+    def __repr__(self):
+        return '<StockNews %r>' % self.code
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+
+# 新闻联播
+class StockCctvNews(db.Model):
+    __tablename__ = 'stock_cctv_news'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    date = db.Column(db.Date, index=True, comment=u"新闻时间")
+    date_str = db.Column(db.String(50), comment=u"新闻时间")
+    channels = db.Column(db.String(50), comment=u"分类")
+    title = db.Column(db.String(200), comment=u"标题")
+    content = db.Column(db.TEXT, comment=u"内容")
+    createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
+    updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
+
+    def __repr__(self):
+        return '<StockCctvNews %r>' % self.code
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+
+# 上市公司公告(信息地雷)
+class StockAnns(db.Model):
+    __tablename__ = 'stock_anns'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    symbol = db.Column(db.String(30), comment=u"TS代码")
+    code = db.Column(db.String(30), index=True, comment=u"股票代码")
+    name = db.Column(db.String(50), comment=u"股票名称")
+    ann_date = db.Column(db.Date, index=True, comment=u"公告日期")
+    ann_date_str = db.Column(db.String(50), comment=u"公告日期")
+
+    ann_type = db.Column(db.String(50), index=True, comment=u"公告类型")
+    title = db.Column(db.String(200), comment=u"公告标题")
+    content = db.Column(db.TEXT, comment=u"公告内容")
+    pub_time = db.Column(db.String(50), comment=u"公告发布时间")
+
+    createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
+    updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
+
+    def __repr__(self):
+        return '<StockAnns %r>' % self.code
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
