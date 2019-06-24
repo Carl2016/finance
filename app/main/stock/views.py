@@ -1,6 +1,7 @@
 # coding:utf-8
-from flask import request, render_template, Response
+from flask import request, render_template, Response, globals
 from app.main.stock import stock
+from flask_login import login_required
 import json
 from app.main.stock.models import *
 from app.main.common.alchemyEncoder import AlchemyEncoder
@@ -16,12 +17,13 @@ def Response_headers(content):
 
 # 股票列表
 @stock.route('/list', methods=["GET", "POST"])
+@login_required
 def stockList():
     if request.method == 'POST':
         page = request.form['page']
         limit = request.form['limit']
-        pagination = StockBasic.query.paginate(int(page), int(limit), error_out=False)
-        count = StockBasic.query.paginate(int(page), int(limit), error_out=False).pages
+        pagination = globals.db.query(StockBasic).paginate(int(page), int(limit), error_out=False)
+        count = globals.db.query(StockBasic).paginate(int(page), int(limit), error_out=False).pages
         items = pagination.items
         result = {
             "code": 0,
@@ -35,12 +37,13 @@ def stockList():
 
 # 股票上市公司基本信息
 @stock.route('/company', methods=["GET", "POST"])
+@login_required
 def stockCompany():
     if request.method == 'POST':
         page = request.form['page']
         limit = request.form['limit']
-        pagination = StockCompany.query.paginate(int(page), int(limit), error_out=False)
-        count = StockCompany.query.paginate(int(page), int(limit), error_out=False).pages
+        pagination = globals.db.query(StockCompany).paginate(int(page), int(limit), error_out=False)
+        count = globals.db.query(StockCompany).paginate(int(page), int(limit), error_out=False).pages
         items = pagination.items
         result = {
             "code": 0,
@@ -54,12 +57,13 @@ def stockCompany():
 
 # 股票IPO新股列表
 @stock.route('/newShare', methods=["GET", "POST"])
+@login_required
 def stockNewShare():
     if request.method == 'POST':
         page = request.form['page']
         limit = request.form['limit']
-        pagination = StockNewShare.query.paginate(int(page), int(limit), error_out=False)
-        count = StockNewShare.query.paginate(int(page), int(limit), error_out=False).pages
+        pagination = globals.db.query(StockNewShare).paginate(int(page), int(limit), error_out=False)
+        count = globals.db.query(StockNewShare).paginate(int(page), int(limit), error_out=False).pages
         items = pagination.items
         result = {
             "code": 0,
@@ -73,12 +77,13 @@ def stockNewShare():
 
 # 股票A股复权行情
 @stock.route('/proBar', methods=["GET", "POST"])
+@login_required
 def stockProBar():
     if request.method == 'POST':
         page = request.form['page']
         limit = request.form['limit']
-        pagination = StockProBar.query.paginate(int(page), int(limit), error_out=False)
-        count = StockProBar.query.paginate(int(page), int(limit), error_out=False).pages
+        pagination = globals.db.query(StockProBar).paginate(int(page), int(limit), error_out=False)
+        count = globals.db.query(StockProBar).paginate(int(page), int(limit), error_out=False).pages
         items = pagination.items
         result = {
             "code": 0,
@@ -92,12 +97,13 @@ def stockProBar():
 
 # 股票复权因子
 @stock.route('/adjFactor', methods=["GET", "POST"])
+@login_required
 def stockAdjFactor():
     if request.method == 'POST':
         page = request.form['page']
         limit = request.form['limit']
-        pagination = StockAdjFactor.query.paginate(int(page), int(limit), error_out=False)
-        count = StockAdjFactor.query.paginate(int(page), int(limit), error_out=False).pages
+        pagination = globals.db.query(StockAdjFactor).paginate(int(page), int(limit), error_out=False)
+        count = globals.db.query(StockAdjFactor).paginate(int(page), int(limit), error_out=False).pages
         items = pagination.items
         result = {
             "code": 0,
@@ -111,12 +117,13 @@ def stockAdjFactor():
 
 # 股票每日指标
 @stock.route('/dailyBasic', methods=["GET", "POST"])
+@login_required
 def stockDailyBasic():
     if request.method == 'POST':
         page = request.form['page']
         limit = request.form['limit']
-        pagination = StockDailyBasic.query.paginate(int(page), int(limit), error_out=False)
-        count = StockDailyBasic.query.paginate(int(page), int(limit), error_out=False).pages
+        pagination = globals.db.query(StockDailyBasic).paginate(int(page), int(limit), error_out=False)
+        count = globals.db.query(StockDailyBasic).paginate(int(page), int(limit), error_out=False).pages
         items = pagination.items
         result = {
             "code": 0,
@@ -130,12 +137,13 @@ def stockDailyBasic():
 
 # 股票停复牌
 @stock.route('/suspend', methods=["GET", "POST"])
+@login_required
 def stockSuspend():
     if request.method == 'POST':
         page = request.form['page']
         limit = request.form['limit']
-        pagination = StockSuspend.query.paginate(int(page), int(limit), error_out=False)
-        count = StockSuspend.query.paginate(int(page), int(limit), error_out=False).pages
+        pagination = globals.db.query(StockSuspend).paginate(int(page), int(limit), error_out=False)
+        count = globals.db.query(StockSuspend).paginate(int(page), int(limit), error_out=False).pages
         items = pagination.items
         result = {
             "code": 0,
@@ -149,12 +157,13 @@ def stockSuspend():
 
 # 股票利润表
 @stock.route('/income', methods=["GET", "POST"])
+@login_required
 def stockIncome():
     if request.method == 'POST':
         page = request.form['page']
         limit = request.form['limit']
-        pagination = StockIncome.query.paginate(int(page), int(limit), error_out=False)
-        count = StockIncome.query.paginate(int(page), int(limit), error_out=False).pages
+        pagination = globals.db.query(StockIncome).paginate(int(page), int(limit), error_out=False)
+        count = globals.db.query(StockIncome).paginate(int(page), int(limit), error_out=False).pages
         items = pagination.items
         result = {
             "code": 0,
@@ -168,12 +177,13 @@ def stockIncome():
 
 # 股票资产负债表
 @stock.route('/balanceSheet', methods=["GET", "POST"])
+@login_required
 def stockBalanceSheet():
     if request.method == 'POST':
         page = request.form['page']
         limit = request.form['limit']
-        pagination = StockBalanceSheet.query.paginate(int(page), int(limit), error_out=False)
-        count = StockBalanceSheet.query.paginate(int(page), int(limit), error_out=False).pages
+        pagination = globals.db.query(StockBalanceSheet).paginate(int(page), int(limit), error_out=False)
+        count = globals.db.query(StockBalanceSheet).paginate(int(page), int(limit), error_out=False).pages
         items = pagination.items
         result = {
             "code": 0,
@@ -187,12 +197,13 @@ def stockBalanceSheet():
 
 # 股票现金流量表
 @stock.route('/cashFlow', methods=["GET", "POST"])
+@login_required
 def stockCashFlow():
     if request.method == 'POST':
         page = request.form['page']
         limit = request.form['limit']
-        pagination = StockCashFlow.query.paginate(int(page), int(limit), error_out=False)
-        count = StockCashFlow.query.paginate(int(page), int(limit), error_out=False).pages
+        pagination = globals.db.query(StockCashFlow).paginate(int(page), int(limit), error_out=False)
+        count = globals.db.query(StockCashFlow).paginate(int(page), int(limit), error_out=False).pages
         items = pagination.items
         result = {
             "code": 0,
@@ -206,6 +217,7 @@ def stockCashFlow():
 
 # 股票业绩预告
 @stock.route('/foreCast', methods=["GET", "POST"])
+@login_required
 def stockForeCast():
     if request.method == 'POST':
         page = request.form['page']
@@ -225,6 +237,7 @@ def stockForeCast():
 
 # 股票业绩快报
 @stock.route('/express', methods=["GET", "POST"])
+@login_required
 def stockExpress():
     if request.method == 'POST':
         page = request.form['page']
@@ -243,7 +256,8 @@ def stockExpress():
 
 
 # 股票分红送股
-@stock.route('/dividend', methods=["GET", "POST"])
+@stock.route('/dividnd', methods=["GET", "POST"])
+@login_required
 def stockDividend():
     if request.method == 'POST':
         page = request.form['page']
@@ -263,6 +277,7 @@ def stockDividend():
 
 # 财务审计意见
 @stock.route('/finaAudit', methods=["GET", "POST"])
+@login_required
 def stockFinaAudit():
     if request.method == 'POST':
         page = request.form['page']
@@ -282,6 +297,7 @@ def stockFinaAudit():
 
 # 财务审计意见
 @stock.route('/finaMainbz', methods=["GET", "POST"])
+@login_required
 def stockFinaMainbz():
     if request.method == 'POST':
         page = request.form['page']
@@ -301,6 +317,7 @@ def stockFinaMainbz():
 
 #股票日线行情
 @stock.route('/daily', methods=["GET", "POST"])
+@login_required
 def stockDaily():
     if request.method == 'POST':
         params = request.get_json()
@@ -347,6 +364,7 @@ def stockDaily():
 
 #股票周线行情
 @stock.route('/weekly', methods=["GET", "POST"])
+@login_required
 def stockWeekly():
     if request.method == 'POST':
         params = request.get_json()
@@ -393,6 +411,7 @@ def stockWeekly():
 
 #股票月线行情
 @stock.route('/monthly', methods=["GET", "POST"])
+@login_required
 def stockMonthly():
     if request.method == 'POST':
         params = request.get_json()

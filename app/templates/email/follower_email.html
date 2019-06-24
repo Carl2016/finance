@@ -1,0 +1,16 @@
+
+
+
+
+<p>Dear {{follower.username}},</p>
+<p><a href="{{url_for("login", nickname = follower.username, _external = True)}}">{{follower.username}}</a> is now a follower.</p>
+<table>
+    <tr valign="top">
+        <td><img src="{{follower.avatar}}"></td>
+        <td>
+            <a href="{{url_for('login', nickname = follower.username, _external = True)}}">{{follower.username}}</a><br />
+        </td>
+    </tr>
+</table>
+<p>Regards,</p>
+<p>The <code>microblog</code> admin</p>

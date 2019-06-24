@@ -1,5 +1,5 @@
 # coding:utf-8
-from exts import db, db_base
+from app.main import db
 from sqlalchemy.sql import func
 
 
@@ -7,7 +7,7 @@ from sqlalchemy.sql import func
 class StockBasic(db.Model):
     __tablename__ = 'stock_basic'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(20), index=True, comment=u"股票代码")
     name = db.Column(db.String(30), index=True, comment=u"股票名称")
     industry = db.Column(db.String(30), comment=u"所属行业")
@@ -33,7 +33,7 @@ class StockBasic(db.Model):
 class StockCompany(db.Model):
     __tablename__ = 'stock_company'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     exchange = db.Column(db.String(50), comment=u"交易所代码 ，SSE上交所 SZSE深交所")
@@ -66,7 +66,7 @@ class StockCompany(db.Model):
 class StockNewShare(db.Model):
     __tablename__ = 'stock_new_share'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     sub_code = db.Column(db.String(30), comment=u"申购代码")
@@ -94,7 +94,7 @@ class StockNewShare(db.Model):
 class StockDaily(db.Model):
     __tablename__ = 'stock_daily'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     trade_date_str = db.Column(db.String(50), comment=u"交易日期")
@@ -123,7 +123,7 @@ class StockDaily(db.Model):
 class StockWeekly(db.Model):
     __tablename__ = 'stock_weekly'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     trade_date_str = db.Column(db.String(50), comment=u"交易日期")
@@ -152,7 +152,7 @@ class StockWeekly(db.Model):
 class StockMonthly(db.Model):
     __tablename__ = 'stock_monthly'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     trade_date_str = db.Column(db.String(50), comment=u"交易日期")
@@ -181,7 +181,7 @@ class StockMonthly(db.Model):
 class StockProBar(db.Model):
     __tablename__ = 'stock_pro_bar'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     start_date = db.Column(db.String(50), comment=u"开始日期 (格式：YYYYMMDD)")
@@ -205,7 +205,7 @@ class StockProBar(db.Model):
 class StockAdjFactor(db.Model):
     __tablename__ = 'stock_adj_factor'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     trade_date = db.Column(db.String(50), comment=u"交易日期")
@@ -223,14 +223,11 @@ class StockAdjFactor(db.Model):
         db.session.commit()
 
 
-
-
-
 # 个股资金流向
 class StockMoneyflow(db.Model):
     __tablename__ = 'stock_money_flow'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     trade_date = db.Column(db.Date, comment=u"交易日期")
@@ -269,7 +266,7 @@ class StockMoneyflow(db.Model):
 class StockIndexBasic(db.Model):
     __tablename__ = 'stock_index_basic'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     index_code = db.Column(db.String(30), index=True, comment=u"指数代码")
     index_name = db.Column(db.String(50), comment=u"指数名称")
     exp_date = db.Column(db.Date, comment=u"终止日期")
@@ -387,7 +384,7 @@ class StockIndexMonthly(db.Model):
 class StockIndexWeight(db.Model):
     __tablename__ = 'stock_index_weight'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     index_code = db.Column(db.String(50), comment=u"指数代码")
@@ -409,7 +406,7 @@ class StockIndexWeight(db.Model):
 class StockIndexDailyBasic(db.Model):
     __tablename__ = 'stock_index_daily_basic'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     index_code = db.Column(db.String(50), comment=u"指数代码")
@@ -440,7 +437,7 @@ class StockIndexDailyBasic(db.Model):
 class StockDailyBasic(db.Model):
     __tablename__ = 'stock_daily_basic'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     trade_date = db.Column(db.Date, comment=u"交易日期")
@@ -474,7 +471,7 @@ class StockDailyBasic(db.Model):
 class StockSuspend(db.Model):
     __tablename__ = 'stock_suspend'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     suspend_date = db.Column(db.String(50), comment=u"停牌日期")
@@ -497,7 +494,7 @@ class StockSuspend(db.Model):
 class StockIncome(db.Model):
     __tablename__ = 'stock_income'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     ann_date = db.Column(db.Date, index=True, comment=u"公告日期")
@@ -580,7 +577,7 @@ class StockIncome(db.Model):
 class StockBalanceSheet(db.Model):
     __tablename__ = 'stock_balance_sheet'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     ann_date = db.Column(db.Date, index=True, comment=u"公告日期")
@@ -736,7 +733,7 @@ class StockBalanceSheet(db.Model):
 class StockCashFlow(db.Model):
     __tablename__ = 'stock_cash_flow'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     ann_date = db.Column(db.Date, index=True, comment=u"公告日期")
@@ -840,7 +837,7 @@ class StockCashFlow(db.Model):
 class StockForeCast(db.Model):
     __tablename__ = 'stock_fore_cast'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     ann_date = db.Column(db.Date, index=True, comment=u"公告日期")
@@ -853,8 +850,8 @@ class StockForeCast(db.Model):
     net_profit_max = db.Column(db.DECIMAL(20, 4), comment=u"预告净利润上限（万元）")
     last_parent_net = db.Column(db.String(30), comment=u"上年同期归属母公司净利润")
     first_ann_date = db.Column(db.String(50), comment=u"首次公告日")
-    summary = db.Column(db.String(50), comment=u"业绩预告摘要")
-    change_reason = db.Column(db.String(50), comment=u"业绩变动原因")
+    summary = db.Column(db.String(150), comment=u"业绩预告摘要")
+    change_reason = db.Column(db.TEXT, comment=u"业绩变动原因")
     createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
     updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
 
@@ -870,7 +867,7 @@ class StockForeCast(db.Model):
 class StockExpress(db.Model):
     __tablename__ = 'stock_express'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     ann_date = db.Column(db.Date, index=True, comment=u"公告日期")
@@ -920,25 +917,25 @@ class StockExpress(db.Model):
 class StockDividend(db.Model):
     __tablename__ = 'stock_dividend'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     ann_date = db.Column(db.Date, index=True, comment=u"预案公告日")
     ann_date_str = db.Column(db.String(50), comment=u"预案公告日")
     end_date = db.Column(db.String(30), comment=u"分红年度")
     div_proc = db.Column(db.String(30), comment=u"实施进度")
-    stk_div = db.Column(db.DECIMAL(20, 4), comment=u"每股送转")
-    stk_bo_rate = db.Column(db.DECIMAL(20, 4), comment=u"每股送股比例")
-    stk_co_rate = db.Column(db.DECIMAL(20, 4), comment=u"每股转增比例")
-    cash_div = db.Column(db.DECIMAL(20, 4), comment=u"每股分红（税后）")
-    cash_div_tax = db.Column(db.DECIMAL(20, 4), comment=u"每股分红（税前）")
+    stk_div = db.Column(db.DECIMAL(20, 8), comment=u"每股送转")
+    stk_bo_rate = db.Column(db.DECIMAL(20, 8), comment=u"每股送股比例")
+    stk_co_rate = db.Column(db.DECIMAL(20, 8), comment=u"每股转增比例")
+    cash_div = db.Column(db.DECIMAL(20, 8), comment=u"每股分红（税后）")
+    cash_div_tax = db.Column(db.DECIMAL(20, 8), comment=u"每股分红（税前）")
     record_date = db.Column(db.String(30), comment=u"股权登记日")
     ex_date = db.Column(db.String(30), comment=u"除权除息日")
     pay_date = db.Column(db.String(30), comment=u"派息日")
     div_listdate = db.Column(db.String(30), comment=u"红股上市日")
     imp_ann_date = db.Column(db.String(30), comment=u"实施公告日")
     base_date = db.Column(db.String(30), comment=u"基准日")
-    base_share = db.Column(db.DECIMAL(20, 4), comment=u"基准股本（万）")
+    base_share = db.Column(db.DECIMAL(20, 8), comment=u"基准股本（万）")
     createTime = db.Column(db.DateTime, server_default=func.now(), comment=u"创建时间")
     updateTime = db.Column(db.DateTime, server_default=func.now(), comment=u'修改时间')
 
@@ -954,7 +951,7 @@ class StockDividend(db.Model):
 class StockFinaAudit(db.Model):
     __tablename__ = 'stock_fina_audit'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     ann_date = db.Column(db.Date, index=True, comment=u"公告日期")
@@ -980,7 +977,7 @@ class StockFinaAudit(db.Model):
 class StockFinaIndicator(db.Model):
     __tablename__ = 'stock_fina_indicator'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     ann_date = db.Column(db.Date, index=True, comment=u"公告日期")
@@ -1006,7 +1003,7 @@ class StockFinaIndicator(db.Model):
 class StockFinaMainbz(db.Model):
     __tablename__ = 'stock_fina_mainbz'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     end_date = db.Column(db.Date, index=True, comment=u"报告期")
@@ -1032,7 +1029,7 @@ class StockFinaMainbz(db.Model):
 class StockMoneyFlowHsgt(db.Model):
     __tablename__ = 'stock_money_flow_hsgt'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     trade_date = db.Column(db.Date, index=True, comment=u"交易日期")
@@ -1058,7 +1055,7 @@ class StockMoneyFlowHsgt(db.Model):
 class StockHsgtTop(db.Model):
     __tablename__ = 'stock_hsgt_top'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     trade_date = db.Column(db.Date, index=True, comment=u"交易日期")
@@ -1086,7 +1083,7 @@ class StockHsgtTop(db.Model):
 class StockGgtTop(db.Model):
     __tablename__ = 'stock_ggt_top'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     trade_date = db.Column(db.Date, index=True, comment=u"交易日期")
@@ -1120,7 +1117,7 @@ class StockGgtTop(db.Model):
 class StockMargin(db.Model):
     __tablename__ = 'stock_margin'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     trade_date = db.Column(db.Date, index=True, comment=u"交易日期")
@@ -1147,7 +1144,7 @@ class StockMargin(db.Model):
 class StockMarginDetail(db.Model):
     __tablename__ = 'stock_margin_detail'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     trade_date = db.Column(db.Date, index=True, comment=u"交易日期")
@@ -1174,7 +1171,7 @@ class StockMarginDetail(db.Model):
 class StockTopHolders(db.Model):
     __tablename__ = 'stock_top_holders'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     ann_date = db.Column(db.Date, index=True, comment=u"公告日期")
@@ -1198,7 +1195,7 @@ class StockTopHolders(db.Model):
 class StockTopFloatHolders(db.Model):
     __tablename__ = 'stock_top_float_holders'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     ann_date = db.Column(db.Date, index=True, comment=u"公告日期")
@@ -1221,7 +1218,7 @@ class StockTopFloatHolders(db.Model):
 class StockTopList(db.Model):
     __tablename__ = 'stock_top_list'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     trade_date = db.Column(db.Date, index=True, comment=u"交易日期")
@@ -1252,7 +1249,7 @@ class StockTopList(db.Model):
 class StockTopInst(db.Model):
     __tablename__ = 'stock_top_inst'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     trade_date = db.Column(db.Date, index=True, comment=u"交易日期")
@@ -1278,7 +1275,7 @@ class StockTopInst(db.Model):
 class StockPledgeStat(db.Model):
     __tablename__ = 'stock_pledge_stat'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     end_date = db.Column(db.Date, index=True, comment=u"截至日期")
@@ -1303,7 +1300,7 @@ class StockPledgeStat(db.Model):
 class StockPledgeDetail(db.Model):
     __tablename__ = 'stock_pledge_detail'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     ann_date = db.Column(db.Date, index=True, comment=u"公告日期")
@@ -1335,7 +1332,7 @@ class StockPledgeDetail(db.Model):
 class StockRepurchase(db.Model):
     __tablename__ = 'stock_repurchase'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     ann_date = db.Column(db.Date, index=True, comment=u"公告日期")
@@ -1362,7 +1359,7 @@ class StockRepurchase(db.Model):
 class StockConcept(db.Model):
     __tablename__ = 'stock_concept'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     ts_id = db.Column(db.String(50), comment=u"概念分类ID")
@@ -1383,7 +1380,7 @@ class StockConcept(db.Model):
 class StockConceptDetail(db.Model):
     __tablename__ = 'stock_concept_detail'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     ts_id = db.Column(db.String(50), comment=u"概念分类ID")
@@ -1405,7 +1402,7 @@ class StockConceptDetail(db.Model):
 class StockShareFloat(db.Model):
     __tablename__ = 'stock_share_float'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     ann_date = db.Column(db.Date, index=True, comment=u"公告日期")
@@ -1430,7 +1427,7 @@ class StockShareFloat(db.Model):
 class StockBlockTrade(db.Model):
     __tablename__ = 'stock_block_trade'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     trade_date = db.Column(db.Date, index=True, comment=u"交易日历")
@@ -1476,7 +1473,7 @@ class StockStkAccount(db.Model):
 class StockStkHolderNumber(db.Model):
     __tablename__ = 'stock_stk_holder_number'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     ann_date = db.Column(db.Date, index=True, comment=u"公告日期")
@@ -1498,7 +1495,7 @@ class StockStkHolderNumber(db.Model):
 class StockStkHolderTrade(db.Model):
     __tablename__ = 'stock_stk_holder_trade'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     ann_date = db.Column(db.Date, index=True, comment=u"公告日期")
@@ -1673,7 +1670,7 @@ class StockCctvNews(db.Model):
 class StockAnns(db.Model):
     __tablename__ = 'stock_anns'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    symbol = db.Column(db.String(30), comment=u"TS代码")
+    symbol = db.Column(db.String(30), index=True, comment=u"TS代码")
     code = db.Column(db.String(30), index=True, comment=u"股票代码")
     name = db.Column(db.String(50), comment=u"股票名称")
     ann_date = db.Column(db.Date, index=True, comment=u"公告日期")

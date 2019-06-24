@@ -4,7 +4,7 @@
 # @Site    : 
 # @File    : model.py
 # @Software: PyCharm
-from exts import db
+from app.main import db
 
 
 class Apscheduler(db.Model):

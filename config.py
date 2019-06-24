@@ -1,25 +1,20 @@
 # coding:utf-8
 import os
-# from app.stock.views import initHistoryPen
-basedir = os.path.abspath(os.path.dirname(__file__))
-DEBUG = True
-CSRF_ENABLED = False
-SECURITY_TRACKABLE = True
-SECRET_KEY = os.urandom(24)
-WTF_CSRF_ENABLED = False
+import redis
 
 
 class Config:
-
+    DEBUG = True
     SCHEDULER_API_ENABLED = True
-
-    #
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard to guess string'
+    CSRF_ENABLED = False
+    SECURITY_TRACKABLE = True
+    SECRET_KEY = os.urandom(24)
+    WTF_CSRF_ENABLED = False
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
-    FLASKY_MAIL_SUBJECT_PREFIX = '[Flasky]'
-    FLASKY_MAIL_SENDER = '417449614@qq.com'
-    FLASKY_ADMIN = os.environ.get('FLASKY_ADMIN')
+    FLASKY_MAIL_SUBJECT_PREFIX = '[Flask]'
+    FLASKY_ADMIN = '417449614@qq.com'
     SQLALCHEMY_TRACK_MODIFICATIONS = True
+
 
     @staticmethod
     def init_app(app):
@@ -27,17 +22,18 @@ class Config:
 
 
 class DevelopmentConfig(Config):
-    DEBUG = True
-    MAIL_SERVER = 'smtp.qq.com'
-    MAIL_PORT = 587
-    MAIL_USE_TLS = True
-    MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
-    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
+    MAIL_SERVER = 'smtp.qq.com'  # smtp.163.com
+    MAIL_PORT = 465  # 25
+    MAIL_USE_TLS = False
+    MAIL_USE_SSL = True
+    MAIL_USERNAME = '468647870@qq.com'
+    MAIL_PASSWORD = 'kfbfznsqgzjqcbag'
+
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:123456@localhost:3306/finance?charset=utf8'
     # 设置是否在每次连接结束后自动提交数据库中的变动。
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     # 数据库连接池的大小。默认是数据库引擎的默认值：5
-    SQLALCHEMY_POOL_SIZE = 10
+    SQLALCHEMY_POOL_SIZE = 5
     # 控制在连接池达到最大值后可以创建的连接数。当这些额外的连接使用后回收到连接池后将会被断开和抛弃。保证连接池只有设置的大小
     SQLALCHEMY_MAX_OVERFLOW = 5
     # 指定数据库连接池的超时时间。默认是：10
@@ -45,14 +41,24 @@ class DevelopmentConfig(Config):
     # 自动回收连接的秒数
     SQLALCHEMY_POOL_RECYCLE = 1200
 
+    # session
+    SESSION_TYPE = 'redis'
+    # 如果设置为True，则关闭浏览器session就失效
+    SESSION_PERMANENT = True
+    # 是否对发送到浏览器上session的cookie值进行加密
+    SESSION_USE_SIGNER = False
+    # 保存到session中的值的前缀
+    SESSION_KEY_PREFIX = 'session'
+    SESSION_REDIS = redis.Redis(host='127.0.0.1', port='6379', password='', db=0)
+
 
 class TestingConfig(Config):
     TESTING = False
-    SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URI') or 'sqlite:///' + os.path.join(basedir, 'data-test.sqlite')
+    SQLALCHEMY_DATABASE_URI = ''
 
 
 class ProductionConfig(Config):
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URI') or 'sqlite:///' + os.path.join(basedir, 'data.sqlite')
+    SQLALCHEMY_DATABASE_URI = ''
 
 
 config = {

@@ -5,6 +5,10 @@ import json
 from werkzeug.security import generate_password_hash, check_password_hash
 import pandas as pd
 
+import time
+import os
+import psutil
+
 # # %% 获取中国平安三年内K线数据
 # ZGPA = ts.get_hist_data('000001')
 # ZGPA.index = pd.to_datetime(ZGPA.index)
@@ -45,5 +49,5 @@ import pandas as pd
 #
 # print(dd[0]['ts_code'])
 
-admin = generate_password_hash('admin')
-print(admin)
+# admin = generate_password_hash('admin')
+# print(admin)

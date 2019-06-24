@@ -4,17 +4,13 @@
 # @Site    : 
 # @File    : views.py
 # @Software: PyCharm
-from flask import request, jsonify, render_template
+from flask import request, jsonify, render_template, globals
 from app.main.apsCheduler import scheduler
 from app.main.apsCheduler.config import schedulers
 from datetime import datetime
 from app.main.common.alchemyEncoder import AlchemyEncoder
 from flask_login import login_required
 import json
-
-
-def tick():
-     print('Tick! The time is: %s' % datetime.now())
 
 
 @scheduler.route('/list', methods=['GET', 'POST'])
@@ -92,6 +88,7 @@ def pause():
     ids = request.form.get('jobs')
     id_list = json.loads(ids)
     for i in range(len(id_list)):
+
         schedulers.pause_job(id_list[i])
     result = dict(code='0000', msg='暂停成功', connt=None, data=None)
     return jsonify(result)

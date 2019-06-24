@@ -28,13 +28,11 @@ layui.define(['layer'], function (exports) {
                     async: false,
                     data : param,
                     success : function(item) {
-                        console.log(item)
-                        console.log(item.code)
+                        item = JSON.parse(item);
                         if(item.code == "0000"){
                             top.layer.msg(item.msg, {icon: 6});
                             location.reload();
                         }else{
-                            alert(1)
                             top.layer.msg(item.msg,{icon: 5});
                         }
                     },error:function(item){
@@ -45,6 +43,26 @@ layui.define(['layer'], function (exports) {
             }, function () {
 
             })
+
+        },/**ajax */
+        ajaxCms: function (type, async, url, param) {
+            $.ajax({
+                url : url,
+                type : type,
+                async: async,
+                data : param,
+                success : function(item) {
+                    item = JSON.parse(item);
+                    if(item.code == "0000"){
+                        top.layer.msg(item.msg, {icon: 6});
+                        location.reload();
+                    }else{
+                        top.layer.msg(item.msg,{icon: 5});
+                    }
+                },error:function(item){
+
+                }
+            });
 
         },
         /**弹出层*/

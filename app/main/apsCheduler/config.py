@@ -4,33 +4,10 @@
 # @Site    : 
 # @File    : config.py
 # @Software: PyCharm
-from apscheduler.schedulers.background import BackgroundScheduler
-
-from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
-
-# The "apscheduler." prefix is hard coded
-# schedulers = BackgroundScheduler({
-#     'apscheduler.jobstores.default': {
-#         'type': 'sqlalchemy',
-#         'url': 'mysql+mysqldb://root:123456@localhost:3306/finance?charset=utf8'
-#     },
-#     'apscheduler.executors.default': {
-#         'class': 'apscheduler.executors.pool:ThreadPoolExecutor',
-#         'max_workers': '20'
-#     },
-#     'apscheduler.executors.processpool': {
-#         'type': 'processpool',
-#         'max_workers': '5'
-#     },
-#     'apscheduler.job_defaults.coalesce': 'false',
-#     'apscheduler.job_defaults.max_instances': '3',
-#     'apscheduler.timezone': 'UTC',
-# })
-
-
 import pytz
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.jobstores.mongodb import MongoDBJobStore
+from apscheduler.jobstores.redis import RedisJobStore
 from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
 from apscheduler.events import EVENT_JOB_MAX_INSTANCES, EVENT_JOB_ERROR, EVENT_JOB_MISSED
@@ -49,13 +26,25 @@ def err_listener(ev):
 jobstores = {
     'default': SQLAlchemyJobStore(url=DevelopmentConfig.SQLALCHEMY_DATABASE_URI)
 }
+# jobstores = {
+#     'default': RedisJobStore(db=1,
+#                             jobs_key='apscheduler.jobs',
+#                             run_times_key='apscheduler.run_times',
+#                             host='127.0.0.1',
+#                             port='6379',
+#                             password='',
+#     )
+# }
+
+
 executors = {
-    'default': ThreadPoolExecutor(20),
-    'processpool': ProcessPoolExecutor(10)
+    'default': {'type': 'threadpool', 'max_workers': 20},
+    'processpool': ProcessPoolExecutor(max_workers=10)
 }
+
 job_defaults = {
     'coalesce': True,
-    'max_instances': 1
+    'max_instances': 10
 }
 
 tz = pytz.timezone('Asia/Shanghai')

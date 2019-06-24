@@ -22,14 +22,28 @@
     <div class="login layui-anim layui-anim-up">
         <div class="message">Zeus-管理登录</div>
         <div id="darkbannerwrap"></div>
-
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="flashes">
+                    {% for message in messages %}
+                        <li style="text-align: center"><font color="red" size="4px">{{ message }}</font></li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
         <form method="post" class="layui-form" >
-            <input name="username" placeholder="用户名"  type="text" lay-verify="required" class="layui-input" >
+            <input name="username" placeholder="用户名" value="{{ username }}" type="text" lay-verify="required" class="layui-input" >
             <hr class="hr15">
             <input name="password" lay-verify="required" placeholder="密码"  type="password" class="layui-input">
             <hr class="hr15">
-            <input value="登录" lay-submit lay-filter="login" style="width:100%;" type="submit">
-            <hr class="hr20" >
+            <strong style="font-size: 15px">记住帐号？ </strong>
+            <input type="checkbox" checked="" name="remember_me" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF">
+            <hr class="hr15">
+            <input value="登录" lay-filter="login" style="width:100%;" type="submit">
+            <hr class="hr10" >
+            <div style="text-align: center;margin-top: 20px;font-size: larger;">
+                <p >还没有账户? <a href="{{ url_for("register") }}">立刻创建</a></p>
+            </div>
         </form>
     </div>
 
@@ -37,9 +51,6 @@
         $(function  () {
             layui.use('form', function(){
               var form = layui.form;
-              // layer.msg('玩命卖萌中', function(){
-              //   //关闭后的操作
-              //   });
               //监听提交
               form.on('submit(/login)', function(data){
                 // alert(888)

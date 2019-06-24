@@ -1,23 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html class="x-admin-sm">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <title>后台管理系统</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="keywords" content="后台管理系统">
     <meta name="description" content="">
-
     <link rel="shortcut icon" href="/static/img/favicon.ico">
-    <link rel="stylesheet" href="/static/css/font.css">
     <link rel="stylesheet" href="/static/css/xadmin.css">
     <script src="/static/lib/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="/static/js/xadmin.js"></script>
-    <link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_9h680jcse4620529.css">
 <body>
 
     <div class="x-nav">
         <span class="layui-breadcrumb">
-            <a href="/index">首页</a>
+            <a href="/">首页</a>
             <a>
                 <cite>任务调度</cite>
             </a>
@@ -43,7 +40,7 @@
                                     <div class="layui-input-inline" style="width:145px;">
                                         <input type="text" name="searchContent" value="" placeholder="请输入关键字" class="layui-input search_input">
                                     </div>
-                                    <a class="layui-btn userSearchList_btn" lay-submit lay-filter="userSearchFilter"><i class="layui-icon larry-icon larry-chaxun7"></i>查询</a>
+                                    <a class="layui-btn search_btn" lay-submit lay-filter="itemFilter"><i class="layui-icon larry-icon larry-chaxun7"></i>查询</a>
                                 </form>
                             </div>
                             <div class="layui-inline">
@@ -61,7 +58,7 @@
                         </blockquote>
                     </div>
                     <div class="layui-card-body ">
-                        <table class="layui-table" lay-data="{url:'/scheduler/list',method:'POST',page:true,toolbar: '#toolbarDemo',id:'schedulerTableId'}" lay-filter="schedulerTableId">
+                        <table class="layui-table" lay-data="{url:'/scheduler/list',method:'POST',page:true,toolbar: '#toolbar',id:'itemId'}" lay-filter="itemId">
                             <thead>
                                 <tr>
                                     <th lay-data="{type:'checkbox'}">ID</th>
@@ -74,7 +71,7 @@
                                     <th lay-data="{field:'misfire_grace_time', width: '8%', align:'center'}">容错时间</th>
                                     <th lay-data="{field:'cron', align:'center', width: '10%', edit: 'text'}">cron</th>
                                     <th lay-data="{field:'state', align:'center', width: '10%', templet: '#statusTpl'}">状态</th>
-                                    <th lay-data="{align:'center', width: '8%', toolbar: '#userBar'}">操作</th>
+                                    <th lay-data="{align:'center', width: '8%', toolbar: '#itemBar'}">操作</th>
                                 </tr>
                             </thead>
                         </table>
@@ -83,24 +80,9 @@
             </div>
         </div>
     </div>
+    
 
-
-{#<div class="larry-grid layui-anim layui-anim-upbit larryTheme-A ">#}
-{#    <div class="larry-personal">#}
-{#        <div class="layui-tab">#}
-{##}
-{#            <div class="larry-separate"></div>#}
-{#            <!-- 用户列表 -->#}
-            {#<div class="layui-tab-item layui-show " style="padding: 10px 15px;">
-{#                <table id="schedulerTableList"  lay-filter="schedulerTableId" ></table>#}
-{#            </div>#}
-{##}
-{#        </div>#}
-{#    </div>#}
-{#</div>#}
-
-
-<script type="text/html" id="toolbarDemo">
+<script type="text/html" id="toolbar">
     <div class = "layui-btn-container" >
         <button class = "layui-btn layui-btn-sm" lay-event = "getCheckData" > 获取选中行数据 </button>
         <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button >
@@ -130,7 +112,7 @@
                 common = layui.common;
 
             //监听单元格编辑
-            table.on('edit(schedulerTableId)',
+            table.on('edit(itemId)',
             function(obj) {
                 var value = obj.value //得到修改后的值
                 ,
@@ -141,7 +123,7 @@
             });
 
             //头工具栏事件
-            table.on('toolbar(schedulerTableId)',
+            table.on('toolbar(itemId)',
             function(obj) {
                 var checkStatus = table.checkStatus(obj.config.id);
                 switch (obj.event) {
@@ -160,11 +142,11 @@
             });
 
             /**查询*/
-            $(".userSearchList_btn").click(function(){
+            $(".search_btn").click(function(){
                 var loading = layer.load(0,{ shade: [0.3,'#000']});
                 //监听提交
-                form.on('submit(userSearchFilter)', function (data) {
-                    table.reload('schedulerTableId',{
+                form.on('submit(itemFilter)', function (data) {
+                    table.reload('itemId',{
                         where: {
                                 key:data.field.searchTerm,
                                 value:data.field.searchContent
@@ -188,7 +170,7 @@
 
             /**批量删除任务*/
             $(".batchFail_btn").click(function(){
-                var checkStatus = table.checkStatus('schedulerTableId');
+                var checkStatus = table.checkStatus('itemId');
                 if(checkStatus.data.length == 0){
                     common.cmsLayErrorMsg("请选择至少1个任务!");
                 }else{
@@ -204,7 +186,7 @@
 
             /**批量暂停任务*/
             $(".batchPause_btn").click(function(){
-                var checkStatus = table.checkStatus('schedulerTableId');
+                var checkStatus = table.checkStatus('itemId');
                 if(checkStatus.data.length == 0){
                     common.cmsLayErrorMsg("请选择至少1个任务!");
                 }else{
@@ -232,7 +214,7 @@
 
             /**批量恢复任务*/
             $(".batchResume_btn").click(function() {
-                var checkStatus = table.checkStatus('schedulerTableId');
+                var checkStatus = table.checkStatus('itemId');
                 if (checkStatus.data.length == 0) {
                     common.cmsLayErrorMsg("请选择至少1个任务!");
                 } else {
@@ -242,17 +224,16 @@
                     });
                     var url = "/scheduler/batchResume";
                     var param = {jobs:JSON.stringify(ids)};
-                    common.ajaxCmsConfirm('系统提示', '确认要恢复任务吗?', url, param);
+                    common.ajaxCmsConfirm('系统提示', '确认提交?', url, param);
                 }
             });
 
             /**监听工具条*/
-            table.on('tool(schedulerTableId)', function(obj){
+            table.on('tool(itemId)', function(obj){
                 var data = obj.data; //获得当前行数据
                 var layEvent = obj.event; //获得 lay-event 对应的值
-                console.log(data);
                 //编辑任务
-                if (layEvent === 'scheduler_edit') {
+                if (layEvent === 'item_edit') {
                     var id = data.id;
                     var url =  "/scheduler/edit/"+id;
                     common.cmsLayOpen('编辑任务',url,'650px','590px');
@@ -262,170 +243,10 @@
 
 </script>
 
-{#<script type="text/javascript">#}
-{##}
-{#    layui.config({#}
-{#        base : "/static/js/"#}
-{#    }).use(['form', 'table', 'layer','common'], function () {#}
-{#         var $ =  layui.$;#}
-{#                var form = layui.form,#}
-{#                table = layui.table,#}
-{#                layer = layui.layer,#}
-{#                common = layui.common;#}
-{##}
-{#        var loading = layer.load(0,{ shade: [0.3,'#000']});#}
-{#        /**用户表格加载*/#}
-{#        table.render({#}
-{#            elem: '#schedulerTableList',#}
-{#            url: '/scheduler/list',#}
-{#            id:'schedulerTableId',#}
-{#            method: 'post',#}
-{#            height:'full-140',#}
-{#            skin:'row',#}
-{#            even:'true',#}
-{#            size: 'sm',#}
-{#            limit: 10,#}
-{#            page: true,#}
-{#            cols: [[#}
-                {#{type:"numbers"},#}{##}
-{#                {type:"checkbox"},#}
-                {#{field:'id', title: 'ID',align:'left' ,width: '21%'},#}{##}
-{#                {field:'name', title: '方法名字',align:'center',width: '20%'},#}
-{#                {field:'next_run_time', title: '下次执行时间',align:'center',width: '12%'},#}
-{#                {field:'func_ref', title: '方法位置',align:'center',width: '20%'},#}
-{#                {field:'args', title: '参数',align:'center',width: '8%'},#}
-{#                {field:'max_instances', title: '实例',align:'center',width: '5%'},#}
-{#                {field:'misfire_grace_time', title: '容错时间',align:'center',width: '8%'},#}
-{#                {field:'cron', title: 'cron',align:'center',width: '10%'},#}
-{#                {field:'state', title: '状态',align:'center',width: '8%', templet: '#statusTpl'},#}
-{#                {title: '操作', align:'center', width: '10%',toolbar: '#userBar'}#}
-{#            ]],#}
-{#            done: function (res, curr, count) {#}
-{#                common.resizeGrid();#}
-{#                layer.close(loading);#}
-{#            }#}
-{#        });#}
-{##}
-{#        /**查询*/#}
-{#        $(".userSearchList_btn").click(function(){#}
-{#            var loading = layer.load(0,{ shade: [0.3,'#000']});#}
-{#            //监听提交#}
-{#            form.on('submit(userSearchFilter)', function (data) {#}
-{#                table.reload('stockTableId',{#}
-{#                    where: {#}
-{#                            key:data.field.searchTerm,#}
-{#                            value:data.field.searchContent#}
-{#                    },#}
-{#                    height: 'full-140',#}
-{#                    page: true,#}
-{#                    done: function (res, curr, count) {#}
-{#                        common.resizeGrid();#}
-{#                        layer.close(loading);#}
-{##}
-{#                    }#}
-{#                });#}
-{#            });#}
-{#        });#}
-{##}
-{#         /**新增任务*/#}
-{#        $(".add_btn").click(function(){#}
-{#            var url = "/scheduler/add";#}
-{#            common.cmsLayOpen('新增任务',url,'650px','590px');#}
-{#        });#}
-{##}
-{#        /**批量删除任务*/#}
-{#        $(".batchFail_btn").click(function(){#}
-{#            var checkStatus = table.checkStatus('schedulerTableId');#}
-{#            if(checkStatus.data.length == 0){#}
-{#                common.cmsLayErrorMsg("请选择至少1个任务!");#}
-{#            }else{#}
-{#                var ids = [];#}
-{#                $(checkStatus.data).each(function(index, item){#}
-{#                    ids.push(item.id);#}
-{#                });#}
-{#                var url = "/scheduler/batchDelete";#}
-{#                var param = {jobs:JSON.stringify(ids)};#}
-{#                common.ajaxCmsConfirm('系统提示', '确认要删除任务吗?', url, param);#}
-{#            }#}
-{#        });#}
-{##}
-{#        /**批量暂停任务*/#}
-{#        $(".batchPause_btn").click(function(){#}
-{#            var checkStatus = table.checkStatus('schedulerTableId');#}
-{#            if(checkStatus.data.length == 0){#}
-{#                common.cmsLayErrorMsg("请选择至少1个任务!");#}
-{#            }else{#}
-{#                var status = false;#}
-{#                var ids = [];#}
-{#                $(checkStatus.data).each(function(index, item) {#}
-{#                    ids.push(item.id);#}
-{#                    //任务已暂停#}
-{#                    if (item.state == 1) {#}
-{#                        status = true;#}
-{#                        return false;#}
-{#                    } else {#}
-{#                        status = false;#}
-{#                    }#}
-{#                });#}
-{#                if (status == true) {#}
-{#                    common.cmsLayErrorMsg("当前选择的任务已暂停");#}
-{#                    return false;#}
-{#                }#}
-{#                var url = "/scheduler/batchPause";#}
-{#                var param = {jobs:JSON.stringify(ids)};#}
-{#                common.ajaxCmsConfirm('系统提示', '确认要暂停任务吗?', url, param);#}
-{#            }#}
-{#        });#}
-{##}
-{#        /**批量恢复任务*/#}
-{#        $(".batchResume_btn").click(function() {#}
-{#            var checkStatus = table.checkStatus('schedulerTableId');#}
-{#            if (checkStatus.data.length == 0) {#}
-{#                common.cmsLayErrorMsg("请选择至少1个任务!");#}
-{#            } else {#}
-{#                var ids = [];#}
-{#                $(checkStatus.data).each(function(index, item){#}
-{#                    ids.push(item.id);#}
-{#                });#}
-{#                var url = "/scheduler/batchResume";#}
-{#                var param = {jobs:JSON.stringify(ids)};#}
-{#                common.ajaxCmsConfirm('系统提示', '确认要恢复任务吗?', url, param);#}
-{#            }#}
-{#        });#}
-{##}
-{#        /**监听工具条*/#}
-{#        table.on('tool(schedulerTableId)', function(obj){#}
-{#            var data = obj.data; //获得当前行数据#}
-{#            var layEvent = obj.event; //获得 lay-event 对应的值#}
-{#            console.log(data);#}
-{#            //编辑任务#}
-{#            if (layEvent === 'scheduler_edit') {#}
-{#                var id = data.id;#}
-{#                var url =  "/scheduler/edit/"+id;#}
-{#                common.cmsLayOpen('编辑任务',url,'650px','590px');#}
-{#            }#}
-{#        });#}
-{##}
-{##}
-{#    });#}
-{#</script>#}
-{##}
-{##}
-{#<!-- 运行状态tpl-->#}
-{#<script type="text/html" id="statusTpl">#}
-{##}
-{#    {{ '{{# if(d.state == 1) { }}' }}#}
-{#        <span class="layui-btn layui-btn-danger layui-btn-mini">暂停</span>#}
-{#    {{ '{{# } else if(d.state == 2) { }}' }}#}
-{#        <span class="layui-btn layui-btn-normal layui-btn-mini">运行中</span>#}
-{#    {{ '{{# } }}' }}#}
-{##}
-{#</script>#}
-{##}
 <!--工具条 -->
-<script type="text/html" id="userBar">
+<script type="text/html" id="itemBar">
     <div class="layui-btn-group">
-        <a class="layui-btn layui-btn-xs user_edit" lay-event="scheduler_edit"><i class="layui-icon larry-icon larry-bianji2"></i> 编辑</a>
+        <a class="layui-btn layui-btn-xs user_edit" lay-event="item_edit"><i class="layui-icon larry-icon larry-bianji2"></i> 编辑</a>
     </div>
 </script>
 

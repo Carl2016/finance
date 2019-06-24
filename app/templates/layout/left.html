@@ -8,7 +8,33 @@
                     <cite>系统设置</cite>
                     <i class="iconfont nav_right">&#xe697;</i>
                 </a>
+
                 <ul class="sub-menu">
+                    <li>
+                        <a href="javascript:;">
+                            <i class="iconfont">&#xe70b;</i>
+                            <cite>管理员管理</cite>
+                            <i class="iconfont nav_right">&#xe697;</i>
+                        </a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a onclick="xadmin.add_tab('管理员列表','/admin/list')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>管理员列表</cite></a>
+                            </li>
+                            <li>
+                                <a onclick="xadmin.add_tab('角色管理','/admin/role/list')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>角色管理</cite></a>
+                            </li>
+                            <li>
+                                <a onclick="xadmin.add_tab('菜单管理','/admin/menu/list')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>菜单管理</cite></a>
+                            </li>
+                        </ul>
+                    </li>
+
                     <li>
                         <a onclick="xadmin.add_tab('任务调度','/scheduler/list')">
                             <i class="iconfont">&#xe6a7;</i>
@@ -398,7 +424,7 @@
                     <i class="iconfont nav_right">&#xe697;</i></a>
                 <ul class="sub-menu">
                     <li>
-                        <a onclick="xadmin.add_tab('多级分类','cate.html')">
+                        <a onclick="xadmin.add_tab('多级分类','admin-menu-list.html')">
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>多级分类</cite></a>
                     </li>
@@ -434,7 +460,7 @@
                             <cite>角色管理</cite></a>
                     </li>
                     <li>
-                        <a onclick="xadmin.add_tab('权限分类','admin-cate.html')">
+                        <a onclick="xadmin.add_tab('权限分类','admin-admin-menu-list.html')">
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>权限分类</cite></a>
                     </li>
