@@ -17,9 +17,11 @@
 - Flask-APScheduler
 - Flask-Security
 - Flask-Mail
+- Flask-session
 - SQLAlchemy
 - Jinja2
 - Flask-Login
+- redis
 
 **前端技术**
 - layui
@@ -30,6 +32,22 @@
 - 任务调度调度，定时爬取数据到数据库
 - 使用echarts图形化展现数据
 - 用户权限控制
+- 使用redis存储session
+
+## 下次更新功能
+-用户菜单鉴权
+-系统资源配置
+-邮件通知功能
+-密码修改
+
+
+## 2019-06-25更新
+* 新增主页系统资源监控
+* 增加flask-socketIO推送消息
+* 新增管理员管理
+* 新增角色管理
+* 新增菜单管理
+* 新增redis存储session
 
 ## 2019-05-26更新
 * 更换后台界面 X-admin
@@ -62,25 +80,38 @@ python manager.py create_db
 脚本在db目录下:finance.sql
 ```
 
-4.启动项目，在项目根目录执行
+4.启动redis服务端,默认端口：6379 ,如果设置密码的话请到config.py文件修改密码
+```
+SESSION_REDIS = redis.Redis(host='127.0.0.1', port='6379', password='', db=0)
+```
+
+5.启动项目，在项目根目录执行
 
 ```code
 python manager.py runserver
 ```
 
-5.访问项目地址
+6.访问项目地址
 
 ```
-http://localhost:5000/login
+http://localhost:5000
 ```
 
-6.登录用户
+7.登录用户
 ```
 用户名：admin
 密码:admin
 ```
 
 **截图截图**
+
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0625/224716_ae553d45_387233.png "主页监控.PNG")
+
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0625/225247_e0a11c4b_387233.png "管理员.PNG")
+
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0625/225303_6271db75_387233.png "角色管理.PNG")
+
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0625/225322_754419c3_387233.png "菜单管理.PNG")
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2019/0526/232656_7f8ae03c_387233.png "日线行情.PNG")
 
