@@ -146,7 +146,7 @@
             //发异步，把数据提交
             var url = "/admin/role/{{ action }}/{{ role.id or null }}";
             var param = data.field;
-            common.ajaxCms('post', 'false', url, param);
+            common.ajaxFormCms('post', 'false', url, param);
 
             //关闭当前frame
             xadmin.close();

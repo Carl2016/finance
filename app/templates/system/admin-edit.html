@@ -130,7 +130,7 @@
             //发异步，把数据提交
             var url = "/admin/edit/{{ user.id }}";
             console.log(JSON.stringify(data.field))
-            common.ajaxCms('post', 'false', url, data.field);
+            common.ajaxFormCms('post', 'false', url, data.field);
 
             //关闭当前frame
             xadmin.close();

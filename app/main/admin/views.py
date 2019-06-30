@@ -6,6 +6,7 @@ from app.main.common.alchemyEncoder import AlchemyEncoder
 from app.main.admin import admin
 import json
 from app.main.utils.email import *
+from app.main.utils.decorators import auth
 
 
 def user_dict(p):
@@ -15,46 +16,40 @@ def user_dict(p):
         'phone': p.phone,
         'email': p.email,
         'status': p.status,
-        'createTime': p.createTime.strftime('%Y-%m-%d %M:%H:%S'),
+        'createTime': p.createTime.strftime('%Y-%m-%d'),
         'roles': p.roles
     }
 
 
 # 管理员
-@admin.route('/list', methods=['GET', 'POST'])
+@admin.route('/list', methods=['GET'])
 @login_required
+@auth
 def admin_list():
-    #follower = globals.db.query(User).filter_by(id=1).first()
-    #send_email(config.DevelopmentConfig.FLASKY_ADMIN, '密码修改邮件', 'email/follower_email', follower=follower)
-    #send_email(rec, subject, tp)
-
-    if request.method == 'POST':
-        page = request.form['page']
-        limit = request.form['limit']
-        pagination = globals.db.query(User).paginate(int(page), int(limit), error_out=False)
-        items = pagination.items
-        result = {
-            "code": 0,
-            "msg": "获取成功",
-            "count": pagination.pages,
-            "data": items
-        }
-        return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
-    return render_template('system/admin-list.html')
+    page = request.args.get('page')
+    if page is None:
+        page = 1
+    limit = request.args.get('limit')
+    if limit is None:
+        limit = 10
+    pagination = globals.db.query(User).paginate(int(page), int(limit), error_out=False)
+    items = pagination.items
+    return render_template('system/admin-list.html', users=items, count=pagination.total)
 
 
-# 启用
-@admin.route('/enable/<id>', methods=['POST'])
+# 管理员-状态-修改
+@admin.route('/change/<id>', methods=['POST'])
 @login_required
-def enable(id):
+@auth
+def admin_change_status(id):
     if request.method == 'POST':
-        status = int(request.form.get('status'))
         user = globals.db.query(User).filter_by(id=id).first()
+        status = request.json.get('status')
         user.status = status
         user.update()
         result = {
-            "code": "0000",
-            "msg": "启用/关闭成功"
+            "code": '0000',
+            "msg": "修改成功"
         }
         return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
 
@@ -62,7 +57,8 @@ def enable(id):
 # 用户-添加
 @admin.route('/add/', methods=['GET', 'POST'])
 @login_required
-def add():
+@auth
+def admin_add():
     roles = globals.db.query(Role).filter().all()
     if request.method == 'POST':
         username = request.form.get('username')
@@ -84,13 +80,13 @@ def add():
                 "msg": "添加成功"
             }
         return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
-    return render_template("system/admin-add.html", roles=roles)
+    return render_template("system/admin-add.html", roles=roles, user=None)
 
 
 # 编辑
 @admin.route('/edit/<id>', methods=['GET', 'POST'])
 @login_required
-def edit(id):
+def admin_edit(id):
     user = globals.db.query(User).filter_by(id=id).first()
     roles = globals.db.query(Role).filter().all()
     if request.method == 'POST':
@@ -118,7 +114,7 @@ def edit(id):
 # 删除
 @admin.route('/del/<id>', methods=['POST'])
 @login_required
-def delete(id):
+def admin_del(id):
     if request.method == 'POST':
         user = globals.db.query(User).filter_by(id=id).first()
         user.delete()
@@ -129,23 +125,55 @@ def delete(id):
         return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
 
 
+# # 角色
+# @admin.route('/role/list', methods=['GET', 'POST'])
+# @login_required
+# def role_list():
+#     if request.method == 'POST':
+#         page = request.form['page']
+#         limit = request.form['limit']
+#         pagination = globals.db.query(Role).paginate(int(page), int(limit), error_out=False)
+#         items = pagination.items
+#         result = {
+#             "code": 0,
+#             "msg": "获取成功",
+#             "count": pagination.pages,
+#             "data": items
+#         }
+#         return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
+#     return render_template('system/admin-role.html')
+
+
 # 角色
-@admin.route('/role/list', methods=['GET', 'POST'])
+@admin.route('/role/list', methods=['GET'])
 @login_required
 def role_list():
+    page = request.args.get('page')
+    if page is None:
+        page = 1
+    limit = request.args.get('limit')
+    if limit is None:
+        limit = 10
+    pagination = globals.db.query(Role).paginate(int(page), int(limit), error_out=False)
+    items = pagination.items
+    return render_template('system/admin-role.html', roles=items, count=pagination.total)
+
+
+# 角色-状态-修改
+@admin.route('/role/change/<id>', methods=['POST'])
+@login_required
+def role_change_status(id):
     if request.method == 'POST':
-        page = request.form['page']
-        limit = request.form['limit']
-        pagination = globals.db.query(Role).paginate(int(page), int(limit), error_out=False)
-        items = pagination.items
+        role = globals.db.query(Role).filter_by(id=id).first()
+        status = request.json.get('status')
+        role.status = status
+        role.update()
+
         result = {
-            "code": 0,
-            "msg": "获取成功",
-            "count": pagination.pages,
-            "data": items
+            "code": "0000",
+            "msg": "修改成功"
         }
         return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
-    return render_template('system/admin-role.html')
 
 
 # 角色-添加
@@ -274,36 +302,103 @@ def get_children_menu(parentId, allMenu):
 @admin.route('/menu/list', methods=['GET', 'POST'])
 @login_required
 def menu_list():
-    pagination = globals.db.query(Menu).paginate(1, 10, error_out=False)
+    page = request.args.get('page')
+    if page is None:
+        page = 1
+    limit = request.args.get('limit')
+    if limit is None:
+        limit = 10
+    pagination = globals.db.query(Menu).paginate(int(page), int(limit), error_out=False)
     menus = pagination.items
-    if request.method == 'POST':
-        page = request.form['page']
-        limit = request.form['limit']
-        pagination = globals.db.query(Menu).paginate(int(page), int(limit), error_out=False)
-        items = pagination.items
-        result = {
-            "code": 0,
-            "msg": "获取成功",
-            "count": pagination.pages,
-            "data": items
-        }
-        return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
-    return render_template('system/admin-menu-list.html', menus=menus, count=pagination.pages)
+    return render_template('system/admin-menu-list.html', menus=menus, count=pagination.total)
 
 
 # 菜单-添加
-@admin.route('/menu/add', methods=['GET', 'POST'])
+@admin.route('/menu/add/<parentId>', methods=['GET', 'POST'])
 @login_required
-def menu_add():
+def menu_add(parentId):
     if request.method == 'POST':
-        name = request.form['name']
-        describe = request.form['describe']
-        status = request.form['status']
-        role = Role(name, describe, int(status))
-        role.save()
+        name = request.form.get('name')
+        url = request.form.get('url')
+        order = request.form.get('order')
+        type = request.form.get('type')
+        icon = request.form.get('icon')
+        status = request.form.get('status')
+
+        menu = Menu()
+        menu.parent_id = parentId
+        menu.name = name
+        menu.url = url
+        menu.order = int(order) if order != None else order
+        menu.type = int(type) if type != None else type
+        menu.icon = icon
+        menu.status = int(status) if status != None else status
+        menu.save()
+
         result = {
             "code": "0000",
             "msg": "添加成功"
         }
         return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
-    return render_template('system/admin-role-add.html')
+    return render_template('system/admin-menu-add.html', action='add', menu=None, parentId=parentId)
+
+
+# 菜单-修改
+@admin.route('/menu/edit/<parentId>', methods=['GET', 'POST'])
+@login_required
+def menu_edit(parentId):
+    _menu = globals.db.query(Menu).filter(Menu.id == parentId).first()
+    if request.method == 'POST':
+        name = request.form.get('name')
+        url = request.form.get('url')
+        order = request.form.get('order')
+        type = request.form.get('type')
+        icon = request.form.get('icon')
+        status = request.form.get('status')
+
+        menu = Menu()
+        menu.name = name
+        menu.url = url
+        menu.order = order
+        menu.type = type
+        menu.icon = icon
+        menu.status = status
+        menu.save()
+
+        result = {
+            "code": "0000",
+            "msg": "添加成功"
+        }
+        return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
+    return render_template('system/admin-menu-add.html', action='edit', menu=_menu)
+
+
+# 菜单-状态-修改
+@admin.route('/menu/change/<id>', methods=['POST'])
+@login_required
+def menu_change_status(id):
+    if request.method == 'POST':
+        menu = globals.db.query(Menu).filter_by(id=id).first()
+        status = request.json.get('status')
+        menu.status = status
+        menu.update()
+
+        result = {
+            "code": "0000",
+            "msg": "修改成功"
+        }
+        return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)
+
+
+# 删除
+@admin.route('/menu/del/<id>', methods=['POST'])
+@login_required
+def menu_del(id):
+    if request.method == 'POST':
+        menu = globals.db.query(Menu).filter_by(id=id).first()
+        menu.delete()
+        result = {
+            "code": "0000",
+            "msg": "删除成功"
+        }
+        return json.dumps(result, cls=AlchemyEncoder, ensure_ascii=False)

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+<head>
+    {% block head %}
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <title>{% block title %}{% endblock %} 后台管理系统</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <meta name="keywords" content="后台管理系统">
+        <meta name="description" content="">
+        <link rel="shortcut icon" href="/static/img/favicon.ico">
+        <link rel="stylesheet" href="/static/css/xadmin.css">
+        <script src="/static/lib/layui/layui.js" charset="utf-8"></script>
+        <script type="text/javascript" src="/static/js/xadmin.js"></script>
+        <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+        <!--[if lt IE 9]>
+                <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+                <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+            <![endif]-->
+    {% endblock %}
+</head>
+<body>
+
+<div class="x-nav">
+    <span class="layui-breadcrumb">
+        <a href="/">首页</a>
+        <a><cite>{% block bread %} {% endblock %} </cite></a>
+    </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" onclick="location.reload()" title="刷新">
+        <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i>
+    </a>
+</div>
+
+{% block content %}
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body ">
+                    <form class="layui-form layui-col-space5">
+                        <div class="layui-inline layui-show-xs-block">
+                            <input class="layui-input" autocomplete="off" placeholder="开始日" name="start" id="start">
+                        </div>
+                        <div class="layui-inline layui-show-xs-block">
+                            <input class="layui-input" autocomplete="off" placeholder="截止日" name="end" id="end">
+                        </div>
+                        <div class="layui-inline layui-show-xs-block">
+                            <input type="text" name="username" placeholder="请输入用户名" autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                        <div class="layui-inline layui-show-xs-block">
+                            <button class="layui-btn" lay-submit="" lay-filter="sreach"><i
+                                    class="layui-icon">&#xe615;</i></button>
+                        </div>
+                    </form>
+                </div>
+                <div class="layui-card-header">
+{#                    <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>#}
+                    <button class="layui-btn" onclick="xadmin.open('添加用户','/admin/add',600,600)"><i
+                            class="layui-icon"></i>添加
+                    </button>
+                </div>
+                <div class="layui-card-body ">
+                    <table class="layui-table" lay-data="{url:'/admin/list', method:'POST', page:true, id:'itemId'}" lay-filter="itemId">
+                        <thead>
+                            <tr>
+                                <th lay-data="{field:'username', align:'center', width:'10%'}">账号</th>
+                                <th lay-data="{field:'phone', align:'center', width:'10%'}">手机号码</th>
+                                <th lay-data="{field:'email', width:'15%', align:'center'}">邮箱</th>
+                                <th lay-data="{field:'role_names', width: '25%', align:'center'}">角色</th>
+                                <th lay-data="{field:'createTime', width: '12%', align:'center'}">加入时间</th>
+                                <th lay-data="{field:'state', align:'center', width: '8%', templet: '#statusTpl'}">状态</th>
+                                <th lay-data="{align:'center', width: '19%', toolbar: '#itemBar'}">操作</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+
+{% endblock %}
+
+{% block footer %}
+    <style id="welcome_style"></style>
+    <div class="layui-col-md12 align-center">
+        <blockquote class="layui-elem-quote layui-quote-nm">
+            <p>
+                2017 &copy;<a href="http://www.carlzz.com/">www.carlzz.com</a> LGPL license
+            </p>
+        </blockquote>
+    </div>
+{% endblock %}
+
+</body>
+</html>

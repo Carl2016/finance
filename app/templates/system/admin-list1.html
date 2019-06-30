@@ -1,0 +1,148 @@
+{% extends "layout/base.html" %}
+
+{% block title %}
+    管理员列表
+{% endblock %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block bread %}
+    {{ self.title() }}
+{% endblock %}
+
+{% block content %}
+    <div class="layui-fluid">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-body ">
+                        <form class="layui-form layui-col-space5">
+                            <div class="layui-inline layui-show-xs-block">
+                                <input class="layui-input" autocomplete="off" placeholder="开始日" name="start" id="start">
+                            </div>
+                            <div class="layui-inline layui-show-xs-block">
+                                <input class="layui-input" autocomplete="off" placeholder="截止日" name="end" id="end">
+                            </div>
+                            <div class="layui-inline layui-show-xs-block">
+                                <input type="text" name="username" placeholder="请输入用户名" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                            <div class="layui-inline layui-show-xs-block">
+                                <button class="layui-btn" lay-submit="" lay-filter="sreach"><i
+                                        class="layui-icon">&#xe615;</i></button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="layui-card-header">
+                        {#                    <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>#}
+                        <button class="layui-btn" onclick="xadmin.open('添加用户','/admin/add',600,600)"><i
+                                class="layui-icon"></i>添加
+                        </button>
+                    </div>
+                    <div class="layui-card-body ">
+                        <table class="layui-table" lay-data="{url:'/admin/list', method:'POST', page:true, id:'itemId'}"
+                               lay-filter="itemId">
+                            <thead><th lay-data="{field:'username', align:'center', width:'10%'}">账号</th>
+                                <th lay-data="{field:'phone', align:'center', width:'10%'}">手机号码</th>
+                                <th lay-data="{field:'email', width:'15%', align:'center'}">邮箱</th>
+                            <tr>
+
+                                <th lay-data="{field:'role_names', width: '25%', align:'center'}">角色</th>
+                                <th lay-data="{field:'create_time', width: '10%', align:'center'}">加入时间</th>
+                                <th lay-data="{field:'sta', align:'center', width: '10%', templet: '#statusTpl'}">状态</th>
+                                <th lay-data="{align:'center', width: '20%', toolbar: '#itemBar'}">操作</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+        layui.config({
+            base: "/static/js/"
+        }).use(['form', 'table', 'laytpl', 'laydate', 'common'], function () {
+            var $ = layui.$;
+            var form = layui.form,
+                table = layui.table,
+                laydate = layui.laydate,
+                laytpl = layui.laytpl,
+                common = layui.common;
+
+            laytpl.config({
+                open: '<%',
+                close: '%>'
+            });
+
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#start' //指定元素
+            });
+
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#end' //指定元素
+            });
+
+            //监听开关
+            form.on('switch(status)', function () {
+                var id = $(this).attr("lay-data");
+                var status = 0;
+                if (this.checked) {
+                    status = 1;
+                }
+                //发异步，把数据提交
+                var url = "/admin/change/" + id;
+                var data = {'status': status};
+                common.ajaxJsonCms('post', 'false', url, JSON.stringify(data));
+            });
+
+            /**监听工具条*/
+            table.on('tool(itemId)', function (obj) {
+                var data = obj.data; //获得当前行数据
+                var layEvent = obj.event; //获得 lay-event 对应的值
+
+                //编辑
+                if (layEvent === 'item_edit') {
+                    var id = data.id;
+                    var url = "/admin/edit/" + id;
+                    common.cmsLayOpen('编辑', url, '650px', '590px');
+                }
+
+                //删除
+                if (layEvent === 'item_delete') {
+                    var id = data.id;
+                    var url = "/admin/del/" + id;
+                    common.ajaxCmsConfirm('系统提示', '确认删除角色?', url, null);
+                }
+            });
+        });
+
+    </script>
+
+    <!-- 运行状态tpl-->
+    <script type="text/html" id="statusTpl">
+
+        <%# if(d.status == 1) { %>
+        <input type="checkbox" lay-data="" name="switch" lay-text="开启|停用"
+               checked lay-skin="switch" lay-filter="status">
+        <%# } else if(d.status == 0) { %>
+        <input type="checkbox" lay-data="" name="switch" lay-text="开启|停用" lay-skin="switch" lay-filter="status">
+        <%# } %>
+    </script>
+
+    <!--工具条 -->
+    <script type="text/html" id="itemBar">
+        <div class="layui-btn-group">
+            <a class="layui-btn layui-btn layui-btn-xs" lay-event="item_edit"><i class="layui-icon">&#xe642;</i>编辑</a>
+            <a class="layui-btn-danger layui-btn layui-btn-xs" lay-event="item_delete"><i
+                    class="layui-icon">&#xe640;</i>删除</a>
+        </div>
+    </script>
+{% endblock %}

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.2</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="shortcut icon" href="/static/img/favicon.ico">
+    <link rel="stylesheet" href="/static/css/xadmin.css">
+    <script src="/static/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/js/xadmin.js"></script>
+    <!--[if lt IE 9]>
+          <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+          <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+</head>
+<body>
+<div class="x-nav">
+          <span class="layui-breadcrumb">
+            <a href="/">首页</a>
+            <a>
+              <cite>角色管理</cite></a>
+          </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+       onclick="location.reload()" title="刷新">
+        <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i></a>
+</div>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body ">
+                    <form class="layui-form layui-col-space5">
+                        <div class="layui-inline layui-show-xs-block">
+                            <input class="layui-input" autocomplete="off" placeholder="开始日" name="start" id="start">
+                        </div>
+                        <div class="layui-inline layui-show-xs-block">
+                            <input class="layui-input" autocomplete="off" placeholder="截止日" name="end" id="end">
+                        </div>
+                        <div class="layui-inline layui-show-xs-block">
+                            <input type="text" name="username" placeholder="请输入用户名" autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                        <div class="layui-inline layui-show-xs-block">
+                            <button class="layui-btn" lay-submit="" lay-filter="sreach"><i
+                                    class="layui-icon">&#xe615;</i></button>
+                        </div>
+                    </form>
+                </div>
+                <div class="layui-card-header">
+                    <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除
+                    </button>
+                    <button class="layui-btn" onclick="xadmin.open('添加角色','/admin/role/add/', 600, 600)"><i class="layui-icon"></i>添加
+                    </button>
+                </div>
+                <div class="layui-card-body ">
+                <table class="layui-table" lay-data="{url:'/admin/role/list', method:'POST', page:true, id:'itemId'}" lay-filter="itemId">
+                    <thead>
+                        <tr>
+                            {#<th lay-data="{type:'checkbox', width:'5%'}">ID</th>#}
+                            <th lay-data="{field:'name', align:'center', width:'10%'}">角色名称</th>
+                            <th lay-data="{field:'describe', align:'center', width:'15%'}">描述</th>
+                            <th lay-data="{field:'permissions', width: '42%', align:'center'}">权限</th>
+                            <th lay-data="{field:'createTime', width: '12%', align:'center'}">加入时间</th>
+                            <th lay-data="{field:'state', align:'center', width: '8%', templet: '#statusTpl'}">状态</th>
+                            <th lay-data="{align:'center', width: '12%', toolbar: '#itemBar'}">操作</th>
+                        </tr>
+                    </thead>
+                </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    layui.config({
+        base: "/static/js/"
+    }).use(['table', 'laydate','common'], function () {
+        var $ =  layui.$;
+        table = layui.table,
+        laydate = layui.laydate,
+        common = layui.common;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#start' //指定元素
+        });
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#end' //指定元素
+        });
+
+        /**监听工具条*/
+        table.on('tool(itemId)', function(obj){
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值
+
+            //编辑
+            if (layEvent === 'item_edit') {
+                var id = data.id;
+                var url =  "/admin/role/edit/"+id;
+                common.cmsLayOpen('修改角色',url,'600px','600px');
+            }
+
+            //删除
+            if (layEvent === 'item_delete') {
+                var id = data.id;
+                var url =  "/admin/role/del/"+id;
+                common.ajaxCmsConfirm('系统提示', '确认删除角色?', url, null);
+            }
+        });
+    });
+
+
+</script>
+<!-- 运行状态tpl-->
+<script type="text/html" id="statusTpl">
+    {{ '{{# if(d.status == 1) { }}' }}
+        <span class="layui-btn td-status layui-btn-normal layui-btn-mini">已启用</span>
+    {{ '{{# } else if(d.status == 0) { }}' }}
+        <span class="layui-btn td-status layui-btn-normal layui-btn-mini layui-btn-disabled">已停用</span>
+    {{ '{{# } }}' }}
+</script>
+<!--工具条 -->
+<script type="text/html" id="itemBar">
+    <div class="layui-btn-group">
+        <a class="layui-btn layui-btn layui-btn-xs" lay-event="item_edit" ><i class="layui-icon">&#xe642;</i>编辑</a>
+        <a class="layui-btn-danger layui-btn layui-btn-xs"  lay-event="item_delete" ><i class="layui-icon">&#xe640;</i>删除</a>
+    </div>
+</script>
+</html>

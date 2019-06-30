@@ -1,11 +1,12 @@
 {% extends "layout/base.html" %}
 
 {% block title %}
-    404
+    403
 {% endblock %}
 
 {% block head %}
     {{ super() }}
+
     <style>
         .error-container {
             max-width: 600px;
@@ -28,8 +29,8 @@
 <div class="layui-container">
     <div class="fly-panel">
         <div class="fly-none error-container">
-            <h1>404</h1>
-            <p>页面或者数据被纸飞机运到火星了,啥都看不到了...</p>
+            <h1>403</h1>
+            <p>没有权限访问该页面,请找管理员授权.</p>
         </div>
     </div>
 </div>

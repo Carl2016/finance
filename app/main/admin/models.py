@@ -92,7 +92,7 @@ class User(db.Model, UserMixin):
 
     @property
     def create_time(self):
-        return self.createTime.strftime('%Y-%m-%d %M:%H:%S')
+        return self.createTime.strftime('%Y-%m-%d')
 
     # def auth(method):
     #     @functools.wraps(method)
@@ -150,6 +150,17 @@ class Role(db.Model):
     #     return menus
 
     @property
+    def permission_names(self):
+        strs = ''
+        for i in range(len(self.menus)):
+            strs = strs + self.menus[i].name + ','
+        return strs
+
+    @property
+    def create_time(self):
+        return self.createTime.strftime('%Y-%m-%d')
+
+    @property
     def menu_ids(self):
         ids = []
         for i in range(len(self.menus)):
@@ -164,19 +175,12 @@ class Role(db.Model):
         globals.db.add(self)
         globals.db.commit()
 
+    def update(self):
+        globals.db.commit()
+
     def delete(self):
         globals.db.delete(self)
         globals.db.commit()
-
-    # @property
-    # def get_role(self, Id):
-    #     role = {}
-    #     item = globals.db.query(Role).filter_by(id=Id).first()
-    #     role['name'] = item.name
-    #     role['describe'] = item.describe
-    #     role['status'] = item.status
-    #     role['menus'] = item.menus
-    #     return role
 
     def __repr__(self):
         return '<Role %r>' % self.name
@@ -209,4 +213,17 @@ class Menu(db.Model):
     updateTime = db.Column(db.DATETIME, server_default=func.now(), comment=u'修改时间')
     updateBy = db.Column(db.String(50), comment=u'修改人')
 
+    def save(self):
+        globals.db.add(self)
+        globals.db.commit()
+
+    def update(self):
+        globals.db.commit()
+
+    def delete(self):
+        globals.db.delete(self)
+        globals.db.commit()
+
+    def __repr__(self):
+        return '<Menu %r>' % self.name
 

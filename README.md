@@ -35,11 +35,14 @@
 - 使用redis存储session
 
 ## 下次更新功能
--用户菜单鉴权
--系统资源配置
--邮件通知功能
--密码修改
+* 系统资源配置
+* 邮件通知功能
+* 密码修改
 
+## 2019-06-30更新
+* 用户菜单鉴权
+* 403\404\500页面
+* 菜单页面添加调整
 
 ## 2019-06-25更新
 * 新增主页系统资源监控
@@ -69,38 +72,56 @@ SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:xxxx@localhost:3306/finance?char
 git clone https://gitee.com/zcm2015/finance.git
 ```
 
-2.初始化数据库，在项目根目录执行
+2.安装虚拟环境
+```code
+pip install virtualenv
+virtualenv venv
+-windows：进到venv目录里，的Script文件夹输入：activate
+-linux：soruse venv/Script/activate
+```
+
+3.安装依赖包
+```code
+pip install -r requirements.txt
+```
+
+4.初始化数据库，在项目根目录执行
 
 ```code
 python manager.py create_db
 ```
 
-3.导入db脚本
+5.导入db脚本
 ```
 脚本在db目录下:finance.sql
 ```
 
-4.启动redis服务端,默认端口：6379 ,如果设置密码的话请到config.py文件修改密码
+6.启动redis服务端,默认端口：6379 ,如果设置密码的话请到config.py文件修改密码
 ```
 SESSION_REDIS = redis.Redis(host='127.0.0.1', port='6379', password='', db=0)
 ```
 
-5.启动项目，在项目根目录执行
+7.启动项目，在项目根目录执行
 
 ```code
 python manager.py runserver
 ```
 
-6.访问项目地址
+8.访问项目地址
 
 ```
 http://localhost:5000
 ```
 
-7.登录用户
+9.注册用户
 ```
-用户名：admin
-密码:admin
+登录按钮下面有个‘立刻创建’
+```
+
+10.菜单鉴权
+```
+包头引入:from app.main.utils.decorators import auth
+在方法上面加@auth
 ```
 
 **截图截图**

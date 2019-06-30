@@ -1,30 +1,18 @@
-<!DOCTYPE html>
-<html class="x-admin-sm">
-<head>
-    <meta charset="UTF-8">
-    <title>欢迎页面-X-admin2.2</title>
-    <meta name="renderer" content="webkit">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <link rel="shortcut icon" href="/static/img/favicon.ico">
-    <link rel="stylesheet" href="/static/css/xadmin.css">
-    <script src="/static/lib/layui/layui.js" charset="utf-8"></script>
-    <script type="text/javascript" src="/static/js/xadmin.js"></script>
-    <!--[if lt IE 9]>
-          <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
-          <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
-</head>
-<body>
-<div class="x-nav">
-          <span class="layui-breadcrumb">
-            <a href="/">首页</a>
-            <a>
-              <cite>角色管理</cite></a>
-          </span>
-    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
-       onclick="location.reload()" title="刷新">
-        <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i></a>
-</div>
+{% extends "layout/base.html" %}
+
+{% block title %}
+    管理员列表
+{% endblock %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block bread %}
+    {{ self.title() }}
+{% endblock %}
+
+{% block content %}
 <div class="layui-fluid">
     <div class="layui-row layui-col-space15">
         <div class="layui-col-md12">
@@ -48,37 +36,65 @@
                     </form>
                 </div>
                 <div class="layui-card-header">
-                    <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除
-                    </button>
                     <button class="layui-btn" onclick="xadmin.open('添加角色','/admin/role/add/', 600, 600)"><i class="layui-icon"></i>添加
                     </button>
                 </div>
                 <div class="layui-card-body ">
-                <table class="layui-table" lay-data="{url:'/admin/role/list', method:'POST', page:true, id:'itemId'}" lay-filter="itemId">
-                    <thead>
+                    <table class="layui-table layui-form">
+                        <thead>
                         <tr>
-                            {#<th lay-data="{type:'checkbox', width:'5%'}">ID</th>#}
-                            <th lay-data="{field:'name', align:'center', width:'10%'}">角色名称</th>
-                            <th lay-data="{field:'describe', align:'center', width:'15%'}">描述</th>
-                            <th lay-data="{field:'permissions', width: '42%', align:'center'}">权限</th>
-                            <th lay-data="{field:'createTime', width: '12%', align:'center'}">加入时间</th>
-                            <th lay-data="{field:'state', align:'center', width: '8%', templet: '#statusTpl'}">状态</th>
-                            <th lay-data="{align:'center', width: '12%', toolbar: '#itemBar'}">操作</th>
+                            <th>角色名称</th>
+                            <th width="10%">描述</th>
+                            <th width="45%">权限</th>
+                            <th width="10%">加入时间</th>
+                            <th width="10%" align="center">状态</th>
+                            <th>操作</th>
                         </tr>
-                    </thead>
-                </table>
+                        </thead>
+                        <tbody class="x-cate">
+                            {% for role in roles %}
+                                <tr>
+                                    <td>{{ role.name }}</td>
+                                    <td>{{ role.describe or '' }}</td>
+                                    <td>{{ role.permission_names }}</td>
+                                    <td>{{ role.create_time }}</td>
+                                    <td>
+                                        <input type="checkbox" lay-data="{{ role.id or '' }}" name="status" lay-text="开启|停用"
+                                        {% if role.status == 1 %} checked {% endif %} lay-skin="switch"
+                                       lay-filter="status">
+                                    </td>
+                                    <td>
+                                        <div class="layui-btn-group">
+                                            <a class="layui-btn layui-btn layui-btn-xs item_edit" lay-data="{{ role.id }}">
+                                                <i class="layui-icon">&#xe642;</i>编辑
+                                            </a>
+                                            <a class="layui-btn-danger layui-btn layui-btn-xs item_delete" lay-data="{{ role.id }}">
+                                                <i class="layui-icon">&#xe640;</i>删除
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="layui-card-body ">
+                    <div id="page"></div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-</body>
+{% endblock %}
+
+{% block script %}
 <script>
     layui.config({
         base: "/static/js/"
-    }).use(['table', 'laydate','common'], function () {
+    }).use(['form', 'table', 'laydate', 'laypage', 'common'], function () {
         var $ =  layui.$;
-        table = layui.table,
+        var form = layui.form,
+        laypage = layui.laypage,
         laydate = layui.laydate,
         common = layui.common;
 
@@ -92,42 +108,43 @@
             elem: '#end' //指定元素
         });
 
-        /**监听工具条*/
-        table.on('tool(itemId)', function(obj){
-            var data = obj.data; //获得当前行数据
-            var layEvent = obj.event; //获得 lay-event 对应的值
-
-            //编辑
-            if (layEvent === 'item_edit') {
-                var id = data.id;
-                var url =  "/admin/role/edit/"+id;
-                common.cmsLayOpen('修改角色',url,'600px','600px');
-            }
-
-            //删除
-            if (layEvent === 'item_delete') {
-                var id = data.id;
-                var url =  "/admin/role/del/"+id;
-                common.ajaxCmsConfirm('系统提示', '确认删除角色?', url, null);
+        //完整功能
+        laypage.render({
+            elem: 'page'
+            , count: {{ count }}
+            , layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']
+            , jump: function (obj) {
+                //console.log(obj)
             }
         });
+
+        //监听开关
+        form.on('switch(status)', function () {
+            var id = $(this).attr("lay-data");
+            var status = 0;
+            if (this.checked) {
+                status = 1;
+            }
+            //发异步，把数据提交
+            var url = "/admin/role/change/" + id;
+            var data = {'status': status};
+            common.ajaxJsonCms('post', 'false', url, JSON.stringify(data));
+        });
+
+        $(".item_edit").click(function () {
+            //编辑
+            var id = $(this).attr("lay-data");
+            var url = "/admin/role/edit/" + id;
+            common.cmsLayOpen('编辑', url, '650px', '590px');
+
+        });
+
+        $(".item_delete").click(function () {
+            //删除
+            var id = $(this).attr("lay-data");
+            var url = "/admin/role/del/" + id;
+            common.ajaxCmsConfirm('系统提示', '确认删除角色?', url, null);
+        });
     });
-
-
 </script>
-<!-- 运行状态tpl-->
-<script type="text/html" id="statusTpl">
-    {{ '{{# if(d.status == 1) { }}' }}
-        <span class="layui-btn td-status layui-btn-normal layui-btn-mini">已启用</span>
-    {{ '{{# } else if(d.status == 0) { }}' }}
-        <span class="layui-btn td-status layui-btn-normal layui-btn-mini layui-btn-disabled">已停用</span>
-    {{ '{{# } }}' }}
-</script>
-<!--工具条 -->
-<script type="text/html" id="itemBar">
-    <div class="layui-btn-group">
-        <a class="layui-btn layui-btn layui-btn-xs" lay-event="item_edit" ><i class="layui-icon">&#xe642;</i>编辑</a>
-        <a class="layui-btn-danger layui-btn layui-btn-xs"  lay-event="item_delete" ><i class="layui-icon">&#xe640;</i>删除</a>
-    </div>
-</script>
-</html>
+{% endblock %}

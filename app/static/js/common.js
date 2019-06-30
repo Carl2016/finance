@@ -6,11 +6,11 @@ layui.define(['layer'], function (exports) {
 
         /**错误msg提示 */
         cmsLayErrorMsg:function (text) {
-            top.layer.msg(text, {icon: 5});
+            top.layer.msg(text, {icon: 5, time: 1000});
         },
         /**成功 msg提示 */
         cmsLaySucMsg:function (text) {
-            top.layer.msg(text, {icon: 6});
+            top.layer.msg(text, {icon: 6, time: 1000});
         },
         /**ajax Confirm 对话框*/
         ajaxCmsConfirm: function (title, text, url, param) {
@@ -30,10 +30,10 @@ layui.define(['layer'], function (exports) {
                     success : function(item) {
                         item = JSON.parse(item);
                         if(item.code == "0000"){
-                            top.layer.msg(item.msg, {icon: 6});
+                            top.layer.msg(item.msg, {icon: 6, time: 1000});
                             location.reload();
                         }else{
-                            top.layer.msg(item.msg,{icon: 5});
+                            top.layer.msg(item.msg,{icon: 5, time: 1000});
                         }
                     },error:function(item){
 
@@ -44,8 +44,31 @@ layui.define(['layer'], function (exports) {
 
             })
 
-        },/**ajax */
-        ajaxCms: function (type, async, url, param) {
+        },/**ajax json */
+        ajaxJsonCms: function (type, async, url, param) {
+            $.ajax({
+                url : url,
+                type : type,
+                async: async,
+                data : param,
+                dataType:'json',
+                contentType:'application/json; charset=UTF-8',
+                success : function(item) {
+                    item = JSON.parse(item);
+                    console.log(item);
+                    if(item.code == "0000"){
+                        top.layer.msg(item.msg, {icon: 6, time: 1000});
+                        location.reload();
+                    }else{
+                        top.layer.msg(item.msg,{icon: 5, time: 1000});
+                    }
+                },error:function(item){
+
+                }
+            });
+
+        },/**ajax from */
+        ajaxFormCms: function (type, async, url, param) {
             $.ajax({
                 url : url,
                 type : type,
@@ -54,10 +77,10 @@ layui.define(['layer'], function (exports) {
                 success : function(item) {
                     item = JSON.parse(item);
                     if(item.code == "0000"){
-                        top.layer.msg(item.msg, {icon: 6});
+                        top.layer.msg(item.msg, {icon: 6, time: 1000});
                         location.reload();
                     }else{
-                        top.layer.msg(item.msg,{icon: 5});
+                        top.layer.msg(item.msg,{icon: 5, time: 1000});
                     }
                 },error:function(item){
 

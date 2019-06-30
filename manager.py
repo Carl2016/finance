@@ -5,10 +5,6 @@
 # @Site    : 
 # @File    : manager.py
 # @Software: PyCharm
-from gevent import monkey
-monkey.patch_socket
-
-
 import os
 from app.main.admin.models import User
 from flask_script import Manager, Shell
@@ -20,13 +16,6 @@ from flask_login import login_required, login_user, logout_user
 from threading import Thread, Lock
 import psutil, time, json
 from app.main.utils.utils import get_network
-
-
-#print(socket.socket)
-
-#gevent.monkey.patch_socket
-
-#print(socket.socket)
 
 
 thread = None
@@ -70,14 +59,8 @@ manager = Manager(app)
 migrate = Migrate(app, db)
 
 
-def dict_user(d):
-    return User(d['get_id'], d['is_active'])
-
-
 @login_manager.user_loader
 def load_user(username):
-    # user = session.get("user")
-    # json.loads(user, object_hook=dict_user)
     return User.query.filter_by(username=username).first()
 
 
@@ -87,9 +70,7 @@ def make_shell_context():
 
 @app.before_request
 def before_request():
-    print(session.get('username'))
     globals.db = db.session
-
 
 
 # 请求之后，不管有么有异常,都关闭session
@@ -131,6 +112,24 @@ def login():
             else:
                 flash('用户名/密码错误')
     return render_template("common/login.html", username=username)
+
+
+# 找不到错误
+@app.errorhandler(404)
+def error_404(error):
+    return render_template('common/404.html'), 404
+
+
+# 权限错误
+@app.errorhandler(403)
+def error_403(error):
+    return render_template('common/403.html'), 403
+
+
+# 服务器错误
+@app.errorhandler(500)
+def error_500(error):
+    return render_template('common/500.html'), 500
 
 
 # 注册
@@ -175,8 +174,6 @@ manager.add_command("shell", Shell(make_context=make_shell_context))
 manager.add_command('db', MigrateCommand)
 # 新加入的代码，重写manager的run命令
 manager.add_command('runserver', socketio.run(app=app, host='0.0.0.0', port=5000, use_reloader=False, debug=True))
-#manager.add_command('runserver', 'gunicorn -k gevent -w 1 app:app')
-
 
 
 if __name__ == '__main__':

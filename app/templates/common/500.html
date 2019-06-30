@@ -1,10 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>500</title>
-</head>
-<body>
+{% extends "layout/base.html" %}
 
-</body>
-</html>
+{% block title %}
+    500
+{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <style>
+        .error-container {
+            max-width: 600px;
+            margin: 40px auto 30px;
+            text-align: center;
+        }
+        .error-container h1 {
+            font-size: 200px;
+            line-height: 1;
+            font-weight: 600;
+        }
+    </style>
+{% endblock %}
+
+{% block bread %}
+    {{ self.title() }}
+{% endblock %}
+
+{% block content %}
+<div class="layui-container">
+    <div class="fly-panel">
+        <div class="fly-none error-container">
+            <h1>500</h1>
+            <p>服务异常,请重新访问.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

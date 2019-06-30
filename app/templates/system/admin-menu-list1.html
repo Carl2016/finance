@@ -1,18 +1,35 @@
-{% extends "layout/base.html" %}
+<!DOCTYPE html>
+<html class="x-admin-sm">
 
-{% block title %}
-    菜单管理
-{% endblock %}
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.2</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="shortcut icon" href="/static/img/favicon.ico">
+    <link rel="stylesheet" href="/static/css/xadmin.css">
+    <script src="/static/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+          <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+          <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+</head>
 
-{% block head %}
-    {{ super() }}
-{% endblock %}
-
-{% block bread %}
-    {{ self.title() }}
-{% endblock %}
-
-{% block content %}
+<body>
+<div class="x-nav">
+    <span class="layui-breadcrumb">
+        <a href="/">首页</a>
+        <a>
+            <cite>菜单管理</cite>
+        </a>
+    </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+       onclick="location.reload()" title="刷新">
+        <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i>
+    </a>
+</div>
 <div class="layui-fluid">
     <div class="layui-row layui-col-space15">
         <div class="layui-col-md12">
@@ -20,13 +37,8 @@
                 <div class="layui-card-body ">
                     <form class="layui-form layui-col-space5">
                         <div class="layui-input-inline layui-show-xs-block">
-                            <input class="layui-input" placeholder="分类名" name="name" lay-verify="required">
-                        </div>
+                            <input class="layui-input" placeholder="分类名" name="cate_name"></div>
 
-                        <div class="layui-inline layui-show-xs-block">
-                            <button class="layui-btn" lay-submit="" lay-filter="sreach"><i
-                                    class="layui-icon">&#xe615;</i></button>
-                        </div>
                     </form>
                 </div>
                 <div class="layui-card-header">
@@ -77,15 +89,16 @@
 
                                 <td class="td-manage">
                                     <button class="layui-btn layui-btn layui-btn-xs"
-                                            onclick="xadmin.open('编辑','/admin/menu/edit/{{ menu.id }}', 600, 600)">
-                                        <i class="layui-icon">&#xe642;</i>编辑
+                                            onclick="xadmin.open('编辑','/admin/menu/edit/{{ menu.id }}', 600, 600)"><i
+                                            class="layui-icon">&#xe642;</i>编辑
                                     </button>
                                     <button class="layui-btn layui-btn-warm layui-btn-xs"
                                             onclick="xadmin.open('添加【{{ menu.name }}】子菜单','/admin/menu/add/{{ menu.id }}', 600, 600)">
                                         <i class="layui-icon">&#xe642;</i>添加子栏目
                                     </button>
-                                    <button class="layui-btn-danger layui-btn layui-btn-xs item_delete" lay-data="{{ menu.id }}">
-                                        <i class="layui-icon">&#xe640;</i>删除
+                                    <button class="layui-btn-danger layui-btn layui-btn-xs"
+                                            onclick="member_del(this,'要删除的id')" href="javascript:;"><i
+                                            class="layui-icon">&#xe640;</i>删除
                                     </button>
                                 </td>
                             </tr>
@@ -101,9 +114,6 @@
         </div>
     </div>
 </div>
-{% endblock %}
-
-{% block script %}
 <script>
     layui.config({
         base: "/static/js/"
@@ -137,13 +147,6 @@
             var url = "/admin/menu/change/" + id;
             var data = {'status': status};
             common.ajaxJsonCms('post', 'false', url, JSON.stringify(data));
-        });
-
-        $(".item_delete").click(function () {
-            //删除
-            var id = $(this).attr("lay-data");
-            var url = "/admin/menu/del/" + id;
-            common.ajaxCmsConfirm('系统提示', '确认删除菜单?', url, null);
         });
 
         /*用户-删除*/
@@ -181,7 +184,7 @@
 
         var cateIds = [];
         function getCateId(cateId) {
-            $("tbody tr[fid=" + cateId + "]").each(function (index, el) {
+            $("tbdoy tr[fid=" + cateId + "]").each(function (index, el) {
                 id = $(el).attr('cate-id');
                 cateIds.push(id);
                 getCateId(id);
@@ -189,5 +192,15 @@
         }
     });
 </script>
-{% endblock %}
-
+<!-- 运行状态tpl-->
+<script type="text/html" id="statusTpl">
+    {{ '{{# if(d.type == 0) { }}' }}
+    <span class="layui-btn td-status layui-btn-radius layui-btn-mini layui-btn-primary">目录</span>
+    {{ '{{# } else if(d.type == 1) { }}' }}
+    <span class="layui-btn td-status layui-btn-radius layui-btn-mini ">菜单</span>
+    {{ '{{# } else if(d.type == 2) { }}' }}
+    <span class="layui-btn td-status layui-btn-radius layui-btn-mini layui-btn-normal">按钮</span>
+    {{ '{{# } }}' }}
+</script>
+</body>
+</html>
